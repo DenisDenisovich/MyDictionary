@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">"MyDictionary "</string>
+    <string name="title_activity_main">MainActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="item_navigation_drawer_dictionary">Dictionary</string>
+    <string name="item_navigation_drawer_training">Trainings</string>
+    <string name="item_navigation_drawer_training_russian_to_english">Rus - Eng</string>
+    <string name="item_navigation_drawer_training_english_to_russian">Eng - Rus</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="dictionary_new_word">Inter new word</string>
+</resources>

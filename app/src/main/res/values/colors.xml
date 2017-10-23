@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#00838f</color>
+    <color name="colorPrimaryDark">#005662</color>
+    <color name="colorPrimaryLight">#4fb3bf</color>
+    <color name="colorAccent">#d84315</color>
+    <color name="colorAccentDark">#9f0000</color>
+    <color name="colorAccentLight">#ff7543</color>
+
+
+    <color name="colorDictionaryBackground">#E8E8E8</color>
+    <color name="colorDictionaryItem">@android:color/white</color>
+    <color name="colorDictionaryWord">@android:color/black</color>
+    <color name="colorDictionaryTranslate">#383838</color>
+    <color name="colorDictionaryNewWordItem">@android:color/white</color>
+    <color name="colorDictionaryNewWord">@android:color/black</color>
+    <color name="colorDictionaryNewTranslate">#383838</color>
+
+    <color name="colorTrainingBackground">@android:color/white</color>
+    <color name="colorTrainingWord">@android:color/black</color>
+    <color name="colorTrainingTranslateText">@android:color/black</color>
+    <color name="colorTrainingTranslateButton">@color/colorAccent</color>
+    <color name="colorTrainingTranslateButtonRight">@color/colorPrimary</color>
+    <color name="colorTrainingTranslateButtonWrong">@android:color/holo_red_light</color>
+
+</resources>

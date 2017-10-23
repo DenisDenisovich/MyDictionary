@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/colorTrainingBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/trainingWord"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/trainWordMarginTop"
+        android:layout_gravity="center"
+        android:textColor="@color/colorTrainingWord"
+        android:textSize="@dimen/trainWordTextSize"
+        android:text="Translate"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/trainTranslateBlockMarginTop">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btnTrainingTranslate1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/trainTranslateMarginTop"
+                android:layout_marginLeft="@dimen/trainTranslateMarginLeft"
+                android:layout_marginRight="@dimen/trainTranslateMarginRight"
+                android:layout_weight="1"
+                android:padding="@dimen/trainTranslatePadding"
+                android:background="@color/colorTrainingTranslateButton"
+                android:textColor="@color/colorTrainingTranslateText"
+                android:textSize="@dimen/trainTranslateTextSize"
+                android:text="перевод 1"/>
+            <Button
+                android:id="@+id/btnTrainingTranslate2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/trainTranslateMarginTop"
+                android:layout_marginLeft="@dimen/trainTranslateMarginLeft"
+                android:layout_marginRight="@dimen/trainTranslateMarginRight"
+                android:layout_weight="1"
+                android:padding="@dimen/trainTranslatePadding"
+                android:background="@color/colorTrainingTranslateButton"
+                android:textColor="@color/colorTrainingTranslateText"
+                android:textSize="@dimen/trainTranslateTextSize"
+                android:text="перевод 2"/>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnTrainingTranslate3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/trainTranslateMarginTop"
+            android:layout_marginLeft="@dimen/trainTranslateMarginLeft"
+            android:layout_marginRight="@dimen/trainTranslateMarginRight"
+            android:layout_gravity="center"
+            android:padding="@dimen/trainTranslatePadding"
+            android:background="@color/colorTrainingTranslateButton"
+            android:textColor="@color/colorTrainingTranslateText"
+            android:textSize="@dimen/trainTranslateTextSize"
+            android:text="перевод 3"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btnTrainingTranslate4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/trainTranslateMarginTop"
+                android:layout_marginLeft="@dimen/trainTranslateMarginLeft"
+                android:layout_marginRight="@dimen/trainTranslateMarginRight"
+                android:layout_weight="1"
+                android:padding="@dimen/trainTranslatePadding"
+                android:background="@color/colorTrainingTranslateButton"
+                android:textColor="@color/colorTrainingTranslateText"
+                android:textSize="@dimen/trainTranslateTextSize"
+                android:text="перевод 4"/>
+            <Button
+                android:id="@+id/btnTrainingTranslate5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/trainTranslateMarginTop"
+                android:layout_marginLeft="@dimen/trainTranslateMarginLeft"
+                android:layout_marginRight="@dimen/trainTranslateMarginRight"
+                android:layout_weight="1"
+                android:padding="@dimen/trainTranslatePadding"
+                android:background="@color/colorTrainingTranslateButton"
+                android:textColor="@color/colorTrainingTranslateText"
+                android:textSize="@dimen/trainTranslateTextSize"
+                android:text="перевод 5"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

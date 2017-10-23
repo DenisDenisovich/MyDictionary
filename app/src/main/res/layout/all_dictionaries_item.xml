@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:id="@+id/dictionaryItem"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/allDictItemHeight"
+        android:layout_marginLeft="@dimen/allDictItemMarginLeft"
+        android:layout_marginRight="@dimen/allDictItemMarginRight"
+        android:layout_marginTop="@dimen/allDictItemMarginTop"
+        android:background="@color/colorDictionaryItem"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dictionary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/allDictDictionaryMarginLeft"
+            android:layout_marginTop="@dimen/allDictDictionaryMarginTop"
+            android:text="Словарь"
+            android:textColor="@color/colorDictionaryTranslate"
+            android:textSize="@dimen/allDictDictionaryTextSize" />
+    </LinearLayout>
+</LinearLayout>
