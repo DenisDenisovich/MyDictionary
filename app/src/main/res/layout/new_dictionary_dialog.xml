@@ -9,13 +9,15 @@
         android:textColor="@color/colorDictionaryItem"
         android:gravity="center"
         android:background="@color/colorPrimary"
-        android:text="Add new dictionary"/>
+        android:text="@string/dialog_add_dictionary_TextView_head"/>
     <EditText
         android:id="@+id/etNewDictionaryDialog"
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:maxLines="1"
+        android:inputType="text"
         android:textSize="@dimen/dictWordTextSize"
         android:textColor="@color/colorDictionaryWord"
-        android:hint="dictionary title"/>
+        android:hint="@string/dialog_add_dictionary_EditText"/>
 </LinearLayout>

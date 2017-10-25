@@ -1,14 +1,27 @@
 <resources>
     <string name="app_name">"MyDictionary "</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="title_all_dictionaries">AllDictionaries</string>
+    <string name="title_training">@string/item_navigation_drawer_training</string>
+
+    <string name="dialog_add_dictionary_positive_button">Add</string>
+    <string name="dialog_add_dictionary_negative_button">Cancel</string>
+    <string name="dialog_add_dictionary_EditText">dictionary title</string>
+    <string name="dialog_add_dictionary_TextView_head">Add new dictionary</string>
+
+    <string name="dialog_edit_dictionary_positive_button">Edit</string>
+    <string name="dialog_edit_dictionary_negative_button">Cancel</string>
+    <string name="dialog_edit_dictionary_EditText">dictionary title</string>
+    <string name="dialog_edit_dictionary_TextView_head">Edit dictionary</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="item_navigation_drawer_dictionary">Dictionary</string>
-    <string name="item_navigation_drawer_training">Trainings</string>
+    <string name="item_navigation_drawer_training">Training</string>
     <string name="item_navigation_drawer_training_russian_to_english">Rus - Eng</string>
     <string name="item_navigation_drawer_training_english_to_russian">Eng - Rus</string>
     <string name="action_settings">Settings</string>
+
 
     <string name="dictionary_new_word">Inter new word</string>
 </resources>

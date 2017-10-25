@@ -1,6 +1,7 @@
 package com.dictionary.my.mydictionary.view.dictionary;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -144,12 +145,11 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
                         sizeOfDeleteList = adapter.addViewToDeleteList(l);
                     }
                     if(sizeOfDeleteList == 0){
-                        fab.show();
                         checkListMod = OPEN_DICTIONARY_MOD;
                         mListener.checkListIsChange();
+                        fab.show();
                     }else{
                         mListener.checkListIsChange();
-                        fab.hide();
                     }
                 }else if(checkListMod == OPEN_DICTIONARY_MOD) {
                    // mListener.selectedDictionary(l);
@@ -163,8 +163,8 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
                 if(checkListMod != CHANGE_MOD) {
                     sizeOfDeleteList = adapter.addViewToDeleteList(l);
                     checkListMod = CHANGE_MOD;
-                    fab.hide();
                     mListener.checkListIsChange();
+                    fab.hide();
                     return true;
                 }else{
                     return false;
@@ -208,8 +208,6 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
                     modifiedDictionary = new HashMap<>();
                     modifiedDictionary.put(from[0],adapter.getDeleteList().get(0));
                     modifiedDictionary.put(from[1],data.getStringExtra(from[1]));
-                    resetCheckList();
-                    mListener.checkListIsChange();
                     presenter.editDictionary();
                     break;
             }
@@ -225,11 +223,20 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
 
     @Override
     public ArrayList<Long> getDeletedDictionary() {
-        return adapter.getDeleteList();
+        ArrayList<Long> list = new ArrayList<>();
+        ArrayList<Long> buf = adapter.getDeleteList();
+        for(int i = 0; i < adapter.getSizeOfDeleteList(); i++){
+            list.add(buf.get(i));
+        }
+        resetCheckList();
+        mListener.checkListIsChange();
+        return list;
     }
 
     @Override
     public Map<String, Object> getEditedDictionary() {
+        resetCheckList();
+        mListener.checkListIsChange();
         return modifiedDictionary;
     }
 
@@ -241,16 +248,12 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     @Override
     public void deleteSelectedDictionaries() {
         presenter.deleteDictionary();
-        checkListMod = OPEN_DICTIONARY_MOD;
-        fab.show();
     }
 
     @Override
     public void deleteSelectedDictionariesWithData() {
         if(adapter.getSizeOfDeleteList() == 1){
             presenter.deleteDictionaryWithWords();
-            checkListMod = OPEN_DICTIONARY_MOD;
-            fab.show();
         }
     }
 
@@ -265,7 +268,6 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     public void editSelectedDictionary() {
         if(adapter.getSizeOfDeleteList() == 1){
             createEditDictionaryDialog();
-
         }
 
     }

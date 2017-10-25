@@ -3,6 +3,7 @@ package com.dictionary.my.mydictionary.view;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -20,7 +21,6 @@ import com.dictionary.my.mydictionary.view.training.EngRusTrainingView;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DictionaryListener {
-    HostToAllDictionariesCommands allDictListener;
     AllDictionariesView allDictionaries;
     DictionaryView dictionaryView;
     HostToAllDictionariesCommands hostToAllDictionariesCommands;
@@ -28,16 +28,20 @@ public class MainActivity extends AppCompatActivity
     Integer itemCount = null;
     Toolbar toolbar;
     ActionBarDrawerToggle toggle;
-    final String KEY_TOOLBAR_MOD = "ToolbarMod";
+
     final String KEY_FRAGMENT = "Fragment";
     final String KEY_FRAGMENT_ALL_DICTIONARIES = "AllDictionaries";
     final String KEY_FRAGMENT_DICTIONARY = "Dictionary";
     final String KEY_FRAGMENT_TRAINING = "Training";
+    final String KEY_DEFAULT_ACTIVITY = "Activity";
     String currentFragment;
+
+    final String KEY_TOOLBAR_MOD = "ToolbarMod";
     final int DEFAULT_TOOLBAR_MOD = 1;
     final int ALL_DICTIONARIES_TOOLBAR_MOD = 2;
     final int DICTIONARY_TOOLBAR_MOD = 3;
     int menuToolbarMod;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +51,6 @@ public class MainActivity extends AppCompatActivity
             currentFragment = savedInstanceState.getString(KEY_FRAGMENT);
             switch (currentFragment){
                 case KEY_FRAGMENT_ALL_DICTIONARIES:
-                    Log.d("LOG_TAG", "Yes");
                     hostToAllDictionariesCommands = (AllDictionariesView) getSupportFragmentManager().findFragmentById(R.id.container);
                     itemCount = hostToAllDictionariesCommands.getSizeOfDeleteList();
                     break;
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity
             invalidateOptionsMenu();
         }else{
             menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+            currentFragment = KEY_DEFAULT_ACTIVITY;
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -107,10 +111,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onPrepareOptionsMenu(Menu menu) {
         if(menuToolbarMod == ALL_DICTIONARIES_TOOLBAR_MOD){
             if(itemCount == 1){
-                menu.findItem(R.id.all_dict_delete_with_words).setEnabled(true);
                 menu.findItem(R.id.all_dict_edit_action).setEnabled(true);
             }else{
-                menu.findItem(R.id.all_dict_delete_with_words).setEnabled(false);
                 menu.findItem(R.id.all_dict_edit_action).setEnabled(false);
             }
             toolbar.setTitle(itemCount.toString());
@@ -125,7 +127,23 @@ public class MainActivity extends AppCompatActivity
             menu.setGroupVisible(R.id.all_dictionaries_group,false);
             menu.setGroupVisible(R.id.dictionary_group,false);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_white_24dp);
-            toolbar.setTitle("All Dictionaries");
+
+            switch (currentFragment){
+                case KEY_FRAGMENT_ALL_DICTIONARIES:
+                    toolbar.setTitle(getResources().getString(R.string.title_all_dictionaries));
+                    break;
+                case KEY_FRAGMENT_DICTIONARY:
+                    //toolbar.setTitle(getResources().getString(R.string.title_all_dictionaries));
+                    break;
+                case KEY_FRAGMENT_TRAINING:
+                    toolbar.setTitle(getResources().getString(R.string.title_all_dictionaries));
+                    break;
+                case KEY_DEFAULT_ACTIVITY:
+                    toolbar.setTitle(getResources().getString(R.string.title_activity_main));
+                    break;
+
+            }
+
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -137,7 +155,7 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        if (item.getItemId() == android.R.id.home) {
+        if (id == android.R.id.home) {
             if(menuToolbarMod == ALL_DICTIONARIES_TOOLBAR_MOD){
                 menuToolbarMod = DEFAULT_TOOLBAR_MOD;
                 hostToAllDictionariesCommands.resetCheckList();
@@ -152,18 +170,14 @@ public class MainActivity extends AppCompatActivity
         }
 
         if(menuToolbarMod == ALL_DICTIONARIES_TOOLBAR_MOD){
-            switch (item.getItemId()){
+            switch (id){
                 case R.id.all_dict_delete_action:
-                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
                     hostToAllDictionariesCommands.deleteSelectedDictionaries();
-                    invalidateOptionsMenu();
                     break;
                 case R.id.all_dict_delete_with_words:
                     break;
                 case R.id.all_dict_edit_action:
-                    //menuToolbarMod = DEFAULT_TOOLBAR_MOD;
                     hostToAllDictionariesCommands.editSelectedDictionary();
-                    //invalidateOptionsMenu();
                     break;
             }
         }
@@ -187,11 +201,11 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.container,allDictionaries);
             currentFragment = KEY_FRAGMENT_ALL_DICTIONARIES;
             hostToAllDictionariesCommands = allDictionaries;
-            toolbar.setTitle("All Dictionaries");
+            toolbar.setTitle(getResources().getString(R.string.title_all_dictionaries));
         }  else if (id == R.id.nav_training) {
             fragmentTransaction.replace(R.id.container,new EngRusTrainingView());
             currentFragment = KEY_FRAGMENT_TRAINING;
-            toolbar.setTitle("Training");
+            toolbar.setTitle(getResources().getString(R.string.item_navigation_drawer_training));
         } else if (id == R.id.nav_setting) {
 
         }
