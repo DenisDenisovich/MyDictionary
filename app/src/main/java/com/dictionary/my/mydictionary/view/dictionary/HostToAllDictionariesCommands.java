@@ -5,9 +5,9 @@ package com.dictionary.my.mydictionary.view.dictionary;
  */
 
 public interface HostToAllDictionariesCommands {
-    int getDeletedItemCount();
+    Integer getSizeOfDeleteList();
     void deleteSelectedDictionaries();
     void deleteSelectedDictionariesWithData();
-    void cancelDeletedDictionaries();
+    void resetCheckList();
     void editSelectedDictionary();
 }

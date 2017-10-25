@@ -12,12 +12,11 @@ public interface AllDictionaries {
     void hideProgress();
     void showToast(String message);
     void createAdapter(ArrayList<Map<String, Object>> data, String ... key);
-    void setData(ArrayList<Map<String, Object>> data);
     void createDictionariesList();
     //void updateDictionariesList(ArrayList<Map<String, Object>> data);
     //void setFromKeys(String ... key);
 
     Map<String,Object> getNewDictionary();
-    ArrayList<Long> getDeletingDictionary();
-    Map<String,Object> getEditingDictionary();
+    ArrayList<Long> getDeletedDictionary();
+    Map<String,Object> getEditedDictionary();
 }

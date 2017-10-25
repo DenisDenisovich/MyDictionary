@@ -23,9 +23,9 @@ public class MainActivity extends AppCompatActivity
     HostToAllDictionariesCommands allDictListener;
     AllDictionariesView allDictionaries;
     DictionaryView dictionaryView;
-    HostToAllDictionariesCommands allDictionariesCommands;
-    long selectedDictionary;
-    Integer deletedItemCount = null;
+    HostToAllDictionariesCommands hostToAllDictionariesCommands;
+    long dictionaryId;
+    Integer itemCount = null;
     Toolbar toolbar;
     ActionBarDrawerToggle toggle;
     final String KEY_TOOLBAR_MOD = "ToolbarMod";
@@ -48,8 +48,8 @@ public class MainActivity extends AppCompatActivity
             switch (currentFragment){
                 case KEY_FRAGMENT_ALL_DICTIONARIES:
                     Log.d("LOG_TAG", "Yes");
-                    allDictionariesCommands = (AllDictionariesView) getSupportFragmentManager().findFragmentById(R.id.container);
-                    deletedItemCount = allDictionariesCommands.getDeletedItemCount();
+                    hostToAllDictionariesCommands = (AllDictionariesView) getSupportFragmentManager().findFragmentById(R.id.container);
+                    itemCount = hostToAllDictionariesCommands.getSizeOfDeleteList();
                     break;
                 case KEY_FRAGMENT_DICTIONARY:
                     break;
@@ -106,14 +106,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         if(menuToolbarMod == ALL_DICTIONARIES_TOOLBAR_MOD){
-            if(deletedItemCount == 1){
+            if(itemCount == 1){
                 menu.findItem(R.id.all_dict_delete_with_words).setEnabled(true);
                 menu.findItem(R.id.all_dict_edit_action).setEnabled(true);
             }else{
                 menu.findItem(R.id.all_dict_delete_with_words).setEnabled(false);
                 menu.findItem(R.id.all_dict_edit_action).setEnabled(false);
             }
-            toolbar.setTitle(deletedItemCount.toString());
+            toolbar.setTitle(itemCount.toString());
             menu.setGroupVisible(R.id.default_group,false);
             menu.setGroupVisible(R.id.all_dictionaries_group,true);
             menu.setGroupVisible(R.id.dictionary_group,false);
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity
         if (item.getItemId() == android.R.id.home) {
             if(menuToolbarMod == ALL_DICTIONARIES_TOOLBAR_MOD){
                 menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-                allDictionariesCommands.cancelDeletedDictionaries();
+                hostToAllDictionariesCommands.resetCheckList();
                 invalidateOptionsMenu();
                 return true;
             }else if(menuToolbarMod == DICTIONARY_TOOLBAR_MOD){
@@ -155,14 +155,14 @@ public class MainActivity extends AppCompatActivity
             switch (item.getItemId()){
                 case R.id.all_dict_delete_action:
                     menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-                    allDictionariesCommands.deleteSelectedDictionaries();
+                    hostToAllDictionariesCommands.deleteSelectedDictionaries();
                     invalidateOptionsMenu();
                     break;
                 case R.id.all_dict_delete_with_words:
                     break;
                 case R.id.all_dict_edit_action:
                     //menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-                    allDictionariesCommands.editSelectedDictionary();
+                    hostToAllDictionariesCommands.editSelectedDictionary();
                     //invalidateOptionsMenu();
                     break;
             }
@@ -186,7 +186,7 @@ public class MainActivity extends AppCompatActivity
             allDictionaries = new AllDictionariesView();
             fragmentTransaction.replace(R.id.container,allDictionaries);
             currentFragment = KEY_FRAGMENT_ALL_DICTIONARIES;
-            allDictionariesCommands = allDictionaries;
+            hostToAllDictionariesCommands = allDictionaries;
             toolbar.setTitle("All Dictionaries");
         }  else if (id == R.id.nav_training) {
             fragmentTransaction.replace(R.id.container,new EngRusTrainingView());
@@ -203,12 +203,8 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void setDictionary(long dictionaryId) {
-        selectedDictionary = dictionaryId;
-    }
-
-    @Override
-    public void openNewDictionary() {
+    public void selectedDictionary(long dictionaryId) {
+        this.dictionaryId = dictionaryId;
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container,new DictionaryView());
         fragmentTransaction.addToBackStack(null);
@@ -217,28 +213,19 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public long getDictionary() {
-        return selectedDictionary;
+        return dictionaryId;
     }
 
     @Override
-    public void startChangeItemMod() {
-        menuToolbarMod = ALL_DICTIONARIES_TOOLBAR_MOD;
-        invalidateOptionsMenu();
-    }
-
-    @Override
-    public void endChangeItemMod() {
-        menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-        invalidateOptionsMenu();
-    }
-
-    @Override
-    public void setDeletedItemCount(int delCount) {
-        if(delCount == 0) {
-            deletedItemCount = null;
+    public void checkListIsChange() {
+        itemCount = hostToAllDictionariesCommands.getSizeOfDeleteList();
+        if(itemCount == 0){
+            menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+            invalidateOptionsMenu();
         }else{
-            deletedItemCount = delCount;
+            menuToolbarMod = ALL_DICTIONARIES_TOOLBAR_MOD;
+            invalidateOptionsMenu();
         }
-        invalidateOptionsMenu();
     }
+
 }

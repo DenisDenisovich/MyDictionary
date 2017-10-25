@@ -31,21 +31,26 @@ import java.util.Map;
 
 public class AllDictionariesView extends Fragment implements AllDictionaries, HostToAllDictionariesCommands {
 
-    AllDictionariesPresenter presenter;
-    DictionaryListener mListener;
-    ListView listView;
-    AllDictionariesAdapter adapter;
-    ArrayList<Map<String, Object>> data;
-    DialogFragment dialog;
-    final int REQUEST_CODE_NEW_DICTIONARY = 1;
-    final int REQUEST_CODE_EDIT_DICTIONARY = 2;
-    String[] from;
-    int[] to = {R.id.dictionary};
-    String newDictionary;
-    Map<String, Object> modifiedDictionary;
-    int selectedItemMod;
-    final int CHANGE_MOD = 1;
-    final int OPEN_DICTIONARY_MOD = 2;
+    private AllDictionariesPresenter presenter;
+    private DictionaryListener mListener;
+    private ListView listView;
+    private AllDictionariesAdapter adapter;
+    FloatingActionButton fab;
+
+    private DialogFragment dialog;
+    private final int REQUEST_CODE_NEW_DICTIONARY = 1;
+    private final int REQUEST_CODE_EDIT_DICTIONARY = 2;
+
+    private String[] from;
+    private int[] to = {R.id.dictionary};
+
+    private Integer sizeOfDeleteList;
+    private String newDictionary;
+    private Map<String, Object> modifiedDictionary;
+
+    private int checkListMod;
+    private final int CHANGE_MOD = 1;
+    private final int OPEN_DICTIONARY_MOD = 2;
 
     @Override
     public void onAttach(Context context) {
@@ -67,13 +72,16 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d("LOG_TAG", "onCreateSUKA");
         presenter.attach(this);
-
 
         View view = inflater.inflate(R.layout.all_dictionaries_fragment, null);
         listView = view.findViewById(R.id.lvAllDictionaries);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.allDictionariesFab);
+        fab = view.findViewById(R.id.allDictionariesFab);
+        if(checkListMod == CHANGE_MOD){
+            fab.hide();
+        }else{
+            fab.show();
+        }
         fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -118,14 +126,8 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
 
     @Override
     public void createAdapter(ArrayList<Map<String, Object>> data, String... key) {
-        this.data = data;
         from = key;
         adapter = new AllDictionariesAdapter(getActivity(),data,R.layout.all_dictionaries_item,from,to);
-    }
-
-    @Override
-    public void setData(ArrayList<Map<String, Object>> data) {
-        this.data = data;
     }
 
 
@@ -135,22 +137,22 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(selectedItemMod == CHANGE_MOD){
+                if(checkListMod == CHANGE_MOD){
                     if(adapter.viewIsDelete(l)){
-                        adapter.removeViewFromDeleteList(l);
+                        sizeOfDeleteList = adapter.removeViewFromDeleteList(l);
                     }else{
-                        adapter.addViewToDeleteList(l);
+                        sizeOfDeleteList = adapter.addViewToDeleteList(l);
                     }
-                    //adapter.notifyDataSetChanged();
-                    if(adapter.getSizeOfDeleteList() == 0){
-                        selectedItemMod = OPEN_DICTIONARY_MOD;
-                        mListener.endChangeItemMod();
+                    if(sizeOfDeleteList == 0){
+                        fab.show();
+                        checkListMod = OPEN_DICTIONARY_MOD;
+                        mListener.checkListIsChange();
                     }else{
-                        mListener.setDeletedItemCount(adapter.getSizeOfDeleteList());
+                        mListener.checkListIsChange();
+                        fab.hide();
                     }
-                }else if(selectedItemMod == OPEN_DICTIONARY_MOD) {
-                    mListener.setDictionary(l);
-                    //mListener.openNewDictionary();
+                }else if(checkListMod == OPEN_DICTIONARY_MOD) {
+                   // mListener.selectedDictionary(l);
                 }
             }
         });
@@ -158,11 +160,11 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                if(selectedItemMod != CHANGE_MOD) {
-                    adapter.addViewToDeleteList(l);
-                    selectedItemMod = CHANGE_MOD;
-                    mListener.startChangeItemMod();
-                    mListener.setDeletedItemCount(adapter.getSizeOfDeleteList());
+                if(checkListMod != CHANGE_MOD) {
+                    sizeOfDeleteList = adapter.addViewToDeleteList(l);
+                    checkListMod = CHANGE_MOD;
+                    fab.hide();
+                    mListener.checkListIsChange();
                     return true;
                 }else{
                     return false;
@@ -206,10 +208,8 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
                     modifiedDictionary = new HashMap<>();
                     modifiedDictionary.put(from[0],adapter.getDeleteList().get(0));
                     modifiedDictionary.put(from[1],data.getStringExtra(from[1]));
-                    mListener.endChangeItemMod();
-                    adapter.clearDeleteList();
-                    adapter.notifyDataSetChanged();
-                    selectedItemMod = OPEN_DICTIONARY_MOD;
+                    resetCheckList();
+                    mListener.checkListIsChange();
                     presenter.editDictionary();
                     break;
             }
@@ -224,38 +224,41 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     }
 
     @Override
-    public ArrayList<Long> getDeletingDictionary() {
+    public ArrayList<Long> getDeletedDictionary() {
         return adapter.getDeleteList();
     }
 
     @Override
-    public Map<String, Object> getEditingDictionary() {
+    public Map<String, Object> getEditedDictionary() {
         return modifiedDictionary;
     }
 
     @Override
-    public int getDeletedItemCount() {
-        return adapter.getSizeOfDeleteList();
+    public Integer getSizeOfDeleteList() {
+        return sizeOfDeleteList;
     }
 
     @Override
     public void deleteSelectedDictionaries() {
         presenter.deleteDictionary();
-        selectedItemMod = OPEN_DICTIONARY_MOD;
+        checkListMod = OPEN_DICTIONARY_MOD;
+        fab.show();
     }
 
     @Override
     public void deleteSelectedDictionariesWithData() {
         if(adapter.getSizeOfDeleteList() == 1){
             presenter.deleteDictionaryWithWords();
-            selectedItemMod = OPEN_DICTIONARY_MOD;
+            checkListMod = OPEN_DICTIONARY_MOD;
+            fab.show();
         }
     }
 
     @Override
-    public void cancelDeletedDictionaries() {
-        adapter.clearDeleteList();
-        //selectedItemMod = OPEN_DICTIONARY_MOD;
+    public void resetCheckList() {
+        sizeOfDeleteList = adapter.clearDeleteList();
+        checkListMod = OPEN_DICTIONARY_MOD;
+        fab.show();
     }
 
     @Override
@@ -266,8 +269,4 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
         }
 
     }
-    /*
-    * TEST CHANGE
-    *
-    * */
 }

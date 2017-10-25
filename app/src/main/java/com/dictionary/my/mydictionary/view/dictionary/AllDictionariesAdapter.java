@@ -57,9 +57,9 @@ public class AllDictionariesAdapter extends BaseAdapter {
             view = layoutInflater.inflate(resourse,null);
         }
         if(deleteList.contains(getItemId(i))){
-            ((LinearLayout) view.findViewById(R.id.dictionaryItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryLight));
+            (view.findViewById(R.id.dictionaryItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryLight));
         }else{
-            ((LinearLayout) view.findViewById(R.id.dictionaryItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorDictionaryItem));
+            (view.findViewById(R.id.dictionaryItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorDictionaryItem));
         }
         ((TextView) view.findViewById(to[0])).setText(getText(i));
         return view;
@@ -69,9 +69,10 @@ public class AllDictionariesAdapter extends BaseAdapter {
         return (String)data.get(i).get(from[1]);
     }
 
-    public void addViewToDeleteList(long l){
+    public int addViewToDeleteList(long l){
         deleteList.add(l);
         this.notifyDataSetChanged();
+        return deleteList.size();
     }
 
     public boolean viewIsDelete(long l){
@@ -81,9 +82,10 @@ public class AllDictionariesAdapter extends BaseAdapter {
         return false;
     }
 
-    public void removeViewFromDeleteList(long l){
+    public int removeViewFromDeleteList(long l){
         deleteList.remove(l);
         this.notifyDataSetChanged();
+        return deleteList.size();
     }
 
     public ArrayList<Long> getDeleteList(){
@@ -91,14 +93,14 @@ public class AllDictionariesAdapter extends BaseAdapter {
     }
 
     public Integer getSizeOfDeleteList(){
-        Log.d("LOG_TAG", deleteList.toString());
         this.notifyDataSetChanged();
         return deleteList.size();
     }
 
-    public void clearDeleteList(){
+    public int clearDeleteList(){
         deleteList.clear();
         this.notifyDataSetChanged();
+        return deleteList.size();
     }
 
 }

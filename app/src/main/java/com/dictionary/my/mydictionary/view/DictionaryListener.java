@@ -5,11 +5,7 @@ package com.dictionary.my.mydictionary.view;
  */
 
 public interface DictionaryListener {
-    void setDictionary(long dictionaryId);
-    void openNewDictionary();
+    void selectedDictionary(long dictionaryId);
     long getDictionary();
-
-    void startChangeItemMod();
-    void endChangeItemMod();
-    void setDeletedItemCount(int deletedCount);
+    void checkListIsChange();
 }

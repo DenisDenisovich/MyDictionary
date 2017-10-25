@@ -81,7 +81,6 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
 
     @Override
     public void update() {
-        view.setData(data);
         view.createDictionariesList();
     }
 
@@ -107,7 +106,7 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
 
     @Override
     public void deleteDictionary() {
-        idOfDelDicts = view.getDeletingDictionary();
+        idOfDelDicts = view.getDeletedDictionary();
         Single<ArrayList<Long>> observable = Single.create(new SingleOnSubscribe<ArrayList<Long>>() {
             @Override
             public void subscribe(@NonNull SingleEmitter<ArrayList<Long>> e) throws Exception {
@@ -125,7 +124,7 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
 
     @Override
     public void deleteDictionaryWithWords() {
-        idOfDelDictwithWords = view.getDeletingDictionary().get(0);
+        idOfDelDictwithWords = view.getDeletedDictionary().get(0);
         Single<Long> observable = Single.create(new SingleOnSubscribe<Long>() {
             @Override
             public void subscribe(@NonNull SingleEmitter<Long> e) throws Exception {
@@ -143,7 +142,7 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
 
     @Override
     public void editDictionary() {
-        modifiedDictionary = view.getEditingDictionary();
+        modifiedDictionary = view.getEditedDictionary();
         Single<Map<String, Object>> observable = Single.create(new SingleOnSubscribe<Map<String, Object>>() {
             @Override
             public void subscribe(@NonNull SingleEmitter<Map<String, Object>> e) throws Exception {
