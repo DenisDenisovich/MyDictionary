@@ -2,12 +2,10 @@ package com.dictionary.my.mydictionary.view.dictionary;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dictionary.my.mydictionary.R;
@@ -24,13 +22,13 @@ public class AllDictionariesAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Map<String,Object>> data;
     private ArrayList<Long> deleteList;
-    private int resourse;
+    private int resource;
     private String[] from;
     private int[] to;
     public AllDictionariesAdapter(Context context, ArrayList<Map<String,Object>> data, int resourse, String[] from, int[] to){
         this.context = context;
         this.data = data;
-        this.resourse = resourse;
+        this.resource = resourse;
         this.from = from;
         this.to = to;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -54,7 +52,7 @@ public class AllDictionariesAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view == null){
-            view = layoutInflater.inflate(resourse,null);
+            view = layoutInflater.inflate(resource,null);
         }
         if(deleteList.contains(getItemId(i))){
             (view.findViewById(R.id.dictionaryItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryLight));

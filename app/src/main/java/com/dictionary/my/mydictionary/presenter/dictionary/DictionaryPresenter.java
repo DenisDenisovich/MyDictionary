@@ -9,6 +9,9 @@ public interface DictionaryPresenter<V> {
     void detach();
     void destroy();
     void init(long dictionaryId);
+    void update();
     void newWord();
-    void deleteWord();
+    void deleteWords();
+    void moveWords();
+    void editWord();
 }

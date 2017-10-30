@@ -35,6 +35,7 @@ public class AllDictionariesRepositoriesImpl implements AllDictionariesRepositor
     DisposableSingleObserver<Map<String,Object>> disposableEditDict;
 
     public AllDictionariesRepositoriesImpl(Context context){
+
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
     }

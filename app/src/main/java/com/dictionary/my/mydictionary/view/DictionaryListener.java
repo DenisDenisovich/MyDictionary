@@ -5,7 +5,7 @@ package com.dictionary.my.mydictionary.view;
  */
 
 public interface DictionaryListener {
-    void selectedDictionary(long dictionaryId);
+    void selectedDictionary(long dictionaryId, String dictionaryTitle);
     long getDictionary();
     void checkListIsChange();
 }

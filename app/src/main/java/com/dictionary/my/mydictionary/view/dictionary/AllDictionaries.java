@@ -13,8 +13,6 @@ public interface AllDictionaries {
     void showToast(String message);
     void createAdapter(ArrayList<Map<String, Object>> data, String ... key);
     void createDictionariesList();
-    //void updateDictionariesList(ArrayList<Map<String, Object>> data);
-    //void setFromKeys(String ... key);
 
     Map<String,Object> getNewDictionary();
     ArrayList<Long> getDeletedDictionary();

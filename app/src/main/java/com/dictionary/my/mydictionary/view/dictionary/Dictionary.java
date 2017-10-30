@@ -11,11 +11,13 @@ public interface Dictionary {
     void showProgress();
     void hideProgress();
     void showToast(String message);
+    void createAdapter(ArrayList<Map<String, Object>> data, String ... key);
+    void createWordsList();
 
-    void showDictionary(ArrayList<Map<String, Object>> data);
-    void setFromKeys(String ... key);
     Map<String,Object> getNewWord();
     ArrayList<Long> getDeletedWords();
+    ArrayList<Long> getMovedWords();
+    Map<String,Object> getEditedWord();
 
 
 }

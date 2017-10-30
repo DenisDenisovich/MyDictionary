@@ -14,6 +14,18 @@
     <string name="dialog_edit_dictionary_EditText">dictionary title</string>
     <string name="dialog_edit_dictionary_TextView_head">Edit dictionary</string>
 
+    <string name="dialog_add_word_positive_button">Add</string>
+    <string name="dialog_add_word_negative_button">Cancel</string>
+    <string name="dialog_add_word_EditText1">word</string>
+    <string name="dialog_add_word_EditText2">translate</string>
+    <string name="dialog_add_word_TextView_head">Add new word</string>
+
+    <string name="dialog_edit_word_positive_button">Edit</string>
+    <string name="dialog_edit_word_negative_button">Cancel</string>
+    <string name="dialog_edit_word_EditText1">new word</string>
+    <string name="dialog_edit_word_EditText2">new word</string>
+    <string name="dialog_edit_word_TextView_head">Edit word</string>
+
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="item_navigation_drawer_dictionary">Dictionary</string>

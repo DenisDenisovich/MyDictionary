@@ -152,7 +152,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
                         mListener.checkListIsChange();
                     }
                 }else if(checkListMod == OPEN_DICTIONARY_MOD) {
-                   // mListener.selectedDictionary(l);
+                    mListener.selectedDictionary(l,(String)adapter.getItem(i));
                 }
             }
         });

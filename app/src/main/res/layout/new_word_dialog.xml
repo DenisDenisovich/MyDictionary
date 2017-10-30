@@ -9,7 +9,7 @@
         android:textColor="@color/colorDictionaryItem"
         android:gravity="center"
         android:background="@color/colorPrimary"
-        android:text="Add new word"/>
+        android:text="@string/dialog_add_word_TextView_head"/>
     <EditText
         android:id="@+id/newWordDialog"
         android:layout_marginTop="15dp"
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/dictWordTextSize"
         android:textColor="@color/colorDictionaryWord"
-        android:hint="word"/>
+        android:hint="@string/dialog_add_word_EditText1"/>
     <EditText
         android:id="@+id/newTranslateDialog"
         android:layout_marginTop="15dp"
@@ -25,5 +25,5 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/dictWordTextSize"
         android:textColor="@color/colorDictionaryWord"
-        android:hint="translate"/>
+        android:hint="@string/dialog_add_word_EditText2"/>
 </LinearLayout>
