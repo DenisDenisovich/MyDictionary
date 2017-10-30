@@ -49,9 +49,10 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     private String newDictionary;
     private Map<String, Object> modifiedDictionary;
 
-    private int checkListMod;
+
     private final int CHANGE_MOD = 1;
     private final int OPEN_DICTIONARY_MOD = 2;
+    private int checkListMod = OPEN_DICTIONARY_MOD;
 
     @Override
     public void onAttach(Context context) {
@@ -152,7 +153,8 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
                         mListener.checkListIsChange();
                     }
                 }else if(checkListMod == OPEN_DICTIONARY_MOD) {
-                    mListener.selectedDictionary(l,(String)adapter.getItem(i));
+
+                    mListener.selectedDictionary(l,(String)((Map<String,Object>)adapter.getItem(i)).get(from[0]));
                 }
             }
         });

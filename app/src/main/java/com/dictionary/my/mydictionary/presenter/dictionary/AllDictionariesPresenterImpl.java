@@ -1,9 +1,7 @@
 package com.dictionary.my.mydictionary.presenter.dictionary;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.domain.UseCaseAllDictionaries;
 import com.dictionary.my.mydictionary.domain.UseCaseAllDictionariesImpl;
@@ -32,7 +30,8 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
     private ArrayList<Long> idOfDelDicts;
     private Long idOfDelDictwithWords;
     private Map<String, Object> modifiedDictionary;
-    private final String ERROR_MESSAGE_ADD_LIST = "ERROR: add new dictionary";
+    private final String ERROR_MESSAGE_LOADING_DICTIONARY_LIST = "ERROR: load dictionaries";
+    private final String ERROR_MESSAGE_ADD_NEW_DICTIONARY = "ERROR: add new dictionary";
     private final String ERROR_MESSAGE_DELETE_ITEMS = "ERROR: delete selected dictionaries";
     private final String ERROR_MESSAGE_EDIT_ITEMS = "ERROR: edit selected dictionary";
     public AllDictionariesPresenterImpl(Context context){
@@ -69,7 +68,7 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
 
             @Override
             public void onError(@NonNull Throwable e) {
-                view.showToast("Data I/O error");
+                view.showToast(ERROR_MESSAGE_LOADING_DICTIONARY_LIST);
             }
 
             @Override
@@ -100,7 +99,7 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
                     init();
                 }catch (Throwable t){
                     e.onError(t);
-                    view.showToast(ERROR_MESSAGE_ADD_LIST);
+                    view.showToast(ERROR_MESSAGE_ADD_NEW_DICTIONARY);
                 }
             }
         });

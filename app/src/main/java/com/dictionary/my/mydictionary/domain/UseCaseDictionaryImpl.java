@@ -17,9 +17,11 @@ import io.reactivex.Single;
 
 public class UseCaseDictionaryImpl implements UseCaseDictionary{
     DictionaryRepository repository;
-    public UseCaseDictionaryImpl(Context context){
-        repository = new DictionaryRepositoryImpl(context);
+    public UseCaseDictionaryImpl(Context context, Long currentDictionaryId){
+        repository = new DictionaryRepositoryImpl(context, currentDictionaryId);
     }
+
+
     @Override
     public Observable<Map<String, Object>> getWordsList() {
         return repository.getDictionariesList();

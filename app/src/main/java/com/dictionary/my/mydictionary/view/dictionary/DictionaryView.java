@@ -45,7 +45,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     private String[] from;
     private int[] to = {R.id.word_dictionary, R.id.translate_dictionary};
 
-    long initDictionaryId;
+    long currentDictionaryId;
     long moveToDictionaryId;
     private Integer sizeOfDeleteList;
     private Map<String, Object> newWord;
@@ -61,6 +61,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
         super.onAttach(context);
         try{
             mListener = (DictionaryListener) context;
+            currentDictionaryId = mListener.getDictionary();
         }catch (ClassCastException e){
             e.printStackTrace();
         }
@@ -70,15 +71,14 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
-        presenter = new DictionaryPresenterImpl(getActivity().getApplicationContext());
-
+        presenter = new DictionaryPresenterImpl(getActivity().getApplicationContext(), currentDictionaryId);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         presenter.attach(this);
-        initDictionaryId = mListener.getDictionary();
+
         View view = inflater.inflate(R.layout.dictionary_fragment,null);
         listView =  view.findViewById(R.id.lvDictionary);
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.dictionaryFab);
@@ -94,7 +94,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
             }
         });
         if(savedInstanceState == null){
-            presenter.init(initDictionaryId);
+            presenter.init();
         }else{
             presenter.update();
         }
@@ -175,7 +175,6 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
         }
     });
     }
-
 
 
     @Override

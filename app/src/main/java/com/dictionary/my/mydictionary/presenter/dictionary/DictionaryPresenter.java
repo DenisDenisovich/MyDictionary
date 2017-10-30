@@ -8,7 +8,7 @@ public interface DictionaryPresenter<V> {
     void attach(V view);
     void detach();
     void destroy();
-    void init(long dictionaryId);
+    void init();
     void update();
     void newWord();
     void deleteWords();
