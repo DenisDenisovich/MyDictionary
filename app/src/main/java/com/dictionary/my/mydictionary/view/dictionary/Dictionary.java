@@ -11,9 +11,9 @@ public interface Dictionary {
     void showProgress();
     void hideProgress();
     void showToast(String message);
-    void createAdapter(ArrayList<Map<String, Object>> data, String ... key);
+    void createAdapter(ArrayList<Map<String, Object>> data);
     void createWordsList();
-
+    void setFrom(String ... from);
     Map<String,Object> getNewWord();
     ArrayList<Long> getDeletedWords();
     ArrayList<Long> getMovedWords();

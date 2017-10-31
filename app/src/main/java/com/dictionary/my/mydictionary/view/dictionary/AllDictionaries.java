@@ -11,8 +11,9 @@ public interface AllDictionaries {
     void showProgress();
     void hideProgress();
     void showToast(String message);
-    void createAdapter(ArrayList<Map<String, Object>> data, String ... key);
+    void createAdapter(ArrayList<Map<String, Object>> data);
     void createDictionariesList();
+    void setFrom(String ... from);
 
     Map<String,Object> getNewDictionary();
     ArrayList<Long> getDeletedDictionary();

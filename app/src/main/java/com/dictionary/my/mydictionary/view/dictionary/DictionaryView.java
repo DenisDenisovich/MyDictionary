@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.dictionary.my.mydictionary.R;
+import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.presenter.dictionary.DictionaryPresenter;
 import com.dictionary.my.mydictionary.presenter.dictionary.DictionaryPresenterImpl;
 import com.dictionary.my.mydictionary.view.DictionaryListener;
@@ -34,7 +35,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     DictionaryPresenter presenter;
     private DictionaryListener mListener;
     private ListView listView;
-    private AllDictionariesAdapter adapter;
+    private WordAdapter adapter;
     FloatingActionButton fab;
 
     private DialogFragment dialog;
@@ -42,7 +43,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     private final int REQUEST_CODE_EDIT_WORD = 2;
     private final int REQUEST_CODE_MOVE_WORDS = 3;
 
-    private String[] from;
+    private String[] from = Content.fromDictionary;
     private int[] to = {R.id.word_dictionary, R.id.translate_dictionary};
 
     long currentDictionaryId;
@@ -81,7 +82,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
 
         View view = inflater.inflate(R.layout.dictionary_fragment,null);
         listView =  view.findViewById(R.id.lvDictionary);
-        FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.dictionaryFab);
+        fab = (FloatingActionButton) view.findViewById(R.id.dictionaryFab);
         if(checkListMod == CHANGE_MOD){
             fab.hide();
         }else{
@@ -131,9 +132,8 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     }
 
     @Override
-    public void createAdapter(ArrayList<Map<String, Object>> data, String... key) {
-        from = key;
-        adapter = new AllDictionariesAdapter(getActivity(),data,R.layout.dictionary_item,from,to);
+    public void createAdapter(ArrayList<Map<String, Object>> data) {
+        adapter = new WordAdapter(getActivity(),data,R.layout.word_item,from,to);
     }
 
     @Override
@@ -174,6 +174,11 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
             }
         }
     });
+    }
+
+    @Override
+    public void setFrom(String... from) {
+        this.from = from;
     }
 
 

@@ -57,6 +57,7 @@ public class DictionaryPresenterImpl<V extends Dictionary> implements Dictionary
 
     @Override
     public void init() {
+        view.setFrom(from);
         data = new ArrayList<>();
         getWordsListDisposable = useCase.getWordsList()
                 .subscribeOn(Schedulers.io())
@@ -69,12 +70,13 @@ public class DictionaryPresenterImpl<V extends Dictionary> implements Dictionary
 
                     @Override
                     public void onError(@NonNull Throwable e) {
+                        e.printStackTrace();
                         view.showToast(ERROR_MESSAGE_LOADING_WORDS_LIST);
                     }
 
                     @Override
                     public void onComplete() {
-                        view.createAdapter(data,from);
+                        view.createAdapter(data);
                         view.createWordsList();
                     }
                 });

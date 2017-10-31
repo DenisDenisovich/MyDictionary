@@ -1,6 +1,7 @@
 package com.dictionary.my.mydictionary.view;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
@@ -86,6 +87,29 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if(getSupportFragmentManager().findFragmentByTag(KEY_DEFAULT_ACTIVITY) != null && getSupportFragmentManager().findFragmentByTag(KEY_DEFAULT_ACTIVITY).isVisible()){
+                    currentFragment = KEY_DEFAULT_ACTIVITY;
+                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+                    invalidateOptionsMenu();
+                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES).isVisible()){
+                    currentFragment = KEY_FRAGMENT_ALL_DICTIONARIES;
+                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+                    invalidateOptionsMenu();
+                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_DICTIONARY) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_DICTIONARY).isVisible()){
+                    currentFragment = KEY_FRAGMENT_DICTIONARY;
+                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+                    invalidateOptionsMenu();
+                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING).isVisible()){
+                    currentFragment = KEY_FRAGMENT_TRAINING;
+                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+                    invalidateOptionsMenu();
+                }
+            }
+        });
     }
 
     @Override
@@ -230,12 +254,12 @@ public class MainActivity extends AppCompatActivity
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_dictionary) {
             allDictionaries = new AllDictionariesView();
-            fragmentTransaction.replace(R.id.container,allDictionaries);
+            fragmentTransaction.replace(R.id.container,allDictionaries,KEY_FRAGMENT_ALL_DICTIONARIES);
             currentFragment = KEY_FRAGMENT_ALL_DICTIONARIES;
             hostToAllDictionariesCommands = allDictionaries;
             toolbar.setTitle(getResources().getString(R.string.title_all_dictionaries));
         }  else if (id == R.id.nav_training) {
-            fragmentTransaction.replace(R.id.container,new EngRusTrainingView());
+            fragmentTransaction.replace(R.id.container,new EngRusTrainingView(),KEY_FRAGMENT_TRAINING);
             currentFragment = KEY_FRAGMENT_TRAINING;
             toolbar.setTitle(getResources().getString(R.string.item_navigation_drawer_training));
         } else if (id == R.id.nav_setting) {
@@ -254,7 +278,7 @@ public class MainActivity extends AppCompatActivity
         this.dictionaryTitle = dictionaryTitle;
         dictionaryView = new DictionaryView();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container,dictionaryView);
+        fragmentTransaction.replace(R.id.container,dictionaryView,KEY_FRAGMENT_DICTIONARY);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
         currentFragment = KEY_FRAGMENT_DICTIONARY;

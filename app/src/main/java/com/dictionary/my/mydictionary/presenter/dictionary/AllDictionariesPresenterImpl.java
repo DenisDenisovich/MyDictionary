@@ -56,6 +56,7 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
 
     @Override
     public void init() {
+        view.setFrom(from);
         data = new ArrayList<>();
         getDictionariesListDisposable = useCase.getDictionariesList()
                 .subscribeOn(Schedulers.io())
@@ -73,7 +74,7 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
 
             @Override
             public void onComplete() {
-                view.createAdapter(data,from);
+                view.createAdapter(data);
                 view.createDictionariesList();
 
             }

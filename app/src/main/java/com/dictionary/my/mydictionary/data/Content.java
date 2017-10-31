@@ -24,5 +24,5 @@ public interface Content {
     final String editDbAllDictionaries = COLUMN_ROWID + " = ";
 
     final String selectDbDictionary = "select " + COLUMN_ROWID + ", " + COLUMN_WORD + ", " + COLUMN_TRANSLATE + " " +
-                                       "from " + TABLE_ALL_WORD + " where " + COLUMN_DICTIONARY + " = ";
+                                       "from " + TABLE_ALL_WORD + " where " + COLUMN_DICTIONARY + " = ? ";
 }

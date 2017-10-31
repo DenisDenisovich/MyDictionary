@@ -127,8 +127,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     }
 
     @Override
-    public void createAdapter(ArrayList<Map<String, Object>> data, String... key) {
-        from = key;
+    public void createAdapter(ArrayList<Map<String, Object>> data) {
         adapter = new AllDictionariesAdapter(getActivity(),data,R.layout.all_dictionaries_item,from,to);
     }
 
@@ -153,8 +152,9 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
                         mListener.checkListIsChange();
                     }
                 }else if(checkListMod == OPEN_DICTIONARY_MOD) {
-
-                    mListener.selectedDictionary(l,(String)((Map<String,Object>)adapter.getItem(i)).get(from[0]));
+                    Map<String, Object> item = (Map<String, Object>)adapter.getItem(i);
+                    String itemString = (String)item.get(from[1]);
+                    mListener.selectedDictionary(l,itemString);
                 }
             }
         });
@@ -173,6 +173,11 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
                 }
             }
         });
+    }
+
+    @Override
+    public void setFrom(String... from) {
+        this.from = from;
     }
 
     @Override

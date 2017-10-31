@@ -1,5 +1,6 @@
 package com.dictionary.my.mydictionary.view.dictionary;
 
+
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -14,10 +15,10 @@ import java.util.ArrayList;
 import java.util.Map;
 
 /**
- * Created by luxso on 12.10.2017.
+ * Created by luxso on 31.10.2017.
  */
 
-public class AllDictionariesAdapter extends BaseAdapter {
+public class WordAdapter extends BaseAdapter {
     private LayoutInflater layoutInflater;
     private Context context;
     private ArrayList<Map<String,Object>> data;
@@ -25,7 +26,8 @@ public class AllDictionariesAdapter extends BaseAdapter {
     private int resource;
     private String[] from;
     private int[] to;
-    public AllDictionariesAdapter(Context context, ArrayList<Map<String,Object>> data, int resource, String[] from, int[] to){
+
+    public WordAdapter(Context context, ArrayList<Map<String,Object>> data, int resource, String[] from, int[] to){
         this.context = context;
         this.data = data;
         this.resource = resource;
@@ -49,24 +51,28 @@ public class AllDictionariesAdapter extends BaseAdapter {
         return (Long)data.get(i).get(from[0]);
     }
 
+
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         if(view == null){
             view = layoutInflater.inflate(resource,null);
         }
         if(deleteList.contains(getItemId(i))){
-            (view.findViewById(R.id.dictionaryItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryLight));
+            (view.findViewById(R.id.wordItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryLight));
         }else{
-            (view.findViewById(R.id.dictionaryItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorDictionaryItem));
+            (view.findViewById(R.id.wordItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorDictionaryItem));
         }
-        ((TextView) view.findViewById(to[0])).setText(getText(i));
+        ((TextView) view.findViewById(to[0])).setText(getWordText(i));
+        ((TextView) view.findViewById(to[1])).setText(getTranslateText(i));
         return view;
     }
 
-    private String getText(int i){
+    private String getWordText(int i){
         return (String)data.get(i).get(from[1]);
     }
-
+    private String getTranslateText(int i){
+        return (String)data.get(i).get(from[2]);
+    }
     public int addViewToDeleteList(long l){
         deleteList.add(l);
         this.notifyDataSetChanged();
@@ -100,5 +106,4 @@ public class AllDictionariesAdapter extends BaseAdapter {
         this.notifyDataSetChanged();
         return deleteList.size();
     }
-
 }

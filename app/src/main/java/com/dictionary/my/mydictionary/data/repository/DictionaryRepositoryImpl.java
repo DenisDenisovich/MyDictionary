@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.data.DBHelper;
@@ -47,7 +48,7 @@ public class DictionaryRepositoryImpl implements DictionaryRepository {
         Observable<Map<String,Object>> observable = Observable.create(new ObservableOnSubscribe<Map<String, Object>>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<Map<String, Object>> e) throws Exception {
-                Cursor cursor = db.rawQuery(Content.selectDbAllDictionaries, new String[] {currentDictionaryId.toString()});
+                Cursor cursor = db.rawQuery(Content.selectDbDictionary, new String[] {currentDictionaryId.toString()});
                 Map<String,Object> item;
                 try {
                     if(cursor.moveToLast()){
@@ -63,7 +64,7 @@ public class DictionaryRepositoryImpl implements DictionaryRepository {
                 }
             }
         });
-        return null;
+        return observable;
     }
 
     @Override
