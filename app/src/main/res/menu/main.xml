@@ -24,11 +24,6 @@
             android:icon="@drawable/ic_delete_white_24px"
             />
         <item
-            android:id="@+id/all_dict_delete_with_words"
-            android:orderInCategory="200"
-            android:title="Delete with data"
-            app:showAsAction="never"/>
-        <item
             android:id="@+id/all_dict_edit_action"
             android:orderInCategory="300"
             android:title="Edit"

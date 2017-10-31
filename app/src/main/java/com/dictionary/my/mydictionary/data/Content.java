@@ -21,6 +21,7 @@ public interface Content {
     final String selectDbAllDictionaries = "select " + COLUMN_ROWID + ", " + COLUMN_TITLE + " " +
                                             "from " + TABLE_DICTIONARIES;
     final String deleteDbAllDictionaries = COLUMN_ROWID + " = ";
+    final String deleteDbAllDictionariesWithWords = COLUMN_DICTIONARY + " = ";
     final String editDbAllDictionaries = COLUMN_ROWID + " = ";
 
     final String selectDbDictionary = "select " + COLUMN_ROWID + ", " + COLUMN_WORD + ", " + COLUMN_TRANSLATE + " " +

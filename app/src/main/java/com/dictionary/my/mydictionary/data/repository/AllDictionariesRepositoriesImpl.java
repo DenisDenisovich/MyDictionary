@@ -85,6 +85,7 @@ public class AllDictionariesRepositoriesImpl implements AllDictionariesRepositor
                 for(int i = 0; i < longs.size();i++){
                     whereArg[i] = longs.get(i).toString();
                     db.delete(Content.TABLE_DICTIONARIES,Content.deleteDbAllDictionaries + whereArg[i], null);
+                    db.delete(Content.TABLE_ALL_WORD,Content.deleteDbAllDictionariesWithWords + whereArg[i], null);
                 }
 
             }
@@ -94,11 +95,6 @@ public class AllDictionariesRepositoriesImpl implements AllDictionariesRepositor
 
             }
         });
-    }
-
-    @Override
-    public void deleteDictionaryWithWords(Single<Long> observable) {
-
     }
 
     @Override

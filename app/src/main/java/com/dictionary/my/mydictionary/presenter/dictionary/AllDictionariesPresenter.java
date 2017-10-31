@@ -12,6 +12,5 @@ public interface AllDictionariesPresenter<V> {
     void update();
     void newDictionary();
     void deleteDictionary();
-    void deleteDictionaryWithWords();
     void editDictionary();
 }

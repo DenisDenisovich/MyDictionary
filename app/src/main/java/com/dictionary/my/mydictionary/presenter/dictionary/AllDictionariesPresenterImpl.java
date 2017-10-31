@@ -127,24 +127,6 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
     }
 
     @Override
-    public void deleteDictionaryWithWords() {
-        idOfDelDictwithWords = view.getDeletedDictionary().get(0);
-        Single<Long> observable = Single.create(new SingleOnSubscribe<Long>() {
-            @Override
-            public void subscribe(@NonNull SingleEmitter<Long> e) throws Exception {
-                try{
-                    e.onSuccess(idOfDelDictwithWords);
-                    init();
-                }catch (Throwable t){
-                    e.onError(t);
-                    view.showToast(ERROR_MESSAGE_DELETE_ITEMS);
-                }
-            }
-        });
-        useCase.deleteDictionaryWithWords(observable);
-    }
-
-    @Override
     public void editDictionary() {
         modifiedDictionary = view.getEditedDictionary();
         Single<Map<String, Object>> observable = Single.create(new SingleOnSubscribe<Map<String, Object>>() {

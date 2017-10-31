@@ -32,11 +32,6 @@ public class UseCaseAllDictionariesImpl implements UseCaseAllDictionaries{
     }
 
     @Override
-    public void deleteDictionaryWithWords(Single<Long> observable) {
-
-    }
-
-    @Override
     public void editDictionary(Single<Map<String, Object>> observable) {
         repositories.editDictionary(observable);
 

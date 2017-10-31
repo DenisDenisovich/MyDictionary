@@ -257,12 +257,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
         presenter.deleteDictionary();
     }
 
-    @Override
-    public void deleteSelectedDictionariesWithData() {
-        if(adapter.getSizeOfDeleteList() == 1){
-            presenter.deleteDictionaryWithWords();
-        }
-    }
+
 
     @Override
     public void resetCheckList() {

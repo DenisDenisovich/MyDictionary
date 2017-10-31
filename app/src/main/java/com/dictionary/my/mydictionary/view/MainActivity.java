@@ -216,8 +216,6 @@ public class MainActivity extends AppCompatActivity
                 case R.id.all_dict_delete_action:
                     hostToAllDictionariesCommands.deleteSelectedDictionaries();
                     break;
-                case R.id.all_dict_delete_with_words:
-                    break;
                 case R.id.all_dict_edit_action:
                     hostToAllDictionariesCommands.editSelectedDictionary();
                     break;

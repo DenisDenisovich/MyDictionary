@@ -15,7 +15,6 @@ public interface UseCaseAllDictionaries {
     Observable<Map<String,Object>> getDictionariesList();
     void setNewDictionary(Single<Map<String,Object>> observable);
     void deleteDictionaries(Single<ArrayList<Long>> observable);
-    void deleteDictionaryWithWords(Single<Long> observable);
     void editDictionary(Single<Map<String, Object>> observable);
     void destroy();
 }

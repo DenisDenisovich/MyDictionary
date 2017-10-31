@@ -7,7 +7,6 @@ package com.dictionary.my.mydictionary.view.dictionary;
 public interface HostToAllDictionariesCommands {
     Integer getSizeOfDeleteList();
     void deleteSelectedDictionaries();
-    void deleteSelectedDictionariesWithData();
     void resetCheckList();
     void editSelectedDictionary();
 }
