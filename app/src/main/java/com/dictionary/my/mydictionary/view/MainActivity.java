@@ -27,7 +27,9 @@ public class MainActivity extends AppCompatActivity
     DictionaryView dictionaryView;
     HostToAllDictionariesCommands hostToAllDictionariesCommands;
     HostToDictionaryCommand hostToDictionaryCommands;
+    final String KEY_DICTIONARY_ID = "DictionaryId";
     long dictionaryId;
+    final String KEY_DICTIONARY_TITLE = "DictionaryTitle";
     String dictionaryTitle;
     Integer itemCount = null;
     Toolbar toolbar;
@@ -49,10 +51,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("LOG_TAG", "MainActivity: onCreate()");
         setContentView(R.layout.activity_main);
         if(savedInstanceState != null){
+            Log.d("LOG_TAG", "MainActivity: savedInstanceState != null");
             menuToolbarMod = savedInstanceState.getInt(KEY_TOOLBAR_MOD);
             currentFragment = savedInstanceState.getString(KEY_FRAGMENT);
+            dictionaryId = savedInstanceState.getLong(KEY_DICTIONARY_ID);
+            dictionaryTitle = savedInstanceState.getString(KEY_DICTIONARY_TITLE);
             switch (currentFragment){
                 case KEY_FRAGMENT_ALL_DICTIONARIES:
                     hostToAllDictionariesCommands = (AllDictionariesView) getSupportFragmentManager().findFragmentById(R.id.container);
@@ -67,6 +73,7 @@ public class MainActivity extends AppCompatActivity
             }
             invalidateOptionsMenu();
         }else{
+            Log.d("LOG_TAG", "MainActivity: savedInstanceState == null");
             menuToolbarMod = DEFAULT_TOOLBAR_MOD;
             currentFragment = KEY_DEFAULT_ACTIVITY;
         }
@@ -88,39 +95,37 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        // обработка фрагментов пришедших из бекстека
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
             @Override
             public void onBackStackChanged() {
-                if(getSupportFragmentManager().findFragmentByTag(KEY_DEFAULT_ACTIVITY) != null && getSupportFragmentManager().findFragmentByTag(KEY_DEFAULT_ACTIVITY).isVisible()){
-                    currentFragment = KEY_DEFAULT_ACTIVITY;
-                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-                    invalidateOptionsMenu();
-                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES).isVisible()){
+                Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener()");
+                if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES).isVisible()){
                     currentFragment = KEY_FRAGMENT_ALL_DICTIONARIES;
-                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-                    invalidateOptionsMenu();
+                    hostToAllDictionariesCommands = (AllDictionariesView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES);
                 }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_DICTIONARY) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_DICTIONARY).isVisible()){
                     currentFragment = KEY_FRAGMENT_DICTIONARY;
-                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-                    invalidateOptionsMenu();
-                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING).isVisible()){
-                    currentFragment = KEY_FRAGMENT_TRAINING;
-                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-                    invalidateOptionsMenu();
+                    hostToDictionaryCommands = (DictionaryView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_DICTIONARY);
                 }
+                menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+                invalidateOptionsMenu();
             }
         });
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
+        Log.d("LOG_TAG", "MainActivity: onSaveInstanceState()");
         outState.putInt(KEY_TOOLBAR_MOD, menuToolbarMod);
         outState.putString(KEY_FRAGMENT,currentFragment);
+        outState.putLong(KEY_DICTIONARY_ID,dictionaryId);
+        outState.putString(KEY_DICTIONARY_TITLE,dictionaryTitle);
         super.onSaveInstanceState(outState);
     }
 
     @Override
     public void onBackPressed() {
+        Log.d("LOG_TAG", "MainActivity: onBackPressed()");
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -132,13 +137,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+        Log.d("LOG_TAG", "MainActivity: onCreateOptionsMenu()");
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        Log.d("LOG_TAG", "MainActivity: onPrepareOptionsMenu()");
+        // перерисовка меню в toolbar
         if(menuToolbarMod == ALL_DICTIONARIES_TOOLBAR_MOD){
+            // если выбран режим редактирования в AllDictionariesView
             if(itemCount == 1){
                 menu.findItem(R.id.all_dict_edit_action).setEnabled(true);
             }else{
@@ -150,6 +159,7 @@ public class MainActivity extends AppCompatActivity
             menu.setGroupVisible(R.id.dictionary_group,false);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
         }else if(menuToolbarMod == DICTIONARY_TOOLBAR_MOD){
+            // если выбран режим редактирования в DictionaryView
             if(itemCount == 1){
                 menu.findItem(R.id.dict_edit_action).setEnabled(true);
             }else{
@@ -162,22 +172,26 @@ public class MainActivity extends AppCompatActivity
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_white_24dp);
 
         }else if(menuToolbarMod == DEFAULT_TOOLBAR_MOD){
-            menu.setGroupVisible(R.id.default_group,true);
+            // если выбран default режим
             menu.setGroupVisible(R.id.all_dictionaries_group,false);
             menu.setGroupVisible(R.id.dictionary_group,false);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_white_24dp);
 
             switch (currentFragment){
                 case KEY_FRAGMENT_ALL_DICTIONARIES:
+                    menu.setGroupVisible(R.id.default_group,false);
                     toolbar.setTitle(getResources().getString(R.string.title_all_dictionaries));
                     break;
                 case KEY_FRAGMENT_DICTIONARY:
+                    menu.setGroupVisible(R.id.default_group,true);
                     toolbar.setTitle(dictionaryTitle);
                     break;
                 case KEY_FRAGMENT_TRAINING:
+                    menu.setGroupVisible(R.id.default_group,false);
                     toolbar.setTitle(getResources().getString(R.string.title_all_dictionaries));
                     break;
                 case KEY_DEFAULT_ACTIVITY:
+                    menu.setGroupVisible(R.id.default_group,false);
                     toolbar.setTitle(getResources().getString(R.string.title_activity_main));
                     break;
 
@@ -193,46 +207,50 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
+        Log.d("LOG_TAG", "MainActivity: onOptionsItemSelected()");
         if (id == android.R.id.home) {
-            if(menuToolbarMod == ALL_DICTIONARIES_TOOLBAR_MOD){
-                menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-                hostToAllDictionariesCommands.resetCheckList();
-                invalidateOptionsMenu();
-                return true;
-            }else if(menuToolbarMod == DICTIONARY_TOOLBAR_MOD){
-                menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-                hostToDictionaryCommands.resetCheckList();
-                invalidateOptionsMenu();
-                return true;
-            }else if(menuToolbarMod == DEFAULT_TOOLBAR_MOD) {
-                toggle.onOptionsItemSelected(item);
-                return true;
+            switch(menuToolbarMod){
+                case ALL_DICTIONARIES_TOOLBAR_MOD:
+                    // обработка выхода из режима редактирования (AllDictionariesView)
+                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+                    hostToAllDictionariesCommands.resetCheckList();
+                    invalidateOptionsMenu();
+                    return true;
+                case DICTIONARY_TOOLBAR_MOD:
+                    // обработка выхода из режима редактирования (DictionaryView)
+                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+                    hostToDictionaryCommands.resetCheckList();
+                    invalidateOptionsMenu();
+                    return true;
+                case DEFAULT_TOOLBAR_MOD:
+                    // обработка стандартного режима (открытие NavigationView)
+                    toggle.onOptionsItemSelected(item);
+                    return true;
             }
         }
-
+        // обработка пунктов меню в режиме редактирования AllDictionariesView
         if(menuToolbarMod == ALL_DICTIONARIES_TOOLBAR_MOD){
             switch (id){
                 case R.id.all_dict_delete_action:
                     hostToAllDictionariesCommands.deleteSelectedDictionaries();
-                    break;
+                    return true;
                 case R.id.all_dict_edit_action:
                     hostToAllDictionariesCommands.editSelectedDictionary();
-                    break;
+                    return true;
             }
         }
-
+        // обработка пунктов меню в режиме редактирования DictionaryView
         if(menuToolbarMod == DICTIONARY_TOOLBAR_MOD){
             switch (id){
                 case R.id.dict_delete_action:
                     hostToDictionaryCommands.deleteSelectedWords();
-                    break;
+                    return true;
                 case R.id.dict_move_action:
                     hostToDictionaryCommands.moveSelectedWords();
-                    break;
+                    return true;
                 case R.id.dict_edit_action:
                     hostToDictionaryCommands.editSelectedDictionary();
-                    break;
+                    return true;
             }
         }
 
@@ -247,6 +265,7 @@ public class MainActivity extends AppCompatActivity
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+        Log.d("LOG_TAG", "MainActivity: onNavigationItemSelected()");
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
@@ -255,14 +274,14 @@ public class MainActivity extends AppCompatActivity
             fragmentTransaction.replace(R.id.container,allDictionaries,KEY_FRAGMENT_ALL_DICTIONARIES);
             currentFragment = KEY_FRAGMENT_ALL_DICTIONARIES;
             hostToAllDictionariesCommands = allDictionaries;
-            toolbar.setTitle(getResources().getString(R.string.title_all_dictionaries));
         }  else if (id == R.id.nav_training) {
             fragmentTransaction.replace(R.id.container,new EngRusTrainingView(),KEY_FRAGMENT_TRAINING);
             currentFragment = KEY_FRAGMENT_TRAINING;
-            toolbar.setTitle(getResources().getString(R.string.item_navigation_drawer_training));
         } else if (id == R.id.nav_setting) {
 
         }
+        menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+        invalidateOptionsMenu();
         fragmentTransaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -272,6 +291,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void selectedDictionary(long dictionaryId, String dictionaryTitle) {
+        Log.d("LOG_TAG", "MainActivity: selectDictionary()");
         this.dictionaryId = dictionaryId;
         this.dictionaryTitle = dictionaryTitle;
         dictionaryView = new DictionaryView();
@@ -279,39 +299,36 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.container,dictionaryView,KEY_FRAGMENT_DICTIONARY);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-        currentFragment = KEY_FRAGMENT_DICTIONARY;
-        hostToDictionaryCommands = dictionaryView;
     }
 
     @Override
     public long getDictionary() {
+        Log.d("LOG_TAG", "MainActivity: getDictionary()");
         return dictionaryId;
     }
 
     @Override
     public void checkListIsChange() {
+        Log.d("LOG_TAG", "MainActivity: checkListIsChange()");
         switch (currentFragment){
             case KEY_FRAGMENT_ALL_DICTIONARIES:
                 itemCount = hostToAllDictionariesCommands.getSizeOfDeleteList();
                 if (itemCount == 0) {
                     menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-                    invalidateOptionsMenu();
                 } else {
                     menuToolbarMod = ALL_DICTIONARIES_TOOLBAR_MOD;
-                    invalidateOptionsMenu();
                 }
                 break;
             case KEY_FRAGMENT_DICTIONARY:
                 itemCount = hostToDictionaryCommands.getSizeOfDeleteList();
                 if (itemCount == 0) {
                     menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-                    invalidateOptionsMenu();
                 } else {
                     menuToolbarMod = DICTIONARY_TOOLBAR_MOD;
-                    invalidateOptionsMenu();
                 }
                 break;
         }
+        invalidateOptionsMenu();
     }
 
 }

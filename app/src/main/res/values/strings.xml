@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">"MyDictionary "</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_all_dictionaries">AllDictionaries</string>
+    <string name="title_all_dictionaries">All Dictionaries</string>
     <string name="title_training">@string/item_navigation_drawer_training</string>
 
     <string name="dialog_add_dictionary_positive_button">Add</string>
@@ -11,8 +11,9 @@
 
     <string name="dialog_edit_dictionary_positive_button">Edit</string>
     <string name="dialog_edit_dictionary_negative_button">Cancel</string>
-    <string name="dialog_edit_dictionary_EditText">dictionary title</string>
+    <string name="dialog_edit_dictionary_EditText">new dictionary title</string>
     <string name="dialog_edit_dictionary_TextView_head">Edit dictionary</string>
+    <string name="dialog_edit_dictionary_TextView_old_title">Old title</string>
 
     <string name="dialog_add_word_positive_button">Add</string>
     <string name="dialog_add_word_negative_button">Cancel</string>
@@ -22,9 +23,10 @@
 
     <string name="dialog_edit_word_positive_button">Edit</string>
     <string name="dialog_edit_word_negative_button">Cancel</string>
-    <string name="dialog_edit_word_EditText1">new word</string>
-    <string name="dialog_edit_word_EditText2">new word</string>
-    <string name="dialog_edit_word_TextView_head">Edit word</string>
+    <string name="dialog_edit_word_EditText">new translate</string>
+    <string name="dialog_edit_word_TextView_head">Edit translate</string>
+    <string name="dialog_edit_word_TextView_old_translate">Old translate</string>
+
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

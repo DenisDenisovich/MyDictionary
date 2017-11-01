@@ -101,4 +101,18 @@ public class AllDictionariesAdapter extends BaseAdapter {
         return deleteList.size();
     }
 
+    public Map<String,Object> getEditItem(){
+        Map<String, Object> item = null;
+        if(deleteList.size() == 1) {
+            long l = deleteList.get(0);
+            for(int i = 0; i < data.size(); i++){
+                item = data.get(i);
+                if((Long)item.get(from[0]) == l){
+                    break;
+                }
+            }
+        }
+        return item;
+    }
+
 }

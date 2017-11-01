@@ -1,6 +1,7 @@
 package com.dictionary.my.mydictionary.presenter.dictionary;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.domain.UseCaseDictionary;
@@ -41,22 +42,26 @@ public class DictionaryPresenterImpl<V extends Dictionary> implements Dictionary
     }
     @Override
     public void attach(V view) {
+        Log.d("LOG_TAG", "DictionaryPresenterImpl: attach()");
         this.view = view;
     }
 
     @Override
     public void detach() {
+        Log.d("LOG_TAG", "DictionaryPresenterImpl: detach()");
         view = null;
     }
 
     @Override
     public void destroy() {
+        Log.d("LOG_TAG", "DictionaryPresenterImpl: destroy()");
         getWordsListDisposable.dispose();
         useCase.destroy();
     }
 
     @Override
     public void init() {
+        Log.d("LOG_TAG", "DictionaryPresenterImpl: init()");
         view.setFrom(from);
         data = new ArrayList<>();
         getWordsListDisposable = useCase.getWordsList()
@@ -84,12 +89,14 @@ public class DictionaryPresenterImpl<V extends Dictionary> implements Dictionary
 
     @Override
     public void update() {
+        Log.d("LOG_TAG", "DictionaryPresenterImpl: update()");
         view.createWordsList();
     }
 
 
     @Override
     public void newWord() {
+        Log.d("LOG_TAG", "DictionaryPresenterImpl: newWord()");
         newWord = view.getNewWord();
         Single<Map<String,Object>> observable = Single.create(new SingleOnSubscribe<Map<String, Object>>() {
             @Override
@@ -109,16 +116,43 @@ public class DictionaryPresenterImpl<V extends Dictionary> implements Dictionary
 
     @Override
     public void deleteWords() {
+        Log.d("LOG_TAG", "DictionaryPresenterImpl: deleteWords()");
         idOfDelWords = view.getDeletedWords();
+        Single<ArrayList<Long>> observable = Single.create(new SingleOnSubscribe<ArrayList<Long>>() {
+            @Override
+            public void subscribe(@NonNull SingleEmitter<ArrayList<Long>> e) throws Exception {
+                try{
+                    e.onSuccess(idOfDelWords);
+                    init();
+                }catch (Throwable t){
+                    e.onError(t);
+                    view.showToast(ERROR_MESSAGE_DELETE_ITEMS);
+                }
+            }
+        });
+        useCase.deleteWords(observable);
     }
 
     @Override
     public void moveWords() {
-
+        Log.d("LOG_TAG", "DictionaryPresenterImpl: moveWords()");
     }
 
     @Override
     public void editWord() {
+        Log.d("LOG_TAG", "DictionaryPresenterImpl: editWord()");
         modifiedWord = view.getEditedWord();
+        Single<Map<String,Object>> observable = Single.create(new SingleOnSubscribe<Map<String, Object>>() {
+            @Override
+            public void subscribe(@NonNull SingleEmitter<Map<String, Object>> e) throws Exception {
+                try{
+                    e.onSuccess(modifiedWord);
+                }catch (Throwable t){
+                    e.onError(t);
+                    view.showToast(ERROR_MESSAGE_EDIT_ITEMS);
+                }
+            }
+        });
+        useCase.editWord(observable);
     }
 }

@@ -1,6 +1,7 @@
 package com.dictionary.my.mydictionary.presenter.dictionary;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.domain.UseCaseAllDictionaries;
@@ -28,7 +29,6 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
     private DisposableObserver<Map<String,Object>> getDictionariesListDisposable;
     private Map<String, Object> newDict;
     private ArrayList<Long> idOfDelDicts;
-    private Long idOfDelDictwithWords;
     private Map<String, Object> modifiedDictionary;
     private final String ERROR_MESSAGE_LOADING_DICTIONARY_LIST = "ERROR: load dictionaries";
     private final String ERROR_MESSAGE_ADD_NEW_DICTIONARY = "ERROR: add new dictionary";
@@ -40,22 +40,26 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
 
     @Override
     public void attach(V view) {
+        Log.d("LOG_TAG", "AllDictionariesPresenterImpl: attach()");
         this.view = view;
     }
 
     @Override
     public void detach() {
+        Log.d("LOG_TAG", "AllDictionariesPresenterImpl: detach()");
         view = null;
     }
 
     @Override
     public void destroy() {
+        Log.d("LOG_TAG", "AllDictionariesPresenterImpl: destroy()");
         getDictionariesListDisposable.dispose();
         useCase.destroy();
     }
 
     @Override
     public void init() {
+        Log.d("LOG_TAG", "AllDictionariesPresenterImpl: init()");
         view.setFrom(from);
         data = new ArrayList<>();
         getDictionariesListDisposable = useCase.getDictionariesList()
@@ -85,12 +89,14 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
 
     @Override
     public void update() {
+        Log.d("LOG_TAG", "AllDictionariesPresenterImpl: update()");
         view.createDictionariesList();
     }
 
 
     @Override
     public void newDictionary() {
+        Log.d("LOG_TAG", "AllDictionariesPresenterImpl: newDictionary()");
         newDict = view.getNewDictionary();
         Single<Map<String,Object>> observable = Single.create(new SingleOnSubscribe<Map<String, Object>>() {
             @Override
@@ -110,6 +116,7 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
 
     @Override
     public void deleteDictionary() {
+        Log.d("LOG_TAG", "AllDictionariesPresenterImpl: deleteDictionary()");
         idOfDelDicts = view.getDeletedDictionary();
         Single<ArrayList<Long>> observable = Single.create(new SingleOnSubscribe<ArrayList<Long>>() {
             @Override
@@ -128,13 +135,13 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
 
     @Override
     public void editDictionary() {
+        Log.d("LOG_TAG", "AllDictionariesPresenterImpl: editDictionary()");
         modifiedDictionary = view.getEditedDictionary();
         Single<Map<String, Object>> observable = Single.create(new SingleOnSubscribe<Map<String, Object>>() {
             @Override
             public void subscribe(@NonNull SingleEmitter<Map<String, Object>> e) throws Exception {
                 try{
                     e.onSuccess(modifiedDictionary);
-                    init();
                 }catch (Throwable t){
                     e.onError(t);
                     view.showToast(ERROR_MESSAGE_EDIT_ITEMS);

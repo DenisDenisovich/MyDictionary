@@ -26,4 +26,7 @@ public interface Content {
 
     final String selectDbDictionary = "select " + COLUMN_ROWID + ", " + COLUMN_WORD + ", " + COLUMN_TRANSLATE + " " +
                                        "from " + TABLE_ALL_WORD + " where " + COLUMN_DICTIONARY + " = ? ";
+
+    final String deleteDbDictionary = COLUMN_ROWID + " = ";
+    final String editDbDictionary = COLUMN_ROWID + " = ";
 }

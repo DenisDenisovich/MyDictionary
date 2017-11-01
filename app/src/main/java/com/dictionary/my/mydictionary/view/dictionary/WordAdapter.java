@@ -3,6 +3,7 @@ package com.dictionary.my.mydictionary.view.dictionary;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -105,5 +106,20 @@ public class WordAdapter extends BaseAdapter {
         deleteList.clear();
         this.notifyDataSetChanged();
         return deleteList.size();
+    }
+
+    public Map<String,Object> getEditItem(){
+        Map<String, Object> item = null;
+        if(deleteList.size() == 1) {
+            long l = deleteList.get(0);
+            for(int i = 0; i < data.size(); i++){
+                item = data.get(i);
+                if((Long)item.get(from[0]) == l){
+                    break;
+                }
+            }
+        }
+        Log.d("LOG_TAG", item.toString());
+        return item;
     }
 }

@@ -9,7 +9,7 @@
         android:textColor="@color/colorDictionaryItem"
         android:gravity="center"
         android:background="@color/colorPrimary"
-        android:text="@string/dialog_edit_dictionary_TextView_head"/>
+        android:text="@string/dialog_edit_word_TextView_head"/>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -17,10 +17,10 @@
         android:textSize="@dimen/dictWordTextSize"
         android:gravity="center"
         android:textColor="@color/colorDictionaryWord"
-        android:text="@string/dialog_edit_dictionary_TextView_old_title"
+        android:text="@string/dialog_edit_word_TextView_old_translate"
         />
     <TextView
-        android:id="@+id/tvEditDictionaryDialogOldTitle"
+        android:id="@+id/tvEditWordDialogOldTranslate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/dictWordTextSize"
@@ -29,7 +29,7 @@
         android:text="test"
         />
     <EditText
-        android:id="@+id/etEditDictionaryDialogNewTitle"
+        android:id="@+id/etEditWordDialogNewTranslate"
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -37,5 +37,5 @@
         android:inputType="text"
         android:textSize="@dimen/dictWordTextSize"
         android:textColor="@color/colorDictionaryWord"
-        android:hint="@string/dialog_edit_dictionary_EditText"/>
+        android:hint="@string/dialog_edit_word_EditText"/>
 </LinearLayout>

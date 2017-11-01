@@ -47,8 +47,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
 
     private Integer sizeOfDeleteList;
     private String newDictionary;
-    private Map<String, Object> modifiedDictionary;
-
+    private Map<String, Object> modifiedDictionary = new HashMap<>();
 
     private final int CHANGE_MOD = 1;
     private final int OPEN_DICTIONARY_MOD = 2;
@@ -58,6 +57,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     public void onAttach(Context context) {
         super.onAttach(context);
         try{
+            Log.d("LOG_TAG", "AllDictionariesView: onAttach()");
             mListener = (DictionaryListener) context;
         }catch (ClassCastException e){
             e.printStackTrace();
@@ -67,6 +67,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("LOG_TAG", "AllDictionariesView: onCreate()");
         setRetainInstance(true);
         presenter = new AllDictionariesPresenterImpl(getActivity().getApplicationContext());
     }
@@ -75,7 +76,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         presenter.attach(this);
-
+        Log.d("LOG_TAG", "AllDictionariesView: onCreateView()");
         View view = inflater.inflate(R.layout.all_dictionaries_fragment, null);
         listView = view.findViewById(R.id.lvAllDictionaries);
         fab = view.findViewById(R.id.allDictionariesFab);
@@ -102,12 +103,14 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Log.d("LOG_TAG", "AllDictionariesView: onDestroyView()");
         presenter.detach();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d("LOG_TAG", "AllDictionariesView: onDestroy()");
         presenter.destroy();
     }
 
@@ -128,12 +131,14 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
 
     @Override
     public void createAdapter(ArrayList<Map<String, Object>> data) {
+        Log.d("LOG_TAG", "AllDictionariesView: createAdapter()");
         adapter = new AllDictionariesAdapter(getActivity(),data,R.layout.all_dictionaries_item,from,to);
     }
 
 
     @Override
     public void createDictionariesList() {
+        Log.d("LOG_TAG", "AllDictionariesView: createDictionariesList()");
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -177,11 +182,13 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
 
     @Override
     public void setFrom(String... from) {
+        Log.d("LOG_TAG", "AllDictionariesView: setFrom()");
         this.from = from;
     }
 
     @Override
     public Map<String, Object> getNewDictionary() {
+        Log.d("LOG_TAG", "AllDictionariesView: getNewDictionary()");
         Map<String, Object> item = new HashMap<>();
         if(newDictionary != null) {
             item.put(from[1], newDictionary);
@@ -191,19 +198,25 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     }
 
     private void createNewDictionaryDialog(){
+        Log.d("LOG_TAG", "AllDictionariesView: createNewDictionaryDialog()");
         dialog = new AddDictionaryDialog();
         dialog.setTargetFragment(this, REQUEST_CODE_NEW_DICTIONARY);
         dialog.show(getFragmentManager(),null);
     }
 
     private void createEditDictionaryDialog(){
-        dialog = new EditDictionaryDialog();
+        Log.d("LOG_TAG", "AllDictionariesView: createEditDictionaryDialog()");
+        modifiedDictionary = adapter.getEditItem();
+        String itemTitle = (String)modifiedDictionary.get(from[1]);
+        Log.d("LOG_TAG", itemTitle);
+        dialog = EditDictionaryDialog.newInstance(itemTitle);
         dialog.setTargetFragment(this, REQUEST_CODE_EDIT_DICTIONARY);
         dialog.show(getFragmentManager(),null);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("LOG_TAG", "AllDictionariesView: onActivityResult()");
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK){
             switch (requestCode){
@@ -212,8 +225,6 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
                     presenter.newDictionary();
                     break;
                 case REQUEST_CODE_EDIT_DICTIONARY:
-                    modifiedDictionary = new HashMap<>();
-                    modifiedDictionary.put(from[0],adapter.getDeleteList().get(0));
                     modifiedDictionary.put(from[1],data.getStringExtra(from[1]));
                     presenter.editDictionary();
                     break;
@@ -230,6 +241,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
 
     @Override
     public ArrayList<Long> getDeletedDictionary() {
+        Log.d("LOG_TAG", "AllDictionariesView: getDeletedDictionary()");
         ArrayList<Long> list = new ArrayList<>();
         ArrayList<Long> buf = adapter.getDeleteList();
         for(int i = 0; i < adapter.getSizeOfDeleteList(); i++){
@@ -242,6 +254,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
 
     @Override
     public Map<String, Object> getEditedDictionary() {
+        Log.d("LOG_TAG", "AllDictionariesView: getEditedDictionary()");
         resetCheckList();
         mListener.checkListIsChange();
         return modifiedDictionary;
@@ -249,11 +262,13 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
 
     @Override
     public Integer getSizeOfDeleteList() {
+        Log.d("LOG_TAG", "AllDictionariesView: getSizeOfDeleteList()");
         return sizeOfDeleteList;
     }
 
     @Override
     public void deleteSelectedDictionaries() {
+        Log.d("LOG_TAG", "AllDictionariesView: deleteSelectedDictionaries()");
         presenter.deleteDictionary();
     }
 
@@ -261,6 +276,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
 
     @Override
     public void resetCheckList() {
+        Log.d("LOG_TAG", "AllDictionariesView: resetCheckList()");
         sizeOfDeleteList = adapter.clearDeleteList();
         checkListMod = OPEN_DICTIONARY_MOD;
         fab.show();
@@ -268,6 +284,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
 
     @Override
     public void editSelectedDictionary() {
+        Log.d("LOG_TAG", "AllDictionariesView: editSelectedDictionary()");
         if(adapter.getSizeOfDeleteList() == 1){
             createEditDictionaryDialog();
         }

@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,7 +51,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     long moveToDictionaryId;
     private Integer sizeOfDeleteList;
     private Map<String, Object> newWord;
-    private Map<String, Object> modifiedWord;
+    private Map<String, Object> modifiedWord = new HashMap<>();
     private ArrayList<Long> movedWords;
 
     private int checkListMod;
@@ -61,6 +62,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     public void onAttach(Context context) {
         super.onAttach(context);
         try{
+            Log.d("LOG_TAG", "DictionaryView: onAttach()");
             mListener = (DictionaryListener) context;
             currentDictionaryId = mListener.getDictionary();
         }catch (ClassCastException e){
@@ -71,6 +73,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("LOG_TAG", "DictionaryView: onCreate()");
         setRetainInstance(true);
         presenter = new DictionaryPresenterImpl(getActivity().getApplicationContext(), currentDictionaryId);
     }
@@ -79,7 +82,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         presenter.attach(this);
-
+        Log.d("LOG_TAG", "DictionaryView: onCreateView()");
         View view = inflater.inflate(R.layout.dictionary_fragment,null);
         listView =  view.findViewById(R.id.lvDictionary);
         fab = (FloatingActionButton) view.findViewById(R.id.dictionaryFab);
@@ -106,12 +109,14 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        Log.d("LOG_TAG", "DictionaryView: onDestroyView()");
         presenter.detach();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        Log.d("LOG_TAG", "DictionaryView: onDestroy()");
         presenter.destroy();
     }
 
@@ -133,11 +138,13 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
 
     @Override
     public void createAdapter(ArrayList<Map<String, Object>> data) {
+        Log.d("LOG_TAG", "DictionaryView: createAdapter()");
         adapter = new WordAdapter(getActivity(),data,R.layout.word_item,from,to);
     }
 
     @Override
     public void createWordsList() {
+        Log.d("LOG_TAG", "DictionaryView: createDictionariesList()");
         listView.setAdapter(adapter);
     listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
         @Override
@@ -178,12 +185,14 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
 
     @Override
     public void setFrom(String... from) {
+        Log.d("LOG_TAG", "DictionaryView: setFrom()");
         this.from = from;
     }
 
 
     @Override
     public Map<String, Object> getNewWord() {
+        Log.d("LOG_TAG", "DictionaryView: getNewWord()");
         Map<String, Object> item = new HashMap<>();
         if(newWord != null) {
             item.put(from[1], newWord.get(from[1]));
@@ -195,22 +204,29 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
 
 
     private void createNewWordDialog(){
+        Log.d("LOG_TAG", "DictionaryView: createNewWordDialog()");
         dialog = new AddWordDialog();
         dialog.setTargetFragment(this,REQUEST_CODE_NEW_WORD);
         dialog.show(getFragmentManager(),null);
     }
 
     private void createMoveWordsDialog(){
-
+        Log.d("LOG_TAG", "DictionaryView: createMoveWordsDialog()");
     }
 
     private void createEditWordDialog(){
-
+        Log.d("LOG_TAG", "DictionaryView: createEditWordDialog()");
+        modifiedWord = adapter.getEditItem();
+        String itemTranslate = (String)modifiedWord.get(from[2]);
+        dialog = EditWordDialog.newInstance(itemTranslate);
+        dialog.setTargetFragment(this, REQUEST_CODE_EDIT_WORD);
+        dialog.show(getFragmentManager(),null);
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("LOG_TAG", "DictionaryView: onActivityResult()");
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode == Activity.RESULT_OK){
             switch (requestCode){
@@ -223,6 +239,8 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
                 case REQUEST_CODE_MOVE_WORDS:
                     break;
                 case REQUEST_CODE_EDIT_WORD:
+                    modifiedWord.put(from[2],data.getStringExtra(from[2]));
+                    presenter.editWord();
                     break;
             }
         }
@@ -230,6 +248,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
 
     @Override
     public ArrayList<Long> getDeletedWords() {
+        Log.d("LOG_TAG", "DictionaryView: getDeletedWords()");
         ArrayList<Long> list = new ArrayList<>();
         ArrayList<Long> buf = adapter.getDeleteList();
         for(int i = 0; i < adapter.getSizeOfDeleteList(); i++){
@@ -242,33 +261,41 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
 
     @Override
     public ArrayList<Long> getMovedWords() {
+        Log.d("LOG_TAG", "DictionaryView: getMovedWords()");
         return null;
     }
 
     @Override
     public Map<String, Object> getEditedWord() {
-        return null;
+        Log.d("LOG_TAG", "DictionaryView: getEditedWord()");
+        resetCheckList();
+        mListener.checkListIsChange();
+        return modifiedWord;
     }
 
 
 
     @Override
     public Integer getSizeOfDeleteList() {
+        Log.d("LOG_TAG", "DictionaryView: getSizeOfDeleteList()");
         return sizeOfDeleteList;
     }
 
     @Override
     public void deleteSelectedWords() {
+        Log.d("LOG_TAG", "DictionaryView: deleteSelectedWords()");
         presenter.deleteWords();
     }
 
     @Override
     public void moveSelectedWords() {
+        Log.d("LOG_TAG", "DictionaryView: moveSelectedWords()");
         createMoveWordsDialog();
     }
 
     @Override
     public void resetCheckList() {
+        Log.d("LOG_TAG", "DictionaryView: resetCheckList()");
         sizeOfDeleteList = adapter.clearDeleteList();
         checkListMod = SAY_WORD_MOD;
         fab.show();
@@ -276,6 +303,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
 
     @Override
     public void editSelectedDictionary() {
+        Log.d("LOG_TAG", "DictionaryView: editSelectedDictionary()");
         if(sizeOfDeleteList == 1){
             createEditWordDialog();
         }

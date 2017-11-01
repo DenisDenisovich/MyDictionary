@@ -69,7 +69,9 @@ public class DictionaryRepositoryImpl implements DictionaryRepository {
 
     @Override
     public void setNewWord(Single<Map<String, Object>> observable) {
-        disposableNewWords = observable.subscribeOn(Schedulers.io()).subscribeWith(new DisposableSingleObserver<Map<String, Object>>() {
+        disposableNewWords = observable
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new DisposableSingleObserver<Map<String, Object>>() {
             ContentValues cv = new ContentValues();
             @Override
             public void onSuccess(@NonNull Map<String, Object> stringObjectMap) {
@@ -88,7 +90,23 @@ public class DictionaryRepositoryImpl implements DictionaryRepository {
 
     @Override
     public void deleteWords(Single<ArrayList<Long>> observable) {
+        disposableDelWords = observable
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new DisposableSingleObserver<ArrayList<Long>>() {
+                    @Override
+                    public void onSuccess(@NonNull ArrayList<Long> longs) {
+                        String[] whereArg = new String[longs.size()];
+                        for(int i = 0; i < longs.size();i++){
+                            whereArg[i] = longs.get(i).toString();
+                            db.delete(Content.TABLE_ALL_WORD,Content.deleteDbDictionary + whereArg[i], null);
+                        }
+                    }
 
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+
+                    }
+                });
     }
 
     @Override
@@ -98,7 +116,23 @@ public class DictionaryRepositoryImpl implements DictionaryRepository {
 
     @Override
     public void editWord(Single<Map<String, Object>> observable) {
+        disposableEditWord = observable
+                .subscribeOn(Schedulers.io())
+                .subscribeWith(new DisposableSingleObserver<Map<String, Object>>() {
+                    ContentValues cv = new ContentValues();
+                    Long idOfModifiedWord;
+                    @Override
+                    public void onSuccess(@NonNull Map<String, Object> stringObjectMap) {
+                        idOfModifiedWord = (Long)stringObjectMap.get(Content.fromDictionary[0]);
+                        cv = MapToContentValuesDictionary.map(stringObjectMap);
+                        db.update(Content.TABLE_ALL_WORD,cv,Content.editDbDictionary + idOfModifiedWord,null);
+                    }
 
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                       // e.printStackTrace();
+                    }
+                });
     }
 
     @Override
