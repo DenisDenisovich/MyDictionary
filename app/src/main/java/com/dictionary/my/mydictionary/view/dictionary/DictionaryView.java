@@ -212,6 +212,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
 
     private void createMoveWordsDialog(){
         Log.d("LOG_TAG", "DictionaryView: createMoveWordsDialog()");
+        
     }
 
     private void createEditWordDialog(){
@@ -237,6 +238,8 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
                     presenter.newWord();
                     break;
                 case REQUEST_CODE_MOVE_WORDS:
+                    moveToDictionaryId = (data.getLongExtra(from[0],currentDictionaryId));
+
                     break;
                 case REQUEST_CODE_EDIT_WORD:
                     modifiedWord.put(from[2],data.getStringExtra(from[2]));
