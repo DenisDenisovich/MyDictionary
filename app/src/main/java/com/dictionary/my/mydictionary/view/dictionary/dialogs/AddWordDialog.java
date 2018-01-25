@@ -1,4 +1,4 @@
-package com.dictionary.my.mydictionary.view.dictionary;
+package com.dictionary.my.mydictionary.view.dictionary.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;

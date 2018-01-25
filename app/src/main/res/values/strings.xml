@@ -27,7 +27,7 @@
     <string name="dialog_edit_word_TextView_head">Edit translate</string>
     <string name="dialog_edit_word_TextView_old_translate">Old translate</string>
 
-    <string name="dialog_move_word_positive_button">Edit</string>
+    <string name="dialog_move_word_positive_button">Move</string>
     <string name="dialog_move_word_negative_button">Cancel</string>
     <string name="dialog_move_word_TextView_head">Choice place to move</string>
 

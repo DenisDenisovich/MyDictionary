@@ -14,6 +14,7 @@ public interface Dictionary {
     void createAdapter(ArrayList<Map<String, Object>> data);
     void createWordsList();
     void setFrom(String ... from);
+    void setDictionaryList(ArrayList<Map<String,Object>> dictionaryData);
     Map<String,Object> getNewWord();
     ArrayList<Long> getDeletedWords();
     ArrayList<Long> getMovedWords();

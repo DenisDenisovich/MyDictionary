@@ -1,4 +1,4 @@
-package com.dictionary.my.mydictionary.view.dictionary;
+package com.dictionary.my.mydictionary.view.dictionary.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 
 import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.data.Content;
@@ -29,8 +30,9 @@ public class MoveWordDialog  extends DialogFragment{
         String[] dictTitle = new String[list.size()];
         long[] dictId = new long[list.size()];
         for(int i = 0; i < list.size(); i++){
-            dictTitle[i] = (String)list.get(i).get(Content.fromDictionary[1]);
-            dictId[i] = (Long)list.get(i).get(Content.fromDictionary[0]);
+            dictTitle[i] = (String)list.get(i).get(Content.fromAllDictionaries[1]);
+            dictId[i] = (Long)list.get(i).get(Content.fromAllDictionaries[0]);
+            Log.d("LOG_TAG","inDialog " + dictId[i] + " " + dictTitle[i]);
         }
 
         MoveWordDialog d = new MoveWordDialog();

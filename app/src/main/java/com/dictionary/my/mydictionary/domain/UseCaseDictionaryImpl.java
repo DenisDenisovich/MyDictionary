@@ -9,7 +9,11 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableSource;
 import io.reactivex.Single;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by luxso on 23.09.2017.
@@ -24,7 +28,12 @@ public class UseCaseDictionaryImpl implements UseCaseDictionary{
 
     @Override
     public Observable<Map<String, Object>> getWordsList() {
-        return repository.getDictionariesList();
+        return repository.getWordList();
+    }
+
+    @Override
+    public Observable<Map<String, Object>> getDictionaryList() {
+        return repository.getDictionaryList();
     }
 
     @Override

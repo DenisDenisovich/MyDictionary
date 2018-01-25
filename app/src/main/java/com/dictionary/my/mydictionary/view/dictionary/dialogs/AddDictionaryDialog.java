@@ -1,4 +1,4 @@
-package com.dictionary.my.mydictionary.view.dictionary;
+package com.dictionary.my.mydictionary.view.dictionary.dialogs;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,44 +7,34 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.data.Content;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+
 /**
- * Created by luxso on 21.10.2017.
+ * Created by luxso on 29.09.2017.
  */
 
-public class EditDictionaryDialog extends DialogFragment {
-    private final String KEY_OLD_TITLE = "oldTitle";
-
-    public static EditDictionaryDialog newInstance(String oldTitle){
-        final String KEY_OLD_TITLE = "oldTitle";
-        EditDictionaryDialog d = new EditDictionaryDialog();
-        Bundle arg = new Bundle();
-        arg.putString(KEY_OLD_TITLE,oldTitle);
-        d.setArguments(arg);
-        return d;
-    }
-
+public class AddDictionaryDialog extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.edit_dictionary_dialog,null);
-        TextView tvDictionaryOldTitle = view.findViewById(R.id.tvEditDictionaryDialogOldTitle);
-        tvDictionaryOldTitle.setText(getArguments().getString(KEY_OLD_TITLE));
-        final EditText etDictionaryNewTitle = view.findViewById(R.id.etEditDictionaryDialogNewTitle);
-        etDictionaryNewTitle.addTextChangedListener(new TextWatcher() {
+        View view = inflater.inflate(R.layout.new_dictionary_dialog,null);
+        final EditText etDictionary = view.findViewById(R.id.etNewDictionaryDialog);
+        etDictionary.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -64,19 +54,20 @@ public class EditDictionaryDialog extends DialogFragment {
                 }
             }
         });
+
         builder.setView(view)
-                .setPositiveButton(getResources().getString(R.string.dialog_edit_dictionary_positive_button), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.dialog_add_dictionary_positive_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent data = new Intent();
-                        data.putExtra(Content.fromAllDictionaries[1], etDictionaryNewTitle.getText().toString());
+                        data.putExtra(Content.fromAllDictionaries[1], etDictionary.getText().toString());
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,data);
                     }
                 })
-                .setNegativeButton(getResources().getString(R.string.dialog_edit_dictionary_negative_button), new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.dialog_add_dictionary_negative_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED,null);
+
                     }
                 });
         return builder.create();

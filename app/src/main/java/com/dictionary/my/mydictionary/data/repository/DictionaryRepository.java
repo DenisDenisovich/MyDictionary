@@ -11,7 +11,8 @@ import io.reactivex.Single;
  */
 
 public interface DictionaryRepository {
-    Observable<Map<String,Object>> getDictionariesList();
+    Observable<Map<String,Object>> getWordList();
+    Observable<Map<String,Object>> getDictionaryList();
     void setNewWord(Single<Map<String,Object>> observable);
     void deleteWords(Single<ArrayList<Long>> observable);
     void moveWords(Observable<Long> observable);

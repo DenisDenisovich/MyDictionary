@@ -11,6 +11,9 @@ import com.dictionary.my.mydictionary.view.dictionary.Dictionary;
 import java.util.ArrayList;
 import java.util.Map;
 
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
@@ -26,16 +29,20 @@ import io.reactivex.schedulers.Schedulers;
 public class DictionaryPresenterImpl<V extends Dictionary> implements DictionaryPresenter<V> {
     private V view;
     private UseCaseDictionary useCase;
-    private ArrayList<Map<String,Object>> data;
+    private ArrayList<Map<String,Object>> wordData;
+    private ArrayList<Map<String,Object>> dictionaryData;
     private Map<String,Object> newWord;
     private ArrayList<Long> idOfDelWords;
     private Map<String, Object> modifiedWord;
+    private ArrayList<Long> movedData;
     private String[] from = Content.fromDictionary;
     private DisposableObserver<Map<String,Object>> getWordsListDisposable;
+    private DisposableObserver<Map<String,Object>> getDictionaryListDisposable;
     private final String ERROR_MESSAGE_LOADING_WORDS_LIST = "ERROR: load words";
     private final String ERROR_MESSAGE_ADD_NEW_WORD = "ERROR: add new word";
     private final String ERROR_MESSAGE_DELETE_ITEMS = "ERROR: delete selected words";
     private final String ERROR_MESSAGE_EDIT_ITEMS = "ERROR: edit selected word";
+    private final String ERROR_MESSAGE_MOVE_ITEMS = "ERROR: move selected word";
 
     public DictionaryPresenterImpl(Context context, Long currentDictionaryId){
         useCase = new UseCaseDictionaryImpl(context, currentDictionaryId);
@@ -55,7 +62,12 @@ public class DictionaryPresenterImpl<V extends Dictionary> implements Dictionary
     @Override
     public void destroy() {
         Log.d("LOG_TAG", "DictionaryPresenterImpl: destroy()");
-        getWordsListDisposable.dispose();
+        if(getWordsListDisposable != null) {
+            getWordsListDisposable.dispose();
+        }
+        if(getDictionaryListDisposable != null){
+            getDictionaryListDisposable.dispose();
+        }
         useCase.destroy();
     }
 
@@ -63,14 +75,14 @@ public class DictionaryPresenterImpl<V extends Dictionary> implements Dictionary
     public void init() {
         Log.d("LOG_TAG", "DictionaryPresenterImpl: init()");
         view.setFrom(from);
-        data = new ArrayList<>();
+        wordData = new ArrayList<>();
         getWordsListDisposable = useCase.getWordsList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<Map<String, Object>>() {
                     @Override
                     public void onNext(@NonNull Map<String, Object> stringObjectMap) {
-                        data.add(stringObjectMap);
+                        wordData.add(stringObjectMap);
                     }
 
                     @Override
@@ -81,7 +93,7 @@ public class DictionaryPresenterImpl<V extends Dictionary> implements Dictionary
 
                     @Override
                     public void onComplete() {
-                        view.createAdapter(data);
+                        view.createAdapter(wordData);
                         view.createWordsList();
                     }
                 });
@@ -134,8 +146,51 @@ public class DictionaryPresenterImpl<V extends Dictionary> implements Dictionary
     }
 
     @Override
+    public void getDictionaryList() {
+        dictionaryData = new ArrayList<>();
+        getDictionaryListDisposable = useCase.getDictionaryList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableObserver<Map<String, Object>>() {
+                    @Override
+                    public void onNext(@NonNull Map<String, Object> stringObjectMap) {
+                        dictionaryData.add(stringObjectMap);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        e.printStackTrace();
+                        view.showToast(ERROR_MESSAGE_MOVE_ITEMS);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        view.setDictionaryList(dictionaryData);
+                    }
+                });
+
+    }
+
+    @Override
     public void moveWords() {
         Log.d("LOG_TAG", "DictionaryPresenterImpl: moveWords()");
+        movedData = view.getMovedWords();
+        Observable<Long> observable = Observable.create(new ObservableOnSubscribe<Long>() {
+            @Override
+            public void subscribe(@NonNull ObservableEmitter<Long> e) throws Exception {
+                try{
+                    for(int i = 0; i < movedData.size(); i++){
+                        e.onNext(movedData.get(i));
+                    }
+                    e.onComplete();
+                    init();
+                }catch (Throwable t){
+                    e.onError(t);
+                }
+            }
+        });
+        useCase.moveWords(observable);
+
     }
 
     @Override

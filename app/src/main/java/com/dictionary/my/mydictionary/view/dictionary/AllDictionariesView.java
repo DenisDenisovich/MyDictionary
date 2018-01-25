@@ -1,7 +1,6 @@
 package com.dictionary.my.mydictionary.view.dictionary;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -21,6 +20,8 @@ import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.presenter.dictionary.AllDictionariesPresenter;
 import com.dictionary.my.mydictionary.presenter.dictionary.AllDictionariesPresenterImpl;
 import com.dictionary.my.mydictionary.view.DictionaryListener;
+import com.dictionary.my.mydictionary.view.dictionary.dialogs.AddDictionaryDialog;
+import com.dictionary.my.mydictionary.view.dictionary.dialogs.EditDictionaryDialog;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -67,7 +68,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("LOG_TAG", "AllDictionariesView: onCreate()");
+        Log.d("LOG_TAG", "AllDictionariesView: onCreate() " + this.hashCode());
         setRetainInstance(true);
         presenter = new AllDictionariesPresenterImpl(getActivity().getApplicationContext());
     }
@@ -76,7 +77,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         presenter.attach(this);
-        Log.d("LOG_TAG", "AllDictionariesView: onCreateView()");
+        Log.d("LOG_TAG", "AllDictionariesView: onCreateView() " + this.hashCode());
         View view = inflater.inflate(R.layout.all_dictionaries_fragment, null);
         listView = view.findViewById(R.id.lvAllDictionaries);
         fab = view.findViewById(R.id.allDictionariesFab);
@@ -103,14 +104,14 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d("LOG_TAG", "AllDictionariesView: onDestroyView()");
+        Log.d("LOG_TAG", "AllDictionariesView: onDestroyView() " + this.hashCode());
         presenter.detach();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("LOG_TAG", "AllDictionariesView: onDestroy()");
+        Log.d("LOG_TAG", "AllDictionariesView: onDestroy() " + this.hashCode());
         presenter.destroy();
     }
 

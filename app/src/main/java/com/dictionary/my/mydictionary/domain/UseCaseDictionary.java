@@ -12,6 +12,7 @@ import io.reactivex.Single;
 
 public interface UseCaseDictionary {
     Observable<Map<String,Object>> getWordsList();
+    Observable<Map<String,Object>> getDictionaryList();
     void setNewWord(Single<Map<String,Object>> observable);
     void deleteWords(Single<ArrayList<Long>> observable);
     void moveWords(Observable<Long> observable);

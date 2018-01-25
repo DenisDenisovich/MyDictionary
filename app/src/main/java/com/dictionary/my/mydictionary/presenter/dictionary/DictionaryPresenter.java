@@ -12,6 +12,7 @@ public interface DictionaryPresenter<V> {
     void update();
     void newWord();
     void deleteWords();
+    void getDictionaryList();
     void moveWords();
     void editWord();
 }
