@@ -32,7 +32,6 @@ public class MoveWordDialog  extends DialogFragment{
         for(int i = 0; i < list.size(); i++){
             dictTitle[i] = (String)list.get(i).get(Content.fromAllDictionaries[1]);
             dictId[i] = (Long)list.get(i).get(Content.fromAllDictionaries[0]);
-            Log.d("LOG_TAG","inDialog " + dictId[i] + " " + dictTitle[i]);
         }
 
         MoveWordDialog d = new MoveWordDialog();

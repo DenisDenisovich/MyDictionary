@@ -22,6 +22,7 @@ import com.dictionary.my.mydictionary.presenter.dictionary.DictionaryPresenter;
 import com.dictionary.my.mydictionary.presenter.dictionary.DictionaryPresenterImpl;
 import com.dictionary.my.mydictionary.view.DictionaryListener;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.AddWordDialog;
+import com.dictionary.my.mydictionary.view.dictionary.dialogs.DeleteWordDialog;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.EditWordDialog;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.MoveWordDialog;
 
@@ -46,13 +47,14 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     private final int REQUEST_CODE_NEW_WORD = 1;
     private final int REQUEST_CODE_EDIT_WORD = 2;
     private final int REQUEST_CODE_MOVE_WORDS = 3;
+    private final int REQUEST_CODE_DELETE_WORDS = 4;
 
     private String[] from = Content.fromDictionary;
     private int[] to = {R.id.word_dictionary, R.id.translate_dictionary};
 
     long currentDictionaryId;
     long moveToDictionaryId;
-    private Integer sizeOfDeleteList;
+    private Integer sizeOfDeleteList = 0;
     private Map<String, Object> newWord;
     private Map<String, Object> modifiedWord = new HashMap<>();
     private ArrayList<Long> movedWords;
@@ -144,6 +146,8 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     public void createAdapter(ArrayList<Map<String, Object>> data) {
         Log.d("LOG_TAG", "DictionaryView: createAdapter()");
         adapter = new WordAdapter(getActivity(),data,R.layout.word_item,from,to);
+        sizeOfDeleteList = 0;
+        mListener.checkListIsChange();
     }
 
     @Override
@@ -236,7 +240,12 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
         dialog.setTargetFragment(this, REQUEST_CODE_EDIT_WORD);
         dialog.show(getFragmentManager(),null);
     }
-
+    private void createDeleteWordDialog(){
+        Log.d("LOG_TAG", "DictionaryView: createDeleteWordDialog()");
+        dialog = DeleteWordDialog.newInstance(getSizeOfDeleteList());
+        dialog.setTargetFragment(this,REQUEST_CODE_DELETE_WORDS);
+        dialog.show(getFragmentManager(),null);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -263,6 +272,9 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
                 case REQUEST_CODE_EDIT_WORD:
                     modifiedWord.put(from[2],data.getStringExtra(from[2]));
                     presenter.editWord();
+                    break;
+                case REQUEST_CODE_DELETE_WORDS:
+                    presenter.deleteWords();
                     break;
             }
         }
@@ -306,7 +318,9 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     @Override
     public void deleteSelectedWords() {
         Log.d("LOG_TAG", "DictionaryView: deleteSelectedWords()");
-        presenter.deleteWords();
+        createDeleteWordDialog();
+
+        //presenter.deleteWords();
     }
 
     @Override

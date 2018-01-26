@@ -21,6 +21,7 @@ import com.dictionary.my.mydictionary.presenter.dictionary.AllDictionariesPresen
 import com.dictionary.my.mydictionary.presenter.dictionary.AllDictionariesPresenterImpl;
 import com.dictionary.my.mydictionary.view.DictionaryListener;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.AddDictionaryDialog;
+import com.dictionary.my.mydictionary.view.dictionary.dialogs.DeleteDictionaryDialog;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.EditDictionaryDialog;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     private DialogFragment dialog;
     private final int REQUEST_CODE_NEW_DICTIONARY = 1;
     private final int REQUEST_CODE_EDIT_DICTIONARY = 2;
+    private final int REQUEST_CODE_DELETE_DICTIONARY = 3;
 
     private String[] from;
     private int[] to = {R.id.dictionary};
@@ -215,6 +217,13 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
         dialog.show(getFragmentManager(),null);
     }
 
+    private void createDeleteDictionaryDialog(){
+        Log.d("LOG_TAG", "AllDictionariesView: createDeleteDictionaryDialog()");
+        dialog = DeleteDictionaryDialog.newInstance(getSizeOfDeleteList());
+        dialog.setTargetFragment(this, REQUEST_CODE_DELETE_DICTIONARY);
+        dialog.show(getFragmentManager(),null);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("LOG_TAG", "AllDictionariesView: onActivityResult()");
@@ -228,6 +237,9 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
                 case REQUEST_CODE_EDIT_DICTIONARY:
                     modifiedDictionary.put(from[1],data.getStringExtra(from[1]));
                     presenter.editDictionary();
+                    break;
+                case REQUEST_CODE_DELETE_DICTIONARY:
+                    presenter.deleteDictionary();
                     break;
             }
         } else if(resultCode == Activity.RESULT_CANCELED){
@@ -270,7 +282,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     @Override
     public void deleteSelectedDictionaries() {
         Log.d("LOG_TAG", "AllDictionariesView: deleteSelectedDictionaries()");
-        presenter.deleteDictionary();
+        createDeleteDictionaryDialog();
     }
 
 

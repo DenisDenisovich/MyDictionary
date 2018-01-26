@@ -129,7 +129,23 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else {
+        }else if(itemCount != null && itemCount != 0){
+            switch(menuToolbarMod){
+                case ALL_DICTIONARIES_TOOLBAR_MOD:
+                    // обработка выхода из режима редактирования (AllDictionariesView)
+                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+                    hostToAllDictionariesCommands.resetCheckList();
+                    invalidateOptionsMenu();
+                    break;
+                case DICTIONARY_TOOLBAR_MOD:
+                    // обработка выхода из режима редактирования (DictionaryView)
+                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+                    hostToDictionaryCommands.resetCheckList();
+                    invalidateOptionsMenu();
+                    break;
+            }
+        }
+        else {
             super.onBackPressed();
         }
     }
@@ -176,7 +192,7 @@ public class MainActivity extends AppCompatActivity
             menu.setGroupVisible(R.id.all_dictionaries_group,false);
             menu.setGroupVisible(R.id.dictionary_group,false);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_dehaze_white_24dp);
-
+            itemCount = 0;
             switch (currentFragment){
                 case KEY_FRAGMENT_ALL_DICTIONARIES:
                     menu.setGroupVisible(R.id.default_group,false);

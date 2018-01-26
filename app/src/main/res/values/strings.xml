@@ -27,6 +27,15 @@
     <string name="dialog_edit_word_TextView_head">Edit translate</string>
     <string name="dialog_edit_word_TextView_old_translate">Old translate</string>
 
+    <string name="dialog_delete_word_TextView_head">Delete word</string>
+    <string name="dialog_delete_dictionary_TextView_head">Delete dictionary</string>
+    <string name="dialog_delete_positive_button">Delete</string>
+    <string name="dialog_delete_negative_button">Cancel</string>
+    <string name="dialog_delete_words_message">Do you really want to delete the words?</string>
+    <string name="dialog_delete_one_word_message">Do you really want to delete the word?</string>
+    <string name="dialog_delete_dictionaries_message">Do you really want to delete the dictionaries?</string>
+    <string name="dialog_delete_one_dictionary_message">Do you really want to delete the dictionary?</string>
+
     <string name="dialog_move_word_positive_button">Move</string>
     <string name="dialog_move_word_negative_button">Cancel</string>
     <string name="dialog_move_word_TextView_head">Choice place to move</string>

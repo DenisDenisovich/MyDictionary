@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+        <TextView
+            android:id="@+id/tvDialogDeleteHead"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/colorPrimary"
+            android:gravity="center"
+            android:text="@string/dialog_delete_word_TextView_head"
+            android:textColor="@color/colorDictionaryItem"
+            android:textSize="@dimen/dictWordTextSize" />
+
+        <TextView
+            android:id="@+id/tvDialogDeleteMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:gravity="center"
+            android:text="@string/dialog_delete_words_message"
+            android:textColor="@color/colorDictionaryWord"
+            android:textSize="@dimen/dictWordTextSize" />
+
+</LinearLayout>
