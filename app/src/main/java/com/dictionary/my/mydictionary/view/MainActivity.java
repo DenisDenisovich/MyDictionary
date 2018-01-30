@@ -74,8 +74,15 @@ public class MainActivity extends AppCompatActivity
             invalidateOptionsMenu();
         }else{
             Log.d("LOG_TAG", "MainActivity: savedInstanceState == null");
+
+            allDictionaries = new AllDictionariesView();
+            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.container,allDictionaries,KEY_FRAGMENT_ALL_DICTIONARIES);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+            currentFragment = KEY_FRAGMENT_ALL_DICTIONARIES;
+            hostToAllDictionariesCommands = allDictionaries;
             menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-            currentFragment = KEY_DEFAULT_ACTIVITY;
         }
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -145,7 +152,10 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
         }
-        else {
+        else if(getSupportFragmentManager().getBackStackEntryCount() == 1){
+            getSupportFragmentManager().popBackStack();
+            super.onBackPressed();
+        }else{
             super.onBackPressed();
         }
     }
