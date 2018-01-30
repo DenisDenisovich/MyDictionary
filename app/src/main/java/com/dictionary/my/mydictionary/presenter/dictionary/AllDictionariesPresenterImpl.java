@@ -40,19 +40,19 @@ public class AllDictionariesPresenterImpl<V extends AllDictionaries> implements 
 
     @Override
     public void attach(V view) {
-        Log.d("LOG_TAG", "AllDictionariesPresenterImpl: attach()");
+        Log.d("LOG_TAG_C/D_Dict", "AllDictionariesPresenterImpl: attach(): Presenter: " + this.hashCode() + " View:" + view.hashCode());
         this.view = view;
     }
 
     @Override
     public void detach() {
-        Log.d("LOG_TAG", "AllDictionariesPresenterImpl: detach()");
+        Log.d("LOG_TAG_C/D_Dict", "AllDictionariesPresenterImpl: detach(): Presenter: " + this.hashCode() + " View:" + view.hashCode());
         view = null;
     }
 
     @Override
     public void destroy() {
-        Log.d("LOG_TAG", "AllDictionariesPresenterImpl: destroy()");
+        Log.d("LOG_TAG_C/D_Dict", "AllDictionariesPresenterImpl: destroy(): Presenter: " + this.hashCode());
         getDictionariesListDisposable.dispose();
         useCase.destroy();
     }

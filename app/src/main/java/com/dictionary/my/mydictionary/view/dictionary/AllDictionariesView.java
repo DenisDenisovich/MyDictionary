@@ -70,7 +70,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("LOG_TAG", "AllDictionariesView: onCreate() " + this.hashCode());
+        Log.d("LOG_TAG_C/D_Dict", "AllDictionariesView: onCreate() " + this.hashCode());
         setRetainInstance(true);
         presenter = new AllDictionariesPresenterImpl(getActivity().getApplicationContext());
     }
@@ -79,7 +79,7 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         presenter.attach(this);
-        Log.d("LOG_TAG", "AllDictionariesView: onCreateView() " + this.hashCode());
+        Log.d("LOG_TAG_C/D_Dict", "AllDictionariesView: onCreateView() " + this.hashCode());
         View view = inflater.inflate(R.layout.all_dictionaries_fragment, null);
         listView = view.findViewById(R.id.lvAllDictionaries);
         fab = view.findViewById(R.id.allDictionariesFab);
@@ -106,14 +106,14 @@ public class AllDictionariesView extends Fragment implements AllDictionaries, Ho
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d("LOG_TAG", "AllDictionariesView: onDestroyView() " + this.hashCode());
+        Log.d("LOG_TAG_C/D_Dict", "AllDictionariesView: onDestroyView() " + this.hashCode());
         presenter.detach();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("LOG_TAG", "AllDictionariesView: onDestroy() " + this.hashCode());
+        Log.d("LOG_TAG_C/D_Dict", "AllDictionariesView: onDestroy() " + this.hashCode());
         presenter.destroy();
     }
 

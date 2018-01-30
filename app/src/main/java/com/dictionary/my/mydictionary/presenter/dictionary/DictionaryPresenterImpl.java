@@ -49,19 +49,19 @@ public class DictionaryPresenterImpl<V extends Dictionary> implements Dictionary
     }
     @Override
     public void attach(V view) {
-        Log.d("LOG_TAG", "DictionaryPresenterImpl: attach()");
+        Log.d("LOG_TAG_C/D_Dict", "DictionariesPresenterImpl: attach(): Presenter: " + this.hashCode() + " View:" + view.hashCode());
         this.view = view;
     }
 
     @Override
     public void detach() {
-        Log.d("LOG_TAG", "DictionaryPresenterImpl: detach()");
+        Log.d("LOG_TAG_C/D_Dict", "DictionariesPresenterImpl: detach(): Presenter: " + this.hashCode() + " View:" + view.hashCode());
         view = null;
     }
 
     @Override
     public void destroy() {
-        Log.d("LOG_TAG", "DictionaryPresenterImpl: destroy()");
+        Log.d("LOG_TAG_C/D_Dict", "DictionariesPresenterImpl: destroy(): Presenter: " + this.hashCode());
         if(getWordsListDisposable != null) {
             getWordsListDisposable.dispose();
         }

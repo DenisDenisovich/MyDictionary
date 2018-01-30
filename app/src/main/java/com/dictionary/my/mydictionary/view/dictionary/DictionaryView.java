@@ -79,7 +79,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("LOG_TAG", "DictionaryView: onCreate() " + this.hashCode());
+        Log.d("LOG_TAG_C/D_Dict", "DictionaryView: onCreate() " + this.hashCode());
         setRetainInstance(true);
         presenter = new DictionaryPresenterImpl(getActivity().getApplicationContext(), currentDictionaryId);
     }
@@ -88,7 +88,7 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         presenter.attach(this);
-        Log.d("LOG_TAG", "DictionaryView: onCreateView() " + this.hashCode());
+        Log.d("LOG_TAG_C/D_Dict", "DictionaryView: onCreateView() " + this.hashCode());
         View view = inflater.inflate(R.layout.dictionary_fragment,null);
         listView =  view.findViewById(R.id.lvDictionary);
         fab = (FloatingActionButton) view.findViewById(R.id.dictionaryFab);
@@ -115,14 +115,14 @@ public class DictionaryView extends Fragment implements Dictionary, HostToDictio
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d("LOG_TAG", "DictionaryView: onDestroyView()" + this.hashCode());
+        Log.d("LOG_TAG_C/D_Dict", "DictionaryView: onDestroyView()" + this.hashCode());
         presenter.detach();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d("LOG_TAG", "DictionaryView: onDestroy() " + this.hashCode());
+        Log.d("LOG_TAG_C/D_Dict", "DictionaryView: onDestroy() " + this.hashCode());
         presenter.destroy();
     }
 

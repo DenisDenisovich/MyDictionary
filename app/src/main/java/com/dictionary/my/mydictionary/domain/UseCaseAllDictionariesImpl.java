@@ -38,7 +38,8 @@ public class UseCaseAllDictionariesImpl implements UseCaseAllDictionaries{
     }
 
     @Override
-    public void destroy() {
+    public void destroy()
+    {
         repositories.destroy();
     }
 }

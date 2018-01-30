@@ -284,10 +284,15 @@ public class MainActivity extends AppCompatActivity
         Log.d("LOG_TAG", "MainActivity: onNavigationItemSelected()");
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+
+        for(int i = 0; i < getSupportFragmentManager().getBackStackEntryCount(); i++){
+            getSupportFragmentManager().popBackStack();
+        }
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_dictionary) {
             allDictionaries = new AllDictionariesView();
             fragmentTransaction.replace(R.id.container,allDictionaries,KEY_FRAGMENT_ALL_DICTIONARIES);
+            fragmentTransaction.addToBackStack(null);
             currentFragment = KEY_FRAGMENT_ALL_DICTIONARIES;
             hostToAllDictionariesCommands = allDictionaries;
         }  else if (id == R.id.nav_training) {
@@ -296,9 +301,9 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_setting) {
 
         }
+        fragmentTransaction.commit();
         menuToolbarMod = DEFAULT_TOOLBAR_MOD;
         invalidateOptionsMenu();
-        fragmentTransaction.commit();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
