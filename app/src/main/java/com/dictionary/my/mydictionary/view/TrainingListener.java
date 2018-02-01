@@ -5,6 +5,8 @@ package com.dictionary.my.mydictionary.view;
  */
 
 public interface TrainingListener {
-    void setEngRusTraining();
-    void setRusEngTraining();
+    void openTrainingWordTranslate();
+    void openTrainingTranslateWord();
+    void openTrainingConstructor();
+    void openTrainingSprint();
 }

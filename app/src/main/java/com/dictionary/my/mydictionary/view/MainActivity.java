@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.design.widget.NavigationView;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,10 +18,14 @@ import com.dictionary.my.mydictionary.view.dictionary.AllDictionariesView;
 import com.dictionary.my.mydictionary.view.dictionary.DictionaryView;
 import com.dictionary.my.mydictionary.view.dictionary.HostToAllDictionariesCommands;
 import com.dictionary.my.mydictionary.view.dictionary.HostToDictionaryCommand;
-import com.dictionary.my.mydictionary.view.training.EngRusTrainingView;
+import com.dictionary.my.mydictionary.view.training.AllTrainingsView;
+import com.dictionary.my.mydictionary.view.training.TrainingConstructorView;
+import com.dictionary.my.mydictionary.view.training.TrainingSprintView;
+import com.dictionary.my.mydictionary.view.training.TrainingTranslateWordView;
+import com.dictionary.my.mydictionary.view.training.TrainingWordTranslateView;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, DictionaryListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DictionaryListener, TrainingListener {
     AllDictionariesView allDictionaries;
     DictionaryView dictionaryView;
     HostToAllDictionariesCommands hostToAllDictionariesCommands;
@@ -38,7 +41,11 @@ public class MainActivity extends AppCompatActivity
     final String KEY_FRAGMENT = "Fragment";
     final String KEY_FRAGMENT_ALL_DICTIONARIES = "AllDictionaries";
     final String KEY_FRAGMENT_DICTIONARY = "Dictionary";
-    final String KEY_FRAGMENT_TRAINING = "Training";
+    final String KEY_FRAGMENT_ALL_TRAININGS = "AllTraining";
+    final String KEY_FRAGMENT_TRAINING_WORD_TRANSLATE = "TrainingWordTranslate";
+    final String KEY_FRAGMENT_TRAINING_TRANSLATE_WORD = "TrainingTranslateWord";
+    final String KEY_FRAGMENT_TRAINING_CONSTRUCTOR = "TrainingConstructor";
+    final String KEY_FRAGMENT_TRAINING_SPRINT = "TrainingSprint";
     final String KEY_DEFAULT_ACTIVITY = "Activity";
     String currentFragment;
 
@@ -46,6 +53,12 @@ public class MainActivity extends AppCompatActivity
     final int DEFAULT_TOOLBAR_MOD = 1;
     final int ALL_DICTIONARIES_TOOLBAR_MOD = 2;
     final int DICTIONARY_TOOLBAR_MOD = 3;
+    final int ALL_TRAININGS_TOOLBAR_MOD = 4;
+    final int TRAINING_WORD_TRANSLATE_TOOLBAR_MOD = 5;
+    final int TRAINING_TRANSLATE_WORD_TOOLBAR_MOD = 6;
+    final int TRAINING_CONSTRUCTOR_TOOLBAR_MOD = 7;
+    final int TRAINING_SPRINT_TOOLBAR_MOD = 8;
+
     int menuToolbarMod;
 
     @Override
@@ -67,8 +80,6 @@ public class MainActivity extends AppCompatActivity
                 case KEY_FRAGMENT_DICTIONARY:
                     hostToDictionaryCommands = (DictionaryView) getSupportFragmentManager().findFragmentById(R.id.container);
                     itemCount = hostToDictionaryCommands.getSizeOfDeleteList();
-                    break;
-                case KEY_FRAGMENT_TRAINING:
                     break;
             }
             invalidateOptionsMenu();
@@ -212,10 +223,6 @@ public class MainActivity extends AppCompatActivity
                     menu.setGroupVisible(R.id.default_group,true);
                     toolbar.setTitle(dictionaryTitle);
                     break;
-                case KEY_FRAGMENT_TRAINING:
-                    menu.setGroupVisible(R.id.default_group,false);
-                    toolbar.setTitle(getResources().getString(R.string.title_all_dictionaries));
-                    break;
                 case KEY_DEFAULT_ACTIVITY:
                     menu.setGroupVisible(R.id.default_group,false);
                     toolbar.setTitle(getResources().getString(R.string.title_activity_main));
@@ -223,6 +230,32 @@ public class MainActivity extends AppCompatActivity
 
             }
 
+        }else if(menuToolbarMod ==ALL_TRAININGS_TOOLBAR_MOD){
+            menu.setGroupVisible(R.id.default_group,false);
+            menu.setGroupVisible(R.id.all_dictionaries_group,false);
+            menu.setGroupVisible(R.id.dictionary_group,false);
+            toolbar.setTitle("Trainings");
+
+        }else if(menuToolbarMod == TRAINING_WORD_TRANSLATE_TOOLBAR_MOD){
+            menu.setGroupVisible(R.id.default_group,false);
+            menu.setGroupVisible(R.id.all_dictionaries_group,false);
+            menu.setGroupVisible(R.id.dictionary_group,false);
+            toolbar.setTitle("Word - Translate");
+        }else if(menuToolbarMod == TRAINING_TRANSLATE_WORD_TOOLBAR_MOD){
+            menu.setGroupVisible(R.id.default_group,false);
+            menu.setGroupVisible(R.id.all_dictionaries_group,false);
+            menu.setGroupVisible(R.id.dictionary_group,false);
+            toolbar.setTitle("Translate - Word");
+        }else if(menuToolbarMod == TRAINING_CONSTRUCTOR_TOOLBAR_MOD){
+            menu.setGroupVisible(R.id.default_group,false);
+            menu.setGroupVisible(R.id.all_dictionaries_group,false);
+            menu.setGroupVisible(R.id.dictionary_group,false);
+            toolbar.setTitle("Constructor");
+        }else if(menuToolbarMod == TRAINING_SPRINT_TOOLBAR_MOD){
+            menu.setGroupVisible(R.id.default_group,false);
+            menu.setGroupVisible(R.id.all_dictionaries_group,false);
+            menu.setGroupVisible(R.id.dictionary_group,false);
+            toolbar.setTitle("Sprint");
         }
         return super.onPrepareOptionsMenu(menu);
     }
@@ -249,6 +282,26 @@ public class MainActivity extends AppCompatActivity
                     invalidateOptionsMenu();
                     return true;
                 case DEFAULT_TOOLBAR_MOD:
+                    // обработка стандартного режима (открытие NavigationView)
+                    toggle.onOptionsItemSelected(item);
+                    return true;
+                case ALL_TRAININGS_TOOLBAR_MOD:
+                    // обработка стандартного режима (открытие NavigationView)
+                    toggle.onOptionsItemSelected(item);
+                    return true;
+                case TRAINING_WORD_TRANSLATE_TOOLBAR_MOD:
+                    // обработка стандартного режима (открытие NavigationView)
+                    toggle.onOptionsItemSelected(item);
+                    return true;
+                case TRAINING_TRANSLATE_WORD_TOOLBAR_MOD:
+                    // обработка стандартного режима (открытие NavigationView)
+                    toggle.onOptionsItemSelected(item);
+                    return true;
+                case TRAINING_CONSTRUCTOR_TOOLBAR_MOD:
+                    // обработка стандартного режима (открытие NavigationView)
+                    toggle.onOptionsItemSelected(item);
+                    return true;
+                case TRAINING_SPRINT_TOOLBAR_MOD:
                     // обработка стандартного режима (открытие NavigationView)
                     toggle.onOptionsItemSelected(item);
                     return true;
@@ -306,8 +359,9 @@ public class MainActivity extends AppCompatActivity
             currentFragment = KEY_FRAGMENT_ALL_DICTIONARIES;
             hostToAllDictionariesCommands = allDictionaries;
         }  else if (id == R.id.nav_training) {
-            fragmentTransaction.replace(R.id.container,new EngRusTrainingView(),KEY_FRAGMENT_TRAINING);
-            currentFragment = KEY_FRAGMENT_TRAINING;
+            fragmentTransaction.replace(R.id.container,new AllTrainingsView(), KEY_FRAGMENT_ALL_TRAININGS);
+            fragmentTransaction.addToBackStack(null);
+            currentFragment = KEY_FRAGMENT_ALL_TRAININGS;
         } else if (id == R.id.nav_setting) {
 
         }
@@ -362,4 +416,35 @@ public class MainActivity extends AppCompatActivity
         invalidateOptionsMenu();
     }
 
+    @Override
+    public void openTrainingWordTranslate() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, new TrainingWordTranslateView(),KEY_FRAGMENT_TRAINING_WORD_TRANSLATE);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void openTrainingTranslateWord() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, new TrainingTranslateWordView(),KEY_FRAGMENT_TRAINING_TRANSLATE_WORD);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void openTrainingConstructor() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, new TrainingConstructorView(),KEY_FRAGMENT_TRAINING_CONSTRUCTOR);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
+    @Override
+    public void openTrainingSprint() {
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, new TrainingSprintView(),KEY_FRAGMENT_TRAINING_SPRINT);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 }

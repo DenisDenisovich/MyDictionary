@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/colorTrainingBackground"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#E8E8E8">
+
+    <Button
+        android:id="@+id/btnTrainingWordTranslate"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="15dp"
+        android:background="#ffffff"
+        android:text="word - translate"
+        android:textSize="24dp"/>
+    <Button
+        android:id="@+id/btnTrainingTranslateWord"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="15dp"
+        android:background="#ffffff"
+        android:text="translate - word"
+        android:textSize="24dp"/>
+    <Button
+        android:id="@+id/btnTrainingConstructor"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="15dp"
+        android:background="#ffffff"
+        android:text="constructor"
+        android:textSize="24dp"/>
+    <Button
+        android:id="@+id/btnTrainingSprint"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_margin="15dp"
+        android:background="#ffffff"
+        android:text="sprint"
+        android:textSize="24dp"/>
+
+
+
+
+</LinearLayout>
