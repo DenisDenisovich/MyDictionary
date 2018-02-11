@@ -10,20 +10,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dictionary.my.mydictionary.R;
-import com.dictionary.my.mydictionary.view.TrainingListener;
+import com.dictionary.my.mydictionary.view.OpenTrainingsInterface;
 
 /**
  * Created by luxso on 27.09.2017.
  */
 
 public class AllTrainingsView extends Fragment{
-    TrainingListener mListener;
+    OpenTrainingsInterface mListener;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         try{
             Log.d("LOG_TAG", "AllTrainingsView: onAttach()");
-            mListener = (TrainingListener) context;
+            mListener = (OpenTrainingsInterface) context;
         }catch (ClassCastException e){
             e.printStackTrace();
         }

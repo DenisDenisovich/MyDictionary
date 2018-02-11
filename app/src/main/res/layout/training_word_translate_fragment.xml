@@ -4,11 +4,43 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/tvTWTWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
+        android:layout_marginTop="100dp"
         android:layout_gravity="center_horizontal"
         android:text="Word Translate"
         android:textSize="24dp"/>
+
+    <Button
+        android:id="@+id/tvTWTTranslate1"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"/>
+    <Button
+        android:id="@+id/tvTWTTranslate2"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"/>
+    <Button
+        android:id="@+id/tvTWTTranslate3"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"/>
+    <Button
+        android:id="@+id/tvTWTTranslate4"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"/>
+    <Button
+        android:id="@+id/tvTWTTranslate5"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="20dp"/>
 
 </LinearLayout>

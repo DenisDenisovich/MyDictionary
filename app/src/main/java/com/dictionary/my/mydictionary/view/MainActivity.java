@@ -19,17 +19,25 @@ import com.dictionary.my.mydictionary.view.dictionary.DictionaryView;
 import com.dictionary.my.mydictionary.view.dictionary.HostToAllDictionariesCommands;
 import com.dictionary.my.mydictionary.view.dictionary.HostToDictionaryCommand;
 import com.dictionary.my.mydictionary.view.training.AllTrainingsView;
+import com.dictionary.my.mydictionary.view.training.HostToTrainingConstructorCommands;
+import com.dictionary.my.mydictionary.view.training.HostToTrainingSprintCommands;
+import com.dictionary.my.mydictionary.view.training.HostToTrainingWordTranslateCommands;
 import com.dictionary.my.mydictionary.view.training.TrainingConstructorView;
 import com.dictionary.my.mydictionary.view.training.TrainingSprintView;
-import com.dictionary.my.mydictionary.view.training.TrainingTranslateWordView;
 import com.dictionary.my.mydictionary.view.training.TrainingWordTranslateView;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, DictionaryListener, TrainingListener {
+        implements NavigationView.OnNavigationItemSelectedListener, DictionaryListener, OpenTrainingsInterface {
     AllDictionariesView allDictionaries;
     DictionaryView dictionaryView;
+    TrainingWordTranslateView trainingWordTranslateView;
+    TrainingSprintView trainingSprintView;
+    TrainingConstructorView trainingConstructorView;
     HostToAllDictionariesCommands hostToAllDictionariesCommands;
     HostToDictionaryCommand hostToDictionaryCommands;
+    HostToTrainingWordTranslateCommands hostToTrainingWordTranslateCommands;
+    HostToTrainingConstructorCommands hostToTrainingConstructorCommands;
+    HostToTrainingSprintCommands hostToTrainingSprintCommands;
     final String KEY_DICTIONARY_ID = "DictionaryId";
     long dictionaryId;
     final String KEY_DICTIONARY_TITLE = "DictionaryTitle";
@@ -418,32 +426,42 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void openTrainingWordTranslate() {
+        trainingWordTranslateView = new TrainingWordTranslateView();
+        hostToTrainingWordTranslateCommands = trainingWordTranslateView;
+        hostToTrainingWordTranslateCommands.setBaseToLearningTrainingMode();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, new TrainingWordTranslateView(),KEY_FRAGMENT_TRAINING_WORD_TRANSLATE);
+        fragmentTransaction.replace(R.id.container, trainingWordTranslateView,KEY_FRAGMENT_TRAINING_WORD_TRANSLATE);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
     @Override
     public void openTrainingTranslateWord() {
+        trainingWordTranslateView = new TrainingWordTranslateView();
+        hostToTrainingWordTranslateCommands = trainingWordTranslateView;
+        hostToTrainingWordTranslateCommands.setLearningToBaseTrainingMode();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, new TrainingTranslateWordView(),KEY_FRAGMENT_TRAINING_TRANSLATE_WORD);
+        fragmentTransaction.replace(R.id.container, trainingWordTranslateView,KEY_FRAGMENT_TRAINING_TRANSLATE_WORD);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
     @Override
     public void openTrainingConstructor() {
+        trainingConstructorView = new TrainingConstructorView();
+        hostToTrainingConstructorCommands = trainingConstructorView;
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, new TrainingConstructorView(),KEY_FRAGMENT_TRAINING_CONSTRUCTOR);
+        fragmentTransaction.replace(R.id.container, trainingConstructorView,KEY_FRAGMENT_TRAINING_CONSTRUCTOR);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
     @Override
     public void openTrainingSprint() {
+        trainingSprintView = new TrainingSprintView();
+        hostToTrainingSprintCommands = trainingSprintView;
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, new TrainingSprintView(),KEY_FRAGMENT_TRAINING_SPRINT);
+        fragmentTransaction.replace(R.id.container, trainingSprintView,KEY_FRAGMENT_TRAINING_SPRINT);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

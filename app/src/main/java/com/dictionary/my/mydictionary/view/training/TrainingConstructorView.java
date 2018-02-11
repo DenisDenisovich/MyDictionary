@@ -15,7 +15,7 @@ import com.dictionary.my.mydictionary.R;
  * Created by luxso on 01.02.2018.
  */
 
-public class TrainingConstructorView extends Fragment implements TrainingConstructor {
+public class TrainingConstructorView extends Fragment implements TrainingConstructor, HostToTrainingConstructorCommands {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
