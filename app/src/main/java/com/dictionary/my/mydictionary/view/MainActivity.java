@@ -127,13 +127,41 @@ public class MainActivity extends AppCompatActivity
             public void onBackStackChanged() {
                 Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener()");
                 if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES).isVisible()){
+                    Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in ALL_DICT");
                     currentFragment = KEY_FRAGMENT_ALL_DICTIONARIES;
                     hostToAllDictionariesCommands = (AllDictionariesView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES);
+                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
                 }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_DICTIONARY) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_DICTIONARY).isVisible()){
+                    Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in DICT");
                     currentFragment = KEY_FRAGMENT_DICTIONARY;
                     hostToDictionaryCommands = (DictionaryView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_DICTIONARY);
+                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_TRAININGS) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_TRAININGS).isVisible()){
+                    Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in ALL_TRAIN");
+                    currentFragment = KEY_FRAGMENT_ALL_TRAININGS;
+                    menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_WORD_TRANSLATE) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_WORD_TRANSLATE).isVisible()){
+                    Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in TRAIN_WORD_TRANSLATE");
+                    currentFragment = KEY_FRAGMENT_TRAINING_WORD_TRANSLATE;
+                    hostToTrainingWordTranslateCommands = (TrainingWordTranslateView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_WORD_TRANSLATE);
+                    menuToolbarMod = TRAINING_WORD_TRANSLATE_TOOLBAR_MOD;
+                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_TRANSLATE_WORD) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_TRANSLATE_WORD).isVisible()){
+                    Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in TRAIN_TRANSLATE_WORD");
+                    currentFragment = KEY_FRAGMENT_TRAINING_TRANSLATE_WORD;
+                    hostToTrainingWordTranslateCommands = (TrainingWordTranslateView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_TRANSLATE_WORD);
+                    menuToolbarMod = TRAINING_TRANSLATE_WORD_TOOLBAR_MOD;
+                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_CONSTRUCTOR) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_CONSTRUCTOR).isVisible()){
+                    Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in TRAIN_CONSTRUCTOR");
+                    currentFragment = KEY_FRAGMENT_TRAINING_CONSTRUCTOR;
+                    hostToTrainingConstructorCommands = (TrainingConstructorView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_CONSTRUCTOR);
+                    menuToolbarMod = TRAINING_CONSTRUCTOR_TOOLBAR_MOD;
+                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_SPRINT) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_SPRINT).isVisible()){
+                    Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in TRAIN_SPRINT");
+                    currentFragment = KEY_FRAGMENT_TRAINING_SPRINT;
+                    hostToTrainingSprintCommands = (TrainingSprintView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_SPRINT);
+                    menuToolbarMod = TRAINING_SPRINT_TOOLBAR_MOD;
                 }
-                menuToolbarMod = DEFAULT_TOOLBAR_MOD;
+                //menuToolbarMod = DEFAULT_TOOLBAR_MOD;
                 invalidateOptionsMenu();
             }
         });
@@ -235,14 +263,13 @@ public class MainActivity extends AppCompatActivity
                     menu.setGroupVisible(R.id.default_group,false);
                     toolbar.setTitle(getResources().getString(R.string.title_activity_main));
                     break;
-
+                case KEY_FRAGMENT_ALL_TRAININGS:
+                    menu.setGroupVisible(R.id.default_group,false);
+                    menu.setGroupVisible(R.id.all_dictionaries_group,false);
+                    menu.setGroupVisible(R.id.dictionary_group,false);
+                    toolbar.setTitle("Trainings");
+                    break;
             }
-
-        }else if(menuToolbarMod ==ALL_TRAININGS_TOOLBAR_MOD){
-            menu.setGroupVisible(R.id.default_group,false);
-            menu.setGroupVisible(R.id.all_dictionaries_group,false);
-            menu.setGroupVisible(R.id.dictionary_group,false);
-            toolbar.setTitle("Trainings");
 
         }else if(menuToolbarMod == TRAINING_WORD_TRANSLATE_TOOLBAR_MOD){
             menu.setGroupVisible(R.id.default_group,false);
@@ -433,6 +460,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.container, trainingWordTranslateView,KEY_FRAGMENT_TRAINING_WORD_TRANSLATE);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+        menuToolbarMod = TRAINING_WORD_TRANSLATE_TOOLBAR_MOD;
     }
 
     @Override
@@ -444,6 +472,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.container, trainingWordTranslateView,KEY_FRAGMENT_TRAINING_TRANSLATE_WORD);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+        menuToolbarMod = TRAINING_TRANSLATE_WORD_TOOLBAR_MOD;
     }
 
     @Override
@@ -454,6 +483,7 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.container, trainingConstructorView,KEY_FRAGMENT_TRAINING_CONSTRUCTOR);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+        menuToolbarMod = TRAINING_CONSTRUCTOR_TOOLBAR_MOD;
     }
 
     @Override
@@ -464,5 +494,6 @@ public class MainActivity extends AppCompatActivity
         fragmentTransaction.replace(R.id.container, trainingSprintView,KEY_FRAGMENT_TRAINING_SPRINT);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+        menuToolbarMod = TRAINING_SPRINT_TOOLBAR_MOD;
     }
 }

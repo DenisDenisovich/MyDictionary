@@ -26,6 +26,7 @@ public class TrainingConstructorView extends Fragment implements TrainingConstru
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("LOG_TAG_C/D_Training", "TrainingConstructorView: onCreate()" + this.hashCode());
+        setRetainInstance(true);
     }
 
     @Nullable

@@ -54,6 +54,7 @@ public class TrainingWordTranslatePresenterImpl<V extends TrainingWordTranslate>
 
     @Override
     public void destroy() {
+        Log.d("LOG_TAG", "TrainingWordTranslatePresenterImpl destroy()");
         if(blockDisposable != null){
             blockDisposable.dispose();
         }
@@ -62,6 +63,7 @@ public class TrainingWordTranslatePresenterImpl<V extends TrainingWordTranslate>
 
     @Override
     public void init() {
+        Log.d("LOG_TAG", "TrainingWordTranslatePresenterImpl init()");
         blockDisposable = useCase.getTraining()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -98,6 +100,7 @@ public class TrainingWordTranslatePresenterImpl<V extends TrainingWordTranslate>
 
     @Override
     public void update() {
+        Log.d("LOG_TAG", "TrainingWordTranslatePresenterImpl update()");
         setPause()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -130,6 +133,7 @@ public class TrainingWordTranslatePresenterImpl<V extends TrainingWordTranslate>
 
     @Override
     public void TranslateIsSelected() {
+        Log.d("LOG_TAG", "TrainingWordTranslatePresenterImpl TranslateIsSelected()");
         if(!pauseFlag) {
             long wordId = (Long) items.get(currentBlock).get(0).get(Content.COLUMN_ROWID);
             long translateId = view.getSelectedTranslate();
@@ -145,6 +149,7 @@ public class TrainingWordTranslatePresenterImpl<V extends TrainingWordTranslate>
     }
 
     private Completable setPause(){
+        Log.d("LOG_TAG", "TrainingWordTranslatePresenterImpl setPause()");
         return Completable.create(new CompletableOnSubscribe() {
             @Override
             public void subscribe(@NonNull CompletableEmitter e) throws Exception {

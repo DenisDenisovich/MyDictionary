@@ -45,6 +45,7 @@ public class TrainingWordTranslateView extends Fragment implements TrainingWordT
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("LOG_TAG_C/D_Training", "TrainingWordTranslateView: onCreate()" + this.hashCode());
+        setRetainInstance(true);
         String[] languagesMode = new String[2];
         languagesMode[0] = givenWord;
         languagesMode[1] = choiceTranslatingWords;
