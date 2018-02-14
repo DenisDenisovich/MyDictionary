@@ -35,10 +35,13 @@ public class TrainingWordTranslateRepositoryImpl implements TrainingWordTranslat
 
     @Override
     public String getTranslateById(long id) {
+        String translate;
         Cursor cursor = db.rawQuery("select " + Content.COLUMN_TRANSLATE + " from " + Content.TABLE_ALL_WORD + " where " +
                 Content.COLUMN_ROWID + " = ? ",new String[] {String.valueOf(id)});
         if(cursor.moveToFirst()){
-            return cursor.getString(cursor.getColumnIndex(Content.COLUMN_TRANSLATE));
+            translate = cursor.getString(cursor.getColumnIndex(Content.COLUMN_TRANSLATE));
+            cursor.close();
+            return translate;
         }
         return null;
     }

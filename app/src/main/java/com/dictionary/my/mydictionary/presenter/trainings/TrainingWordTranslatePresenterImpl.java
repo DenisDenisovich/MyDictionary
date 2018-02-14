@@ -37,8 +37,8 @@ public class TrainingWordTranslatePresenterImpl<V extends TrainingWordTranslate>
     private boolean pauseFlag = false;
     private int countOfRightAnswer = 0;
     private DisposableObserver<ArrayList<Map<String,Object>>> blockDisposable;
-    public TrainingWordTranslatePresenterImpl(Context context, String[] languagesMode){
-        useCase = new UseCaseTrainingWordTranslateImpl(context, languagesMode);
+    public TrainingWordTranslatePresenterImpl(Context context, Map<String,String> languageMode, String KEY_WORD, String KEY_TRANSLATE){
+        useCase = new UseCaseTrainingWordTranslateImpl(context, languageMode, KEY_WORD, KEY_TRANSLATE);
     }
     @Override
     public void attach(V v) {
@@ -64,36 +64,36 @@ public class TrainingWordTranslatePresenterImpl<V extends TrainingWordTranslate>
     @Override
     public void init() {
         Log.d("LOG_TAG", "TrainingWordTranslatePresenterImpl init()");
+        view.showProgress();
         blockDisposable = useCase.getTraining()
                 .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableObserver<ArrayList<Map<String, Object>>>() {
                     @Override
                     public void onNext(@NonNull ArrayList<Map<String, Object>> maps) {
-                        view.showProgress();
-                        String str = new String();
-                        for(Map<String,Object> i: maps){
-                            str += i.toString();
-                            str += " ";
-                        }
-                        Log.d("LOG_TAG", "in onNext " + str);
                         items.add(maps);
                     }
 
                     @Override
                     public void onError(@NonNull Throwable e) {
                         e.printStackTrace();
+                        view.setErrorMessage("ERROR");
+
                     }
 
                     @Override
                     public void onComplete() {
-                        view.hideProgress();
-                        view.setWord(items.get(currentBlock).get(0));
-                        ArrayList<Map<String,Object>> translate = new ArrayList<Map<String, Object>>();
-                        for(int i = 1; i < items.get(currentBlock).size();i++){
-                            translate.add(items.get(currentBlock).get(i));
+                        if(items.size() != 0) {
+                            view.hideProgress();
+                            view.setWord(items.get(currentBlock).get(0));
+                            ArrayList<Map<String, Object>> translate = new ArrayList<Map<String, Object>>();
+                            for (int i = 1; i < items.get(currentBlock).size(); i++) {
+                                translate.add(items.get(currentBlock).get(i));
+                            }
+                            view.setTranslates(translate);
+                        }else{
+                            view.setErrorMessage("You do not have enough words for training");
                         }
-                        view.setTranslates(translate);
                     }
                 });
     }

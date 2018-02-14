@@ -35,6 +35,7 @@ public class AddWordDialog extends DialogFragment {
         View view = inflater.inflate(R.layout.new_word_dialog,null);
         final EditText etWord = view.findViewById(R.id.newWordDialog);
         final EditText etTranslate = view.findViewById(R.id.newTranslateDialog);
+
         etWord.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

@@ -19,6 +19,7 @@ import com.dictionary.my.mydictionary.presenter.trainings.TrainingWordTranslateP
 import com.dictionary.my.mydictionary.presenter.trainings.TrainingWordTranslatePresenterImpl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -28,8 +29,9 @@ import java.util.concurrent.TimeUnit;
 
 public class TrainingWordTranslateView extends Fragment implements TrainingWordTranslate, HostToTrainingWordTranslateCommands{
     private View view;
-    private String givenWord;
-    private String choiceTranslatingWords;
+    private Map<String,String> languageMod = new HashMap<>();
+    private final String KEY_WORD = "word";
+    private final String KEY_TRANSLATE = "translate";
     private Map<String,Object> word;
     private ArrayList<Map<String,Object>> translate;
     private long idOfSelectedTranslate;
@@ -46,10 +48,7 @@ public class TrainingWordTranslateView extends Fragment implements TrainingWordT
         super.onCreate(savedInstanceState);
         Log.d("LOG_TAG_C/D_Training", "TrainingWordTranslateView: onCreate()" + this.hashCode());
         setRetainInstance(true);
-        String[] languagesMode = new String[2];
-        languagesMode[0] = givenWord;
-        languagesMode[1] = choiceTranslatingWords;
-        presenter = new TrainingWordTranslatePresenterImpl(getActivity().getApplicationContext(),languagesMode);
+        presenter = new TrainingWordTranslatePresenterImpl(getActivity().getApplicationContext(),languageMod, KEY_WORD, KEY_TRANSLATE);
     }
 
     @Nullable
@@ -83,20 +82,21 @@ public class TrainingWordTranslateView extends Fragment implements TrainingWordT
 
     @Override
     public void setBaseToLearningTrainingMode() {
-        givenWord = Content.COLUMN_WORD;
-        choiceTranslatingWords = Content.COLUMN_TRANSLATE;
+        languageMod.put(KEY_WORD,Content.COLUMN_WORD);
+        languageMod.put(KEY_TRANSLATE,Content.COLUMN_TRANSLATE);
     }
 
     @Override
     public void setLearningToBaseTrainingMode() {
-        givenWord = Content.COLUMN_TRANSLATE;
-        choiceTranslatingWords = Content.COLUMN_WORD;
+        languageMod.put(KEY_WORD,Content.COLUMN_TRANSLATE);
+        languageMod.put(KEY_TRANSLATE,Content.COLUMN_WORD);
     }
 
     @Override
     public void setWord(Map<String, Object> word) {
         this.word = word;
-        ((TextView)view.findViewById(R.id.tvTWTWord)).setText((String)word.get(givenWord));
+        String strWord = (String)word.get(languageMod.get(KEY_WORD));
+        ((TextView)view.findViewById(R.id.tvTWTWord)).setText(strWord);
     }
 
     @Override
@@ -121,15 +121,15 @@ public class TrainingWordTranslateView extends Fragment implements TrainingWordT
     @Override
     public void setTranslates(final ArrayList<Map<String, Object>> translates) {
         this.translate = translates;
-        ((Button)view.findViewById(R.id.tvTWTTranslate1)).setText((String)translates.get(0).get(choiceTranslatingWords));
+        ((Button)view.findViewById(R.id.tvTWTTranslate1)).setText((String)translates.get(0).get(languageMod.get(KEY_TRANSLATE)));
         ((Button)view.findViewById(R.id.tvTWTTranslate1)).setBackgroundColor(Color.WHITE);
-        ((Button)view.findViewById(R.id.tvTWTTranslate2)).setText((String)translates.get(1).get(choiceTranslatingWords));
+        ((Button)view.findViewById(R.id.tvTWTTranslate2)).setText((String)translates.get(1).get(languageMod.get(KEY_TRANSLATE)));
         ((Button)view.findViewById(R.id.tvTWTTranslate2)).setBackgroundColor(Color.WHITE);
-        ((Button)view.findViewById(R.id.tvTWTTranslate3)).setText((String)translates.get(2).get(choiceTranslatingWords));
+        ((Button)view.findViewById(R.id.tvTWTTranslate3)).setText((String)translates.get(2).get(languageMod.get(KEY_TRANSLATE)));
         ((Button)view.findViewById(R.id.tvTWTTranslate3)).setBackgroundColor(Color.WHITE);
-        ((Button)view.findViewById(R.id.tvTWTTranslate4)).setText((String)translates.get(3).get(choiceTranslatingWords));
+        ((Button)view.findViewById(R.id.tvTWTTranslate4)).setText((String)translates.get(3).get(languageMod.get(KEY_TRANSLATE)));
         ((Button)view.findViewById(R.id.tvTWTTranslate4)).setBackgroundColor(Color.WHITE);
-        ((Button)view.findViewById(R.id.tvTWTTranslate5)).setText((String)translates.get(4).get(choiceTranslatingWords));
+        ((Button)view.findViewById(R.id.tvTWTTranslate5)).setText((String)translates.get(4).get(languageMod.get(KEY_TRANSLATE)));
         ((Button)view.findViewById(R.id.tvTWTTranslate5)).setBackgroundColor(Color.WHITE);
 
         view.findViewById(R.id.tvTWTTranslate1).setOnClickListener(new View.OnClickListener() {
@@ -203,7 +203,12 @@ public class TrainingWordTranslateView extends Fragment implements TrainingWordT
 
     @Override
     public void setErrorMessage(String message) {
-
+        ((TextView)view.findViewById(R.id.tvTWTWord)).setText(message);
+        view.findViewById(R.id.tvTWTTranslate1).setVisibility(View.GONE);
+        view.findViewById(R.id.tvTWTTranslate2).setVisibility(View.GONE);
+        view.findViewById(R.id.tvTWTTranslate3).setVisibility(View.GONE);
+        view.findViewById(R.id.tvTWTTranslate4).setVisibility(View.GONE);
+        view.findViewById(R.id.tvTWTTranslate5).setVisibility(View.GONE);
     }
 
 
