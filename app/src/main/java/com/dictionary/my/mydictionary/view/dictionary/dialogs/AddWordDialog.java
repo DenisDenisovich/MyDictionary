@@ -11,6 +11,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -86,8 +87,8 @@ public class AddWordDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent data = new Intent();
-                        data.putExtra(Content.fromDictionary[1], etWord.getText().toString());
-                        data.putExtra(Content.fromDictionary[2], etTranslate.getText().toString());
+                        data.putExtra(Content.fromDictionary[1], etWord.getText().toString().trim().replaceAll("\\s{2,}", " "));
+                        data.putExtra(Content.fromDictionary[2], etTranslate.getText().toString().trim().replaceAll("\\s{2,}", " "));
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,data);
                     }
                 })

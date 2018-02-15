@@ -68,7 +68,7 @@ public class EditDictionaryDialog extends DialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent data = new Intent();
-                        data.putExtra(Content.fromAllDictionaries[1], etDictionaryNewTitle.getText().toString());
+                        data.putExtra(Content.fromAllDictionaries[1], etDictionaryNewTitle.getText().toString().trim().replaceAll("\\s{2,}", " "));
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,data);
                     }
                 })

@@ -68,7 +68,7 @@ public class EditWordDialog extends DialogFragment{
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent data = new Intent();
-                        data.putExtra(Content.fromDictionary[2], etWordNewTranslate.getText().toString());
+                        data.putExtra(Content.fromDictionary[2], etWordNewTranslate.getText().toString().trim().replaceAll("\\s{2,}", " "));
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,data);
                     }
                 })

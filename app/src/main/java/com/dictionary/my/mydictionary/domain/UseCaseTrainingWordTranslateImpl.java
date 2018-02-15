@@ -59,6 +59,7 @@ public class UseCaseTrainingWordTranslateImpl implements UseCaseTrainingWordTran
                     ArrayList<String> strListOfTranslate;
                     Map<String, Object> itemTranslate;
                     String translate;
+                    String checkString; //строка, через которую проверяем различность переводов двух слов
                     Map<String,Object> swapItemTranslate;
 
                     ArrayList<Map<String, Object>> emittedItems;
@@ -90,9 +91,9 @@ public class UseCaseTrainingWordTranslateImpl implements UseCaseTrainingWordTran
                                     itemWord.put(Content.COLUMN_TRANSLATE, word);
                                 }
                                 countOfTryingFindWord++;
-                            } while (idListOfWord.contains(id) || strListOfWord.contains(word));
+                            } while (idListOfWord.contains(id) || strListOfWord.contains(word.toLowerCase()));
                             idListOfWord.add(id);
-                            strListOfWord.add(word);
+                            strListOfWord.add(word.toLowerCase());
                             itemWord.put(Content.COLUMN_ROWID, id);
                             listOfWord.add(itemWord);
                             // выгружаем правильный перевод и записываем его на первую позицию в списке
@@ -105,7 +106,7 @@ public class UseCaseTrainingWordTranslateImpl implements UseCaseTrainingWordTran
                                 itemTranslate.put(Content.COLUMN_WORD, translate);
                             }
                             idListOfTranslate.add(id);
-                            strListOfTranslate.add(translate);
+                            strListOfTranslate.add(translate.toLowerCase());
                             itemTranslate.put(Content.COLUMN_ROWID, id);
                             listOfTranslate.add(itemTranslate);
                             // догружаем остальные 4 перевода
@@ -121,15 +122,18 @@ public class UseCaseTrainingWordTranslateImpl implements UseCaseTrainingWordTran
                                     id = Long.parseLong(allIds.get(rand.nextInt(count)));
                                     if(translateMod.equals(Content.COLUMN_TRANSLATE)){
                                         translate = repository.getTranslateById(id);
+                                        checkString = repository.getWordById(id).toLowerCase();
                                         itemTranslate.put(Content.COLUMN_TRANSLATE, translate);
                                     }else{
                                         translate = repository.getWordById(id);
+                                        checkString = repository.getTranslateById(id).toLowerCase();
                                         itemTranslate.put(Content.COLUMN_WORD, translate);
                                     }
                                     countOfTryingFindTranslate++;
-                                } while (idListOfTranslate.contains(id) || strListOfTranslate.contains(translate));
+                                } while (idListOfTranslate.contains(id) || strListOfTranslate.contains(translate.toLowerCase())
+                                        || strListOfWord.get(strListOfWord.size() -1).equals(checkString));
                                 idListOfTranslate.add(id);
-                                strListOfTranslate.add(translate);
+                                strListOfTranslate.add(translate.toLowerCase());
                                 itemTranslate.put(Content.COLUMN_ROWID, id);
                                 listOfTranslate.add(itemTranslate);
                             }
