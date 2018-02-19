@@ -10,16 +10,15 @@ import com.dictionary.my.mydictionary.data.DBHelper;
 import java.util.ArrayList;
 
 /**
- * Created by luxso on 01.02.2018.
+ * Created by luxso on 18.02.2018.
  */
 
-public class TrainingWordTranslateRepositoryImpl implements TrainingWordTranslateRepository {
+public class TrainingRepositoryImpl implements TrainingRepository {
     DBHelper dbHelper;
     SQLiteDatabase db;
-    public TrainingWordTranslateRepositoryImpl(Context context){
+    public TrainingRepositoryImpl(Context context){
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
-
     }
     @Override
     public ArrayList<String> getAllId() {
@@ -49,7 +48,7 @@ public class TrainingWordTranslateRepositoryImpl implements TrainingWordTranslat
     @Override
     public String getWordById(long id) {
         Cursor cursor = db.rawQuery("select " + Content.COLUMN_WORD + " from " + Content.TABLE_ALL_WORD + " where " +
-        Content.COLUMN_ROWID + " = ? ",new String[] {String.valueOf(id)});
+                Content.COLUMN_ROWID + " = ? ",new String[] {String.valueOf(id)});
         if(cursor.moveToFirst()){
             return cursor.getString(cursor.getColumnIndex(Content.COLUMN_WORD));
         }

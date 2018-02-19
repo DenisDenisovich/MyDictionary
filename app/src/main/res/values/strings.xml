@@ -18,14 +18,14 @@
     <string name="dialog_add_word_positive_button">Add</string>
     <string name="dialog_add_word_negative_button">Cancel</string>
     <string name="dialog_add_word_EditText1">word</string>
-    <string name="dialog_add_word_EditText2">translate</string>
+    <string name="dialog_add_word_EditText2">currentTranslate</string>
     <string name="dialog_add_word_TextView_head">Add new word</string>
 
     <string name="dialog_edit_word_positive_button">Edit</string>
     <string name="dialog_edit_word_negative_button">Cancel</string>
-    <string name="dialog_edit_word_EditText">new translate</string>
-    <string name="dialog_edit_word_TextView_head">Edit translate</string>
-    <string name="dialog_edit_word_TextView_old_translate">Old translate</string>
+    <string name="dialog_edit_word_EditText">new currentTranslate</string>
+    <string name="dialog_edit_word_TextView_head">Edit currentTranslate</string>
+    <string name="dialog_edit_word_TextView_old_translate">Old currentTranslate</string>
 
     <string name="dialog_delete_word_TextView_head">Delete word</string>
     <string name="dialog_delete_dictionary_TextView_head">Delete dictionary</string>

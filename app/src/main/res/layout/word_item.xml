@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dictWordMarginLeft"
             android:layout_marginTop="@dimen/dictWordMarginTop"
-            android:text="translate"
+            android:text="currentTranslate"
             android:textColor="@color/colorDictionaryWord"
             android:textSize="@dimen/dictWordTextSize" />
 

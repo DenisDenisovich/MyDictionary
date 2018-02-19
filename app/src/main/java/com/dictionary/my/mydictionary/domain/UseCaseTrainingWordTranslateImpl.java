@@ -4,8 +4,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.Content;
-import com.dictionary.my.mydictionary.data.repository.TrainingWordTranslateRepository;
-import com.dictionary.my.mydictionary.data.repository.TrainingWordTranslateRepositoryImpl;
+import com.dictionary.my.mydictionary.data.repository.TrainingRepository;
+import com.dictionary.my.mydictionary.data.repository.TrainingRepositoryImpl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,7 +22,7 @@ import io.reactivex.annotations.NonNull;
  */
 
 public class UseCaseTrainingWordTranslateImpl implements UseCaseTrainingWordTranslate {
-    TrainingWordTranslateRepository repository;
+    TrainingRepository repository;
     private String wordMod;
     private String translateMod;
     private final int minCountOfWords = 10;
@@ -34,7 +34,7 @@ public class UseCaseTrainingWordTranslateImpl implements UseCaseTrainingWordTran
     private int countOfTryingFindTranslate;
 
     public UseCaseTrainingWordTranslateImpl(Context context, Map<String,String> languageMode, String KEY_WORD, String KEY_TRANSLATE){
-        repository = new TrainingWordTranslateRepositoryImpl(context);
+        repository = new TrainingRepositoryImpl(context);
         wordMod = languageMode.get(KEY_WORD);
         translateMod = languageMode.get(KEY_TRANSLATE);
     }

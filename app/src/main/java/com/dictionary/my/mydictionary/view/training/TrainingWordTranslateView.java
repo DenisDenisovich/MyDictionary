@@ -58,8 +58,10 @@ public class TrainingWordTranslateView extends Fragment implements TrainingWordT
         presenter.attach(this);
         view = inflater.inflate(R.layout.training_word_translate_fragment,null);
         if(savedInstanceState == null){
+            Log.d("LOG_TAG", "savedInstanceState == null");
             presenter.init();
         }else{
+            Log.d("LOG_TAG", "savedInstanceState != null");
             presenter.update();
         }
         return view;
