@@ -1,4 +1,4 @@
-package com.dictionary.my.mydictionary.data.repository;
+package com.dictionary.my.mydictionary.data.repository.storage;
 
 import android.content.Context;
 import android.database.Cursor;

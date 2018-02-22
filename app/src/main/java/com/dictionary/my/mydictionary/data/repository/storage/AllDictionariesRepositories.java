@@ -1,4 +1,4 @@
-package com.dictionary.my.mydictionary.data.repository;
+package com.dictionary.my.mydictionary.data.repository.storage;
 
 import java.util.ArrayList;
 import java.util.Map;

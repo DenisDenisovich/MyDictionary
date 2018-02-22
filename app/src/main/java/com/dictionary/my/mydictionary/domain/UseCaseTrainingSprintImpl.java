@@ -3,10 +3,15 @@ package com.dictionary.my.mydictionary.domain;
 import android.content.Context;
 import android.util.Log;
 
-import com.dictionary.my.mydictionary.data.repository.TrainingRepository;
-import com.dictionary.my.mydictionary.data.repository.TrainingRepositoryImpl;
+import com.dictionary.my.mydictionary.data.Content;
+import com.dictionary.my.mydictionary.data.repository.storage.TrainingRepository;
+import com.dictionary.my.mydictionary.data.repository.storage.TrainingRepositoryImpl;
+import com.dictionary.my.mydictionary.domain.entites.Meaning;
+import com.dictionary.my.mydictionary.domain.entites.WordSkyEng;
 import com.dictionary.my.mydictionary.domain.entites.WordSprint;
+import com.dictionary.my.mydictionary.view.App;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -14,6 +19,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
+import retrofit2.Response;
 
 /**
  * Created by luxso on 19.02.2018.
@@ -21,8 +27,10 @@ import io.reactivex.annotations.NonNull;
 
 public class UseCaseTrainingSprintImpl implements UseCaseTrainingSprint {
     private TrainingRepository repository;
+    Response<ArrayList<WordSkyEng>> response;
+    ArrayList<String> alternativeTranslate;
     private final int minCountOfWords = 10;
-    private final int countOfBlock = 60;
+    private final int countOfBlock = 40;
     private int maxCountOfTryingFindWord = minCountOfWords;
     private int countOfTryingFindWord;
     public UseCaseTrainingSprintImpl(Context context){
@@ -37,25 +45,39 @@ public class UseCaseTrainingSprintImpl implements UseCaseTrainingSprint {
                     ArrayList<String> allIds = repository.getAllId();
                     int count = allIds.size();
                     WordSprint item;
+                    String word;
+                    String translate;
                     long id;
                     if(count >= minCountOfWords){
                         Random rand = new Random();
                         for(int i = 0; i < countOfBlock; i++){
                             item = new WordSprint();
                             id = Long.valueOf(allIds.get(rand.nextInt(allIds.size())));
-                            item.setWord(repository.getTranslateById(id));
+                            word = repository.getTranslateById(id);
+                            item.setWord(word);
+                            item.setId(id);
+                            // выгружаем из SkyEng альтернативные переводы
+                            alternativeTranslate = getAlternativeTranslates(word.toLowerCase());
                             if (rand.nextInt()%2 == 0){
                                 // вставляем правильный перевод
                                 item.setTranslate(repository.getWordById(id));
                                 item.setRightFlag(true);
                             }else{
                                 // вставляем неправильный перевод
-                                id = Long.valueOf(allIds.get(rand.nextInt(allIds.size())));
-                                item.setTranslate(repository.getWordById(id));
-                                item.setRightFlag(false);
+                                countOfTryingFindWord = 0;
+                                do {
+                                    if(countOfTryingFindWord > maxCountOfTryingFindWord){
+                                        throw new Throwable();
+                                    }
+                                    id = Long.valueOf(allIds.get(rand.nextInt(allIds.size())));
+                                    translate = repository.getWordById(id);
+                                    countOfTryingFindWord++;
+                                }while (translate.toLowerCase().equals(repository.getWordById(item.getId()).toLowerCase())
+                                        || alternativeTranslate.contains(translate.toLowerCase()));
+                                    item.setTranslate(repository.getWordById(id));
+                                    item.setRightFlag(false);
                             }
                             if(!e.isDisposed()){
-                                Log.d("LOG_TAG", "item word: " + item.getWord() + ", translate: " + item.getTranslate() + ", boolean: " + item.isRightFlag());
                                 e.onNext(item);
                             }
                         }
@@ -74,6 +96,17 @@ public class UseCaseTrainingSprintImpl implements UseCaseTrainingSprint {
                 }
             }
         });
+    }
+
+    private ArrayList<String> getAlternativeTranslates(String word) throws IOException {
+        alternativeTranslate = new ArrayList<String>();
+        ArrayList<WordSkyEng> data;
+        response = App.getSkyEngApi().getAlterTranslations(word).execute();
+        data = response.body();
+        for(WordSkyEng w: data){
+            alternativeTranslate.add(w.getText().toLowerCase());
+        }
+        return alternativeTranslate;
     }
 
     @Override

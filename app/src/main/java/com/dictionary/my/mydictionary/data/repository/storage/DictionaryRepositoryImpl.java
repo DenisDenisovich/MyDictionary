@@ -1,4 +1,4 @@
-package com.dictionary.my.mydictionary.data.repository;
+package com.dictionary.my.mydictionary.data.repository.storage;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,7 +15,6 @@ import com.dictionary.my.mydictionary.domain.mappers.MapToContentValuesDictionar
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 
 import io.reactivex.Observable;
@@ -23,7 +22,6 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;

@@ -33,6 +33,7 @@ public class TrainingSprintPresenterImpl<V extends TrainingSprint> implements Tr
     DisposableObserver<WordSprint> blockDisposable;
     DisposableObserver<String> timeDisposable;
     ArrayList<WordSprint> items;
+    int countOfRadyBlock = 0;
     int currentBlock = 0;
     int countOfRightSelected = 0;
     boolean pauseFlag = true;
@@ -72,6 +73,11 @@ public class TrainingSprintPresenterImpl<V extends TrainingSprint> implements Tr
                     @Override
                     public void onNext(@NonNull WordSprint wordSprint) {
                         items.add(wordSprint);
+                        countOfRadyBlock++;
+                        if(countOfRadyBlock == 5){
+                            update();
+                            setTime();
+                        }
                     }
 
                     @Override
@@ -82,8 +88,6 @@ public class TrainingSprintPresenterImpl<V extends TrainingSprint> implements Tr
 
                     @Override
                     public void onComplete() {
-                        update();
-                        setTime();
 
                     }
                 });
@@ -100,48 +104,48 @@ public class TrainingSprintPresenterImpl<V extends TrainingSprint> implements Tr
 
     @Override
     public void rightButtonClick() {
-        if(items.get(currentBlock).isRightFlag()){
-            countOfRightSelected++;
-            view.setPositiveMessage();
-        }else{
-            view.setNegativeMessage();
-        }
         if(pauseFlag) {
-            setPause()
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action() {
-                        @Override
-                        public void run() throws Exception {
-                            currentBlock++;
-                            update();
-                            pauseFlag = true;
-                        }
-                    });
-        }
+            if(items.get(currentBlock).isRightFlag()){
+                countOfRightSelected++;
+                view.setPositiveMessage();
+            }else{
+                view.setNegativeMessage();
+            }
+                setPause()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                currentBlock++;
+                                update();
+                                pauseFlag = true;
+                            }
+                        });
+            }
     }
 
     @Override
     public void wrongButtonClick() {
-        if(items.get(currentBlock).isRightFlag()){
-            view.setNegativeMessage();
-        }else{
-            countOfRightSelected++;
-            view.setPositiveMessage();
-        }
         if (pauseFlag) {
-            setPause()
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action() {
-                        @Override
-                        public void run() throws Exception {
-                            currentBlock++;
-                            update();
-                            pauseFlag = true;
-                        }
-                    });
-        }
+            if(items.get(currentBlock).isRightFlag()){
+                view.setNegativeMessage();
+            }else{
+                countOfRightSelected++;
+                view.setPositiveMessage();
+            }
+                setPause()
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Action() {
+                            @Override
+                            public void run() throws Exception {
+                                currentBlock++;
+                                update();
+                                pauseFlag = true;
+                            }
+                        });
+            }
     }
 
     private Completable setPause(){
@@ -165,7 +169,7 @@ public class TrainingSprintPresenterImpl<V extends TrainingSprint> implements Tr
             @Override
             public void subscribe(@NonNull ObservableEmitter<String> e) throws Exception {
                 try {
-                    int time = 30;
+                    int time = 15;
                     int i = 0;
                     while(i < time) {
                         if(pauseFlag && view != null) {

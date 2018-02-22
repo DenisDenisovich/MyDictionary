@@ -8,6 +8,7 @@ import com.dictionary.my.mydictionary.domain.UseCaseTrainingWordTranslate;
 import com.dictionary.my.mydictionary.domain.UseCaseTrainingWordTranslateImpl;
 import com.dictionary.my.mydictionary.view.training.TrainingWordTranslate;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Objects;

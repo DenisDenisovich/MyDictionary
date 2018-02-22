@@ -75,6 +75,7 @@ public class TrainingSprintView extends Fragment implements HostToTrainingSprint
     @Override
     public void onDestroy() {
         super.onDestroy();
+        presenter.destroy();
         Log.d("LOG_TAG_C/D_Training", "TrainingSprintView: onDestroy()" + this.hashCode());
     }
 

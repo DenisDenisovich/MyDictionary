@@ -2,18 +2,14 @@ package com.dictionary.my.mydictionary.domain;
 
 import android.content.Context;
 
-import com.dictionary.my.mydictionary.data.repository.DictionaryRepository;
-import com.dictionary.my.mydictionary.data.repository.DictionaryRepositoryImpl;
+import com.dictionary.my.mydictionary.data.repository.storage.DictionaryRepository;
+import com.dictionary.my.mydictionary.data.repository.storage.DictionaryRepositoryImpl;
 
 import java.util.ArrayList;
 import java.util.Map;
 
 import io.reactivex.Observable;
-import io.reactivex.ObservableSource;
 import io.reactivex.Single;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Function;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by luxso on 23.09.2017.

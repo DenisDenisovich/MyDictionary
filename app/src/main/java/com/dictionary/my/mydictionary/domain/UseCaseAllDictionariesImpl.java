@@ -2,8 +2,8 @@ package com.dictionary.my.mydictionary.domain;
 
 import android.content.Context;
 
-import com.dictionary.my.mydictionary.data.repository.AllDictionariesRepositories;
-import com.dictionary.my.mydictionary.data.repository.AllDictionariesRepositoriesImpl;
+import com.dictionary.my.mydictionary.data.repository.storage.AllDictionariesRepositories;
+import com.dictionary.my.mydictionary.data.repository.storage.AllDictionariesRepositoriesImpl;
 
 
 import java.util.ArrayList;

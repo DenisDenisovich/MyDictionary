@@ -4,9 +4,14 @@ import android.content.Context;
 import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.Content;
-import com.dictionary.my.mydictionary.data.repository.TrainingRepository;
-import com.dictionary.my.mydictionary.data.repository.TrainingRepositoryImpl;
+import com.dictionary.my.mydictionary.data.repository.storage.TrainingRepository;
+import com.dictionary.my.mydictionary.data.repository.storage.TrainingRepositoryImpl;
+import com.dictionary.my.mydictionary.domain.entites.Meaning;
+import com.dictionary.my.mydictionary.domain.entites.Translation;
+import com.dictionary.my.mydictionary.domain.entites.WordSkyEng;
+import com.dictionary.my.mydictionary.view.App;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +21,7 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
+import retrofit2.Response;
 
 /**
  * Created by luxso on 01.02.2018.
@@ -23,6 +29,8 @@ import io.reactivex.annotations.NonNull;
 
 public class UseCaseTrainingWordTranslateImpl implements UseCaseTrainingWordTranslate {
     TrainingRepository repository;
+    Response<ArrayList<WordSkyEng>> response;
+    ArrayList<String> alternativeTranslate;
     private String wordMod;
     private String translateMod;
     private final int minCountOfWords = 10;
@@ -60,7 +68,7 @@ public class UseCaseTrainingWordTranslateImpl implements UseCaseTrainingWordTran
                     Map<String, Object> itemTranslate;
                     String translate;
                     String checkString; //строка, через которую проверяем различность переводов двух слов
-                    Map<String,Object> swapItemTranslate;
+                    Map<String, Object> swapItemTranslate;
 
                     ArrayList<Map<String, Object>> emittedItems;
 
@@ -68,7 +76,7 @@ public class UseCaseTrainingWordTranslateImpl implements UseCaseTrainingWordTran
                         Random rand = new Random();
                         long id;
                         // формируем блоки (слово - 5 переводов)
-                        for(int i = 0; i < countOfReadyBlock; i++) {
+                        for (int i = 0; i < countOfReadyBlock; i++) {
                             listOfTranslate = new ArrayList<Map<String, Object>>();
                             idListOfTranslate = new ArrayList<>();
                             strListOfTranslate = new ArrayList<String>();
@@ -78,30 +86,33 @@ public class UseCaseTrainingWordTranslateImpl implements UseCaseTrainingWordTran
                             //(если количество попыток слишком большое, вызываем Exception)
                             countOfTryingFindWord = 0;
                             do {
-                                if(countOfTryingFindWord > maxCountOfTryingFindWord){
+                                if (countOfTryingFindWord > maxCountOfTryingFindWord) {
                                     throw new Throwable();
 
                                 }
                                 id = Long.parseLong(allIds.get(rand.nextInt(count)));
-                                if(wordMod.equals(Content.COLUMN_WORD)){
+                                if (wordMod.equals(Content.COLUMN_WORD)) {
                                     word = repository.getWordById(id);
                                     itemWord.put(Content.COLUMN_WORD, word);
-                                }else{
+                                } else {
                                     word = repository.getTranslateById(id);
                                     itemWord.put(Content.COLUMN_TRANSLATE, word);
                                 }
                                 countOfTryingFindWord++;
-                            } while (idListOfWord.contains(id) || strListOfWord.contains(word.toLowerCase()));
+                            }
+                            while (idListOfWord.contains(id) || strListOfWord.contains(word.toLowerCase()));
                             idListOfWord.add(id);
                             strListOfWord.add(word.toLowerCase());
                             itemWord.put(Content.COLUMN_ROWID, id);
                             listOfWord.add(itemWord);
+                            // выгружаем из SkyEng альтернативные переводы
+                            alternativeTranslate = getAlternativeTranslates(word.toLowerCase());
                             // выгружаем правильный перевод и записываем его на первую позицию в списке
                             itemTranslate = new HashMap<>();
-                            if(translateMod.equals(Content.COLUMN_TRANSLATE)){
+                            if (translateMod.equals(Content.COLUMN_TRANSLATE)) {
                                 translate = repository.getTranslateById(id);
                                 itemTranslate.put(Content.COLUMN_TRANSLATE, translate);
-                            }else{
+                            } else {
                                 translate = repository.getWordById(id);
                                 itemTranslate.put(Content.COLUMN_WORD, translate);
                             }
@@ -110,28 +121,30 @@ public class UseCaseTrainingWordTranslateImpl implements UseCaseTrainingWordTran
                             itemTranslate.put(Content.COLUMN_ROWID, id);
                             listOfTranslate.add(itemTranslate);
                             // догружаем остальные 4 перевода
-                            for(int j = 0; j < countOfReadyTranslate; j++) {
+                            for (int j = 0; j < countOfReadyTranslate; j++) {
                                 itemTranslate = new HashMap<>();
                                 // рандомно выбираем id перевода и проверяем его на совпадение с уже имеющимися
                                 //(если количество попыток слишком большое, вызываем Exception)
                                 countOfTryingFindTranslate = 0;
                                 do {
-                                    if(countOfTryingFindTranslate > maxCountOfTryingFindTranslate){
+                                    if (countOfTryingFindTranslate > maxCountOfTryingFindTranslate) {
                                         throw new Throwable();
                                     }
                                     id = Long.parseLong(allIds.get(rand.nextInt(count)));
-                                    if(translateMod.equals(Content.COLUMN_TRANSLATE)){
+                                    if (translateMod.equals(Content.COLUMN_TRANSLATE)) {
                                         translate = repository.getTranslateById(id);
                                         checkString = repository.getWordById(id).toLowerCase();
                                         itemTranslate.put(Content.COLUMN_TRANSLATE, translate);
-                                    }else{
+                                    } else {
                                         translate = repository.getWordById(id);
                                         checkString = repository.getTranslateById(id).toLowerCase();
                                         itemTranslate.put(Content.COLUMN_WORD, translate);
                                     }
                                     countOfTryingFindTranslate++;
-                                } while (idListOfTranslate.contains(id) || strListOfTranslate.contains(translate.toLowerCase())
-                                        || strListOfWord.get(strListOfWord.size() -1).equals(checkString));
+                                }
+                                while (idListOfTranslate.contains(id) || strListOfTranslate.contains(translate.toLowerCase())
+                                        || strListOfWord.get(strListOfWord.size() - 1).equals(checkString)
+                                        || alternativeTranslate.contains(translate.toLowerCase()));
                                 idListOfTranslate.add(id);
                                 strListOfTranslate.add(translate.toLowerCase());
                                 itemTranslate.put(Content.COLUMN_ROWID, id);
@@ -140,24 +153,23 @@ public class UseCaseTrainingWordTranslateImpl implements UseCaseTrainingWordTran
                             // перемещаем правильный перевод в случайную позицию в списке
                             int positionOfRightChoice = rand.nextInt(5);
                             swapItemTranslate = listOfTranslate.get(positionOfRightChoice);
-                            listOfTranslate.set(positionOfRightChoice,listOfTranslate.get(0));
-                            listOfTranslate.set(0,swapItemTranslate);
+                            listOfTranslate.set(positionOfRightChoice, listOfTranslate.get(0));
+                            listOfTranslate.set(0, swapItemTranslate);
                             // формируем конечный блок
                             emittedItems.add(listOfWord.get(i));
                             emittedItems.addAll(listOfTranslate);
                             // выводим в лог сформированный блок
                             String str = new String();
-                            for(Map<String,Object> logStr: emittedItems){
+                            for (Map<String, Object> logStr : emittedItems) {
                                 str += logStr.toString();
                                 str += " ";
                             }
-                            Log.d("LOG_TAG", "emittedItem is " + str);
-                            if(!e.isDisposed()) {
+                            if (!e.isDisposed()) {
                                 e.onNext(emittedItems);
                             }
                         }
                     }
-                    if(!e.isDisposed()) {
+                    if (!e.isDisposed()) {
                         e.onComplete();
                     }
                 }catch (Throwable t){
@@ -169,6 +181,23 @@ public class UseCaseTrainingWordTranslateImpl implements UseCaseTrainingWordTran
         });
 
         return observable;
+    }
+
+    private ArrayList<String> getAlternativeTranslates(String word) throws IOException{
+        alternativeTranslate = new ArrayList<String>();
+        ArrayList<WordSkyEng> data;
+        response = App.getSkyEngApi().getAlterTranslations(word).execute();
+        data = response.body();
+        if(wordMod.equals(Content.COLUMN_WORD)) {
+            for(Meaning m: data.get(0).getMeanings()){
+                alternativeTranslate.add(m.getTranslation().getText().toLowerCase());
+            }
+        } else{
+            for(WordSkyEng w: data){
+                alternativeTranslate.add(w.getText().toLowerCase());
+            }
+        }
+        return alternativeTranslate;
     }
 
     @Override
