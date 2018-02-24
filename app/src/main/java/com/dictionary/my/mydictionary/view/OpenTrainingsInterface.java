@@ -5,8 +5,8 @@ package com.dictionary.my.mydictionary.view;
  */
 
 public interface OpenTrainingsInterface {
-    void openTrainingWordTranslate();
-    void openTrainingTranslateWord();
+    void openTrainingSecondToFirst();
+    void openTrainingFirstToSecond();
     void openTrainingConstructor();
     void openTrainingSprint();
 }

@@ -7,8 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.data.DBHelper;
-import com.dictionary.my.mydictionary.domain.mappers.CursorToMapAllDictionaries;
-import com.dictionary.my.mydictionary.domain.mappers.MapToContentValuesAllDictionaries;
+import com.dictionary.my.mydictionary.domain.dictionary.mappers.CursorToMapAllDictionaries;
+import com.dictionary.my.mydictionary.domain.dictionary.mappers.MapToContentValuesAllDictionaries;
 
 import java.util.ArrayList;
 import java.util.Map;

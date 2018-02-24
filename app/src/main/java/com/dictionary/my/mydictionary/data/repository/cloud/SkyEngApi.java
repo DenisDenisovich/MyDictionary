@@ -2,7 +2,7 @@ package com.dictionary.my.mydictionary.data.repository.cloud;
 
 
 
-import com.dictionary.my.mydictionary.domain.entites.WordSkyEng;
+import com.dictionary.my.mydictionary.data.entites.skyengapi.WordSkyEng;
 
 import java.util.ArrayList;
 

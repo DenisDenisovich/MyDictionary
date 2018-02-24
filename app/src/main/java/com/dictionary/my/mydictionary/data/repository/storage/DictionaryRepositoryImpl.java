@@ -8,10 +8,10 @@ import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.data.DBHelper;
-import com.dictionary.my.mydictionary.domain.mappers.CursorToContentValuesDictionary;
-import com.dictionary.my.mydictionary.domain.mappers.CursorToMapAllDictionaries;
-import com.dictionary.my.mydictionary.domain.mappers.CursorToMapDictionary;
-import com.dictionary.my.mydictionary.domain.mappers.MapToContentValuesDictionary;
+import com.dictionary.my.mydictionary.domain.dictionary.mappers.CursorToContentValuesDictionary;
+import com.dictionary.my.mydictionary.domain.dictionary.mappers.CursorToMapAllDictionaries;
+import com.dictionary.my.mydictionary.domain.dictionary.mappers.CursorToMapDictionary;
+import com.dictionary.my.mydictionary.domain.dictionary.mappers.MapToContentValuesDictionary;
 
 import java.util.ArrayList;
 import java.util.Arrays;

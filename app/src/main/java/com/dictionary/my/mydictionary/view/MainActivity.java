@@ -14,28 +14,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.dictionary.my.mydictionary.R;
-import com.dictionary.my.mydictionary.view.dictionary.AllDictionariesView;
-import com.dictionary.my.mydictionary.view.dictionary.DictionaryView;
+import com.dictionary.my.mydictionary.view.dictionary.impl.ViewAllDictionariesImpl;
+import com.dictionary.my.mydictionary.view.dictionary.impl.ViewDictionaryImpl;
 import com.dictionary.my.mydictionary.view.dictionary.HostToAllDictionariesCommands;
 import com.dictionary.my.mydictionary.view.dictionary.HostToDictionaryCommand;
-import com.dictionary.my.mydictionary.view.training.AllTrainingsView;
+import com.dictionary.my.mydictionary.view.training.impl.ViewAllTrainingsImpl;
 import com.dictionary.my.mydictionary.view.training.HostToTrainingConstructorCommands;
 import com.dictionary.my.mydictionary.view.training.HostToTrainingSprintCommands;
-import com.dictionary.my.mydictionary.view.training.HostToTrainingWordTranslateCommands;
-import com.dictionary.my.mydictionary.view.training.TrainingConstructorView;
-import com.dictionary.my.mydictionary.view.training.TrainingSprintView;
-import com.dictionary.my.mydictionary.view.training.TrainingWordTranslateView;
+import com.dictionary.my.mydictionary.view.training.impl.ViewTrainingConstructorImpl;
+import com.dictionary.my.mydictionary.view.training.impl.ViewTrainingFirstToSecondImpl;
+import com.dictionary.my.mydictionary.view.training.impl.ViewTrainingSprintImpl;
+import com.dictionary.my.mydictionary.view.training.impl.ViewTrainingSecondToFirstImpl;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, DictionaryListener, OpenTrainingsInterface {
-    AllDictionariesView allDictionaries;
-    DictionaryView dictionaryView;
-    TrainingWordTranslateView trainingWordTranslateView;
-    TrainingSprintView trainingSprintView;
-    TrainingConstructorView trainingConstructorView;
+    ViewAllDictionariesImpl allDictionaries;
+    ViewDictionaryImpl dictionaryView;
+    ViewTrainingSecondToFirstImpl viewTrainingSecondToFirst;
+    ViewTrainingFirstToSecondImpl viewTrainingFirstToSecond;
+    ViewTrainingSprintImpl trainingSprintView;
+    ViewTrainingConstructorImpl trainingConstructorView;
     HostToAllDictionariesCommands hostToAllDictionariesCommands;
     HostToDictionaryCommand hostToDictionaryCommands;
-    HostToTrainingWordTranslateCommands hostToTrainingWordTranslateCommands;
     HostToTrainingConstructorCommands hostToTrainingConstructorCommands;
     HostToTrainingSprintCommands hostToTrainingSprintCommands;
     final String KEY_DICTIONARY_ID = "DictionaryId";
@@ -50,8 +50,8 @@ public class MainActivity extends AppCompatActivity
     final String KEY_FRAGMENT_ALL_DICTIONARIES = "AllDictionaries";
     final String KEY_FRAGMENT_DICTIONARY = "Dictionary";
     final String KEY_FRAGMENT_ALL_TRAININGS = "AllTraining";
-    final String KEY_FRAGMENT_TRAINING_WORD_TRANSLATE = "TrainingWordTranslate";
-    final String KEY_FRAGMENT_TRAINING_TRANSLATE_WORD = "TrainingTranslateWord";
+    final String KEY_FRAGMENT_TRAINING_SECOND_TO_FIRST = "TrainingSecondToFirst";
+    final String KEY_FRAGMENT_TRAINING_FIRST_TO_SECOND = "TrainingFirstToSecond";
     final String KEY_FRAGMENT_TRAINING_CONSTRUCTOR = "TrainingConstructor";
     final String KEY_FRAGMENT_TRAINING_SPRINT = "TrainingSprint";
     final String KEY_DEFAULT_ACTIVITY = "Activity";
@@ -62,8 +62,8 @@ public class MainActivity extends AppCompatActivity
     final int ALL_DICTIONARIES_TOOLBAR_MOD = 2;
     final int DICTIONARY_TOOLBAR_MOD = 3;
     final int ALL_TRAININGS_TOOLBAR_MOD = 4;
-    final int TRAINING_WORD_TRANSLATE_TOOLBAR_MOD = 5;
-    final int TRAINING_TRANSLATE_WORD_TOOLBAR_MOD = 6;
+    final int TRAINING_SECOND_TO_FIRST_TOOLBAR_MOD = 5;
+    final int TRAINING_FIRST_TO_SECOND_TOOLBAR_MOD = 6;
     final int TRAINING_CONSTRUCTOR_TOOLBAR_MOD = 7;
     final int TRAINING_SPRINT_TOOLBAR_MOD = 8;
 
@@ -82,11 +82,11 @@ public class MainActivity extends AppCompatActivity
             dictionaryTitle = savedInstanceState.getString(KEY_DICTIONARY_TITLE);
             switch (currentFragment){
                 case KEY_FRAGMENT_ALL_DICTIONARIES:
-                    hostToAllDictionariesCommands = (AllDictionariesView) getSupportFragmentManager().findFragmentById(R.id.container);
+                    hostToAllDictionariesCommands = (ViewAllDictionariesImpl) getSupportFragmentManager().findFragmentById(R.id.container);
                     itemCount = hostToAllDictionariesCommands.getSizeOfDeleteList();
                     break;
                 case KEY_FRAGMENT_DICTIONARY:
-                    hostToDictionaryCommands = (DictionaryView) getSupportFragmentManager().findFragmentById(R.id.container);
+                    hostToDictionaryCommands = (ViewDictionaryImpl) getSupportFragmentManager().findFragmentById(R.id.container);
                     itemCount = hostToDictionaryCommands.getSizeOfDeleteList();
                     break;
             }
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity
         }else{
             Log.d("LOG_TAG", "MainActivity: savedInstanceState == null");
 
-            allDictionaries = new AllDictionariesView();
+            allDictionaries = new ViewAllDictionariesImpl();
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.container,allDictionaries,KEY_FRAGMENT_ALL_DICTIONARIES);
             fragmentTransaction.addToBackStack(null);
@@ -129,36 +129,34 @@ public class MainActivity extends AppCompatActivity
                 if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES).isVisible()){
                     Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in ALL_DICT");
                     currentFragment = KEY_FRAGMENT_ALL_DICTIONARIES;
-                    hostToAllDictionariesCommands = (AllDictionariesView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES);
+                    hostToAllDictionariesCommands = (ViewAllDictionariesImpl)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_DICTIONARIES);
                     menuToolbarMod = DEFAULT_TOOLBAR_MOD;
                 }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_DICTIONARY) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_DICTIONARY).isVisible()){
                     Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in DICT");
                     currentFragment = KEY_FRAGMENT_DICTIONARY;
-                    hostToDictionaryCommands = (DictionaryView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_DICTIONARY);
+                    hostToDictionaryCommands = (ViewDictionaryImpl)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_DICTIONARY);
                     menuToolbarMod = DEFAULT_TOOLBAR_MOD;
                 }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_TRAININGS) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_ALL_TRAININGS).isVisible()){
                     Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in ALL_TRAIN");
                     currentFragment = KEY_FRAGMENT_ALL_TRAININGS;
                     menuToolbarMod = DEFAULT_TOOLBAR_MOD;
-                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_WORD_TRANSLATE) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_WORD_TRANSLATE).isVisible()){
+                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_SECOND_TO_FIRST) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_SECOND_TO_FIRST).isVisible()){
                     Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in TRAIN_WORD_TRANSLATE");
-                    currentFragment = KEY_FRAGMENT_TRAINING_WORD_TRANSLATE;
-                    hostToTrainingWordTranslateCommands = (TrainingWordTranslateView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_WORD_TRANSLATE);
-                    menuToolbarMod = TRAINING_WORD_TRANSLATE_TOOLBAR_MOD;
-                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_TRANSLATE_WORD) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_TRANSLATE_WORD).isVisible()){
+                    currentFragment = KEY_FRAGMENT_TRAINING_SECOND_TO_FIRST;
+                    menuToolbarMod = TRAINING_SECOND_TO_FIRST_TOOLBAR_MOD;
+                }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_FIRST_TO_SECOND) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_FIRST_TO_SECOND).isVisible()){
                     Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in TRAIN_TRANSLATE_WORD");
-                    currentFragment = KEY_FRAGMENT_TRAINING_TRANSLATE_WORD;
-                    hostToTrainingWordTranslateCommands = (TrainingWordTranslateView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_TRANSLATE_WORD);
-                    menuToolbarMod = TRAINING_TRANSLATE_WORD_TOOLBAR_MOD;
+                    currentFragment = KEY_FRAGMENT_TRAINING_FIRST_TO_SECOND;
+                    menuToolbarMod = TRAINING_FIRST_TO_SECOND_TOOLBAR_MOD;
                 }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_CONSTRUCTOR) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_CONSTRUCTOR).isVisible()){
                     Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in TRAIN_CONSTRUCTOR");
                     currentFragment = KEY_FRAGMENT_TRAINING_CONSTRUCTOR;
-                    hostToTrainingConstructorCommands = (TrainingConstructorView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_CONSTRUCTOR);
+                    hostToTrainingConstructorCommands = (ViewTrainingConstructorImpl)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_CONSTRUCTOR);
                     menuToolbarMod = TRAINING_CONSTRUCTOR_TOOLBAR_MOD;
                 }else if(getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_SPRINT) != null && getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_SPRINT).isVisible()){
                     Log.d("LOG_TAG", "MainActivity: addOnBackStackChangedListener() in TRAIN_SPRINT");
                     currentFragment = KEY_FRAGMENT_TRAINING_SPRINT;
-                    hostToTrainingSprintCommands = (TrainingSprintView)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_SPRINT);
+                    hostToTrainingSprintCommands = (ViewTrainingSprintImpl)getSupportFragmentManager().findFragmentByTag(KEY_FRAGMENT_TRAINING_SPRINT);
                     menuToolbarMod = TRAINING_SPRINT_TOOLBAR_MOD;
                 }
                 //menuToolbarMod = DEFAULT_TOOLBAR_MOD;
@@ -271,12 +269,12 @@ public class MainActivity extends AppCompatActivity
                     break;
             }
 
-        }else if(menuToolbarMod == TRAINING_WORD_TRANSLATE_TOOLBAR_MOD){
+        }else if(menuToolbarMod == TRAINING_SECOND_TO_FIRST_TOOLBAR_MOD){
             menu.setGroupVisible(R.id.default_group,false);
             menu.setGroupVisible(R.id.all_dictionaries_group,false);
             menu.setGroupVisible(R.id.dictionary_group,false);
             toolbar.setTitle("Word - Translate");
-        }else if(menuToolbarMod == TRAINING_TRANSLATE_WORD_TOOLBAR_MOD){
+        }else if(menuToolbarMod == TRAINING_FIRST_TO_SECOND_TOOLBAR_MOD){
             menu.setGroupVisible(R.id.default_group,false);
             menu.setGroupVisible(R.id.all_dictionaries_group,false);
             menu.setGroupVisible(R.id.dictionary_group,false);
@@ -324,11 +322,11 @@ public class MainActivity extends AppCompatActivity
                     // обработка стандартного режима (открытие NavigationView)
                     toggle.onOptionsItemSelected(item);
                     return true;
-                case TRAINING_WORD_TRANSLATE_TOOLBAR_MOD:
+                case TRAINING_SECOND_TO_FIRST_TOOLBAR_MOD:
                     // обработка стандартного режима (открытие NavigationView)
                     toggle.onOptionsItemSelected(item);
                     return true;
-                case TRAINING_TRANSLATE_WORD_TOOLBAR_MOD:
+                case TRAINING_FIRST_TO_SECOND_TOOLBAR_MOD:
                     // обработка стандартного режима (открытие NavigationView)
                     toggle.onOptionsItemSelected(item);
                     return true;
@@ -388,13 +386,13 @@ public class MainActivity extends AppCompatActivity
         }
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         if (id == R.id.nav_dictionary) {
-            allDictionaries = new AllDictionariesView();
+            allDictionaries = new ViewAllDictionariesImpl();
             fragmentTransaction.replace(R.id.container,allDictionaries,KEY_FRAGMENT_ALL_DICTIONARIES);
             fragmentTransaction.addToBackStack(null);
             currentFragment = KEY_FRAGMENT_ALL_DICTIONARIES;
             hostToAllDictionariesCommands = allDictionaries;
         }  else if (id == R.id.nav_training) {
-            fragmentTransaction.replace(R.id.container,new AllTrainingsView(), KEY_FRAGMENT_ALL_TRAININGS);
+            fragmentTransaction.replace(R.id.container,new ViewAllTrainingsImpl(), KEY_FRAGMENT_ALL_TRAININGS);
             fragmentTransaction.addToBackStack(null);
             currentFragment = KEY_FRAGMENT_ALL_TRAININGS;
         } else if (id == R.id.nav_setting) {
@@ -414,7 +412,7 @@ public class MainActivity extends AppCompatActivity
         Log.d("LOG_TAG", "MainActivity: selectDictionary()");
         this.dictionaryId = dictionaryId;
         this.dictionaryTitle = dictionaryTitle;
-        dictionaryView = new DictionaryView();
+        dictionaryView = new ViewDictionaryImpl();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container,dictionaryView,KEY_FRAGMENT_DICTIONARY);
         fragmentTransaction.addToBackStack(null);
@@ -452,32 +450,28 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void openTrainingWordTranslate() {
-        trainingWordTranslateView = new TrainingWordTranslateView();
-        hostToTrainingWordTranslateCommands = trainingWordTranslateView;
-        hostToTrainingWordTranslateCommands.setBaseToLearningTrainingMode();
+    public void openTrainingSecondToFirst() {
+        viewTrainingSecondToFirst = new ViewTrainingSecondToFirstImpl();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, trainingWordTranslateView,KEY_FRAGMENT_TRAINING_WORD_TRANSLATE);
+        fragmentTransaction.replace(R.id.container, viewTrainingSecondToFirst, KEY_FRAGMENT_TRAINING_SECOND_TO_FIRST);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-        menuToolbarMod = TRAINING_WORD_TRANSLATE_TOOLBAR_MOD;
+        menuToolbarMod = TRAINING_SECOND_TO_FIRST_TOOLBAR_MOD;
     }
 
     @Override
-    public void openTrainingTranslateWord() {
-        trainingWordTranslateView = new TrainingWordTranslateView();
-        hostToTrainingWordTranslateCommands = trainingWordTranslateView;
-        hostToTrainingWordTranslateCommands.setLearningToBaseTrainingMode();
+    public void openTrainingFirstToSecond() {
+        viewTrainingFirstToSecond = new ViewTrainingFirstToSecondImpl();
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.container, trainingWordTranslateView,KEY_FRAGMENT_TRAINING_TRANSLATE_WORD);
+        fragmentTransaction.replace(R.id.container, viewTrainingFirstToSecond, KEY_FRAGMENT_TRAINING_FIRST_TO_SECOND);
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
-        menuToolbarMod = TRAINING_TRANSLATE_WORD_TOOLBAR_MOD;
+        menuToolbarMod = TRAINING_FIRST_TO_SECOND_TOOLBAR_MOD;
     }
 
     @Override
     public void openTrainingConstructor() {
-        trainingConstructorView = new TrainingConstructorView();
+        trainingConstructorView = new ViewTrainingConstructorImpl();
         hostToTrainingConstructorCommands = trainingConstructorView;
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, trainingConstructorView,KEY_FRAGMENT_TRAINING_CONSTRUCTOR);
@@ -488,7 +482,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void openTrainingSprint() {
-        trainingSprintView = new TrainingSprintView();
+        trainingSprintView = new ViewTrainingSprintImpl();
         hostToTrainingSprintCommands = trainingSprintView;
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.container, trainingSprintView,KEY_FRAGMENT_TRAINING_SPRINT);
