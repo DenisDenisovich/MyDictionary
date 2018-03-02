@@ -120,7 +120,7 @@ public class ViewTrainingFirstToSecondImpl extends Fragment implements ViewTrain
             public void onClick(View view) {
                 idOfSelectedTranslate = (Long)translations.get(0).get(KEY_ROWID);
                 idOfSelectedView = R.id.tvTFSTranslate1;
-                presenter.TranslateIsSelected();
+                presenter.translateIsSelected();
             }
         });
         view.findViewById(R.id.tvTFSTranslate2).setOnClickListener(new View.OnClickListener() {
@@ -128,7 +128,7 @@ public class ViewTrainingFirstToSecondImpl extends Fragment implements ViewTrain
             public void onClick(View view) {
                 idOfSelectedTranslate = (Long)translations.get(1).get(KEY_ROWID);
                 idOfSelectedView = R.id.tvTFSTranslate2;
-                presenter.TranslateIsSelected();
+                presenter.translateIsSelected();
             }
         });
         view.findViewById(R.id.tvTFSTranslate3).setOnClickListener(new View.OnClickListener() {
@@ -136,7 +136,7 @@ public class ViewTrainingFirstToSecondImpl extends Fragment implements ViewTrain
             public void onClick(View view) {
                 idOfSelectedTranslate = (Long)translations.get(2).get(KEY_ROWID);
                 idOfSelectedView = R.id.tvTFSTranslate3;
-                presenter.TranslateIsSelected();
+                presenter.translateIsSelected();
             }
         });
         view.findViewById(R.id.tvTFSTranslate4).setOnClickListener(new View.OnClickListener() {
@@ -144,7 +144,7 @@ public class ViewTrainingFirstToSecondImpl extends Fragment implements ViewTrain
             public void onClick(View view) {
                 idOfSelectedTranslate = (Long)translations.get(3).get(KEY_ROWID);
                 idOfSelectedView = R.id.tvTFSTranslate4;
-                presenter.TranslateIsSelected();
+                presenter.translateIsSelected();
             }
         });
         view.findViewById(R.id.tvTFSTranslate5).setOnClickListener(new View.OnClickListener() {
@@ -152,7 +152,7 @@ public class ViewTrainingFirstToSecondImpl extends Fragment implements ViewTrain
             public void onClick(View view) {
                 idOfSelectedTranslate = (Long)translations.get(4).get(KEY_ROWID);
                 idOfSelectedView = R.id.tvTFSTranslate5;
-                presenter.TranslateIsSelected();
+                presenter.translateIsSelected();
             }
         });
     }

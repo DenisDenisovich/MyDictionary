@@ -37,7 +37,6 @@ public class UseCaseTrainingSecondToFirstImpl implements UseCaseTrainingSecondTo
     private int countOfTryingFindWord;
     private int maxCountOfTryingFindTranslate = MIN_COUNT_OF_WORDS;
     private int countOfTryingFindTranslate;
-
     public UseCaseTrainingSecondToFirstImpl(Context context){
         repository = new TrainingRepositoryImpl(context);
     }

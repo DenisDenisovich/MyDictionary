@@ -38,24 +38,26 @@ public class PresenterTrainingSecondToFirstImpl<V extends ViewTrainingSecondToFi
     private boolean pauseFlag = false;
     private int countOfRightAnswer = 0;
     private DisposableObserver<WordSecondToFirst> blockDisposable;
+    private static final String LOG_TAG = "Training_SF_Pres";
+
     public PresenterTrainingSecondToFirstImpl(Context context){
         useCase = new UseCaseTrainingSecondToFirstImpl(context);
     }
     @Override
     public void attach(V v) {
-        Log.d("LOG_TAG_C/D_Training", "TrainingSecondToFirstPresenterImpl: attach(): Presenter: " + this.hashCode() + " View:" + v.hashCode());
+        Log.d(LOG_TAG, "attach(): Presenter: " + this.hashCode() + " View:" + v.hashCode());
         this.view = v;
     }
 
     @Override
     public void detach() {
-        Log.d("LOG_TAG_C/D_Training", "TrainingSecondToFirstPresenterImpl: detach(): Presenter: " + this.hashCode() + " View:" + view.hashCode());
+        Log.d(LOG_TAG, "detach(): Presenter: " + this.hashCode() + " View:" + view.hashCode());
         view = null;
     }
 
     @Override
     public void destroy() {
-        Log.d("LOG_TAG", "TrainingSecondToFirstPresenterImpl: destroy()");
+        Log.d(LOG_TAG, "destroy()");
         if(blockDisposable != null){
             blockDisposable.dispose();
         }
@@ -64,7 +66,7 @@ public class PresenterTrainingSecondToFirstImpl<V extends ViewTrainingSecondToFi
 
     @Override
     public void init() {
-        Log.d("LOG_TAG", "TrainingSecondToFirstPresenterImpl: init()");
+        Log.d(LOG_TAG, "init()");
         view.showProgress();
         blockDisposable = useCase.getTraining()
                 .subscribeOn(Schedulers.computation())
@@ -105,7 +107,7 @@ public class PresenterTrainingSecondToFirstImpl<V extends ViewTrainingSecondToFi
 
     @Override
     public void update() {
-        Log.d("LOG_TAG", "TrainingSecondToFirstPresenterImpl: update()");
+        Log.d(LOG_TAG, "update()");
         setPause()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -141,8 +143,8 @@ public class PresenterTrainingSecondToFirstImpl<V extends ViewTrainingSecondToFi
     }
 
     @Override
-    public void TranslateIsSelected() {
-        Log.d("LOG_TAG", "TrainingSecondToFirstPresenterImpl: TranslateIsSelected()");
+    public void translateIsSelected() {
+        Log.d(LOG_TAG, "translateIsSelected()");
         if(!pauseFlag) {
             long wordId = items.get(currentBlock).getRightTranslationId();
             long translateId = view.getSelectedTranslate();
@@ -158,7 +160,7 @@ public class PresenterTrainingSecondToFirstImpl<V extends ViewTrainingSecondToFi
     }
 
     private Completable setPause(){
-        Log.d("LOG_TAG", "TrainingWordTranslatePresenterImpl setPause()");
+        Log.d(LOG_TAG, "setPause()");
         return Completable.create(new CompletableOnSubscribe() {
             @Override
             public void subscribe(@NonNull CompletableEmitter e) throws Exception {

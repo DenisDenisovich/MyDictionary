@@ -10,5 +10,5 @@ public interface PresenterTrainingSecondToFirst<V> {
     void destroy();
     void init();
     void update();
-    void TranslateIsSelected();
+    void translateIsSelected();
 }

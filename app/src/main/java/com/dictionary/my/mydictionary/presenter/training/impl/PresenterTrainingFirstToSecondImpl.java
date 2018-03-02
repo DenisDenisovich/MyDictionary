@@ -140,8 +140,8 @@ public class PresenterTrainingFirstToSecondImpl<V extends ViewTrainingFirstToSec
     }
 
     @Override
-    public void TranslateIsSelected() {
-        Log.d("LOG_TAG", "TrainingFirstToSecondPresenterImpl: TranslateIsSelected()");
+    public void translateIsSelected() {
+        Log.d("LOG_TAG", "TrainingFirstToSecondPresenterImpl: translateIsSelected()");
         if(!pauseFlag) {
             long wordId = items.get(currentBlock).getRightTranslationId();
             long translateId = view.getSelectedTranslate();
