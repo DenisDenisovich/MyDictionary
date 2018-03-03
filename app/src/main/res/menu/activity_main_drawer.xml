@@ -14,14 +14,14 @@
 
     </group>
 
-    <item android:title="Setting">
+    <!--<item android:title="Setting">
         <menu>
             <item
                 android:id="@+id/nav_setting"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Setting" />
         </menu>
-    </item>
+    </item>-->
 
 
 </menu>
