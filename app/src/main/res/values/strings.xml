@@ -51,4 +51,7 @@
 
 
     <string name="dictionary_new_word">Inter new word</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>
