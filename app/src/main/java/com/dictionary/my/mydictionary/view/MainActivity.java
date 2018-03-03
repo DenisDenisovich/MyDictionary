@@ -1,5 +1,6 @@
 package com.dictionary.my.mydictionary.view;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         }
-
     };
 
     @Override

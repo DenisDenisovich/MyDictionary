@@ -54,7 +54,7 @@ public class ViewTrainingConstructorImpl extends Fragment implements ViewTrainin
         Log.d("LOG_TAG_C/D_Training", "TrainingConstructorView: onCreateView()" + this.hashCode());
         presenter.attach(this);
         view = inflater.inflate(R.layout.activity_main,null);
-        linLayout = view.findViewById(R.id.navigation);
+        //linLayout = view.findViewById(R.id.navigation);
         if(savedInstanceState == null){
             Log.d("LOG_TAG", "savedInstanceState == null");
             presenter.init();
