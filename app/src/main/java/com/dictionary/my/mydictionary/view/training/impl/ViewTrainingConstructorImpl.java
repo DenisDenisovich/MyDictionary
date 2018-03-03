@@ -53,8 +53,8 @@ public class ViewTrainingConstructorImpl extends Fragment implements ViewTrainin
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d("LOG_TAG_C/D_Training", "TrainingConstructorView: onCreateView()" + this.hashCode());
         presenter.attach(this);
-        view = inflater.inflate(R.layout.training_constructor_fragment,null);
-        linLayout = view.findViewById(R.id.llContainer);
+        view = inflater.inflate(R.layout.activity_main,null);
+        linLayout = view.findViewById(R.id.navigation);
         if(savedInstanceState == null){
             Log.d("LOG_TAG", "savedInstanceState == null");
             presenter.init();
@@ -83,7 +83,7 @@ public class ViewTrainingConstructorImpl extends Fragment implements ViewTrainin
         Log.d("LOG_TAG", "ConstView setWord()");
         linLayout.removeAllViewsInLayout();
         // создаем TextView для word
-        ((TextView)view.findViewById(R.id.tvTrainingConstructorWord)).setText(word);
+        //((TextView)view.findViewById(R.id.tvTrainingConstructorWord)).setText(word);
         view/*.findViewById(R.id.tvTrainingConstructorWord)*/.setBackgroundColor(Color.WHITE);
     }
 
@@ -121,7 +121,7 @@ public class ViewTrainingConstructorImpl extends Fragment implements ViewTrainin
 
     public void setCurrentTranslate(String currentTranslate) {
         Log.d("LOG_TAG", "ConstView setCurrentTranslate()");
-        ((TextView)view.findViewById(R.id.tvTrainingConstructorTranslate)).setText(currentTranslate);
+        //((TextView)view.findViewById(R.id.tvTrainingConstructorTranslate)).setText(currentTranslate);
     }
 
     public String getClickSymbol() {
@@ -153,8 +153,8 @@ public class ViewTrainingConstructorImpl extends Fragment implements ViewTrainin
     public void setResultMessage(String message) {
         linLayout.removeAllViews();
         view/*.findViewById(R.id.tvTrainingConstructorWord)*/.setBackgroundColor(Color.WHITE);
-        ((TextView)view.findViewById(R.id.tvTrainingConstructorWord)).setText(message);
-        ((TextView)view.findViewById(R.id.tvTrainingConstructorTranslate)).setText("");
+       // ((TextView)view.findViewById(R.id.tvTrainingConstructorWord)).setText(message);
+        //((TextView)view.findViewById(R.id.tvTrainingConstructorTranslate)).setText("");
     }
 
     @Override

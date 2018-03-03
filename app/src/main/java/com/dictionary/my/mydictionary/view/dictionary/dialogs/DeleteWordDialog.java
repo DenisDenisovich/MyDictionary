@@ -28,7 +28,7 @@ public class DeleteWordDialog extends DialogFragment {
         d.setArguments(arg);
         return d;
     }
-    @NonNull
+    /*@NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Integer countWords = getArguments().getInt(KEY_COUNT_WORDS);
@@ -55,5 +55,5 @@ public class DeleteWordDialog extends DialogFragment {
                     }
                 });
         return builder.create();
-    }
+    }*/
 }

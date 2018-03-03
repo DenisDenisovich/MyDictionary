@@ -2,7 +2,7 @@
 <resources>
     <dimen name="toolbarHeight">60dp</dimen>
 
-    <dimen name="dictItemHeight">80dp</dimen>
+    <!---<dimen name="dictItemHeight">80dp</dimen>
     <dimen name="dictItemMarginLeft">10dp</dimen>
     <dimen name="dictItemMarginRight">10dp</dimen>
     <dimen name="dictItemMarginTop">10dp</dimen>
@@ -33,8 +33,8 @@
     <dimen name="trainTranslateMarginLeft">15dp</dimen>
     <dimen name="trainTranslateMarginRight">15dp</dimen>
     <dimen name="trainTranslatePadding">5dp</dimen>
-    <dimen name="trainTranslateTextSize">18dp</dimen>
-    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="trainTranslateTextSize">18dp</dimen> -->
+    Default screen margins, per the Android Design guidelines.
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="nav_header_vertical_spacing">16dp</dimen>

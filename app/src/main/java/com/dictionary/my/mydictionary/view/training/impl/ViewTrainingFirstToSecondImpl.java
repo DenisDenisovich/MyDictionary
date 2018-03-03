@@ -51,7 +51,7 @@ public class ViewTrainingFirstToSecondImpl extends Fragment implements ViewTrain
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d("LOG_TAG_C/D_Training", "TrainingFirstToSecondView: onCreateView()" + this.hashCode());
         presenter.attach(this);
-        view = inflater.inflate(R.layout.training_first_to_second_fragment,null);
+        view = inflater.inflate(R.layout.activity_main,null);
         if(savedInstanceState == null){
             Log.d("LOG_TAG", "savedInstanceState == null");
             presenter.init();
@@ -79,31 +79,31 @@ public class ViewTrainingFirstToSecondImpl extends Fragment implements ViewTrain
     @Override
     public void setWord(String word) {
         String strWord = word;
-        ((TextView)view.findViewById(R.id.tvTFSWord)).setText(strWord);
+        //((TextView)view.findViewById(R.id.tvTFSWord)).setText(strWord);
     }
 
     @Override
     public void showProgress() {
-        ((TextView)view.findViewById(R.id.tvTFSWord)).setText("Processing");
+        /*((TextView)view.findViewById(R.id.tvTFSWord)).setText("Processing");
         view.findViewById(R.id.tvTFSTranslate1).setVisibility(View.GONE);
         view.findViewById(R.id.tvTFSTranslate2).setVisibility(View.GONE);
         view.findViewById(R.id.tvTFSTranslate3).setVisibility(View.GONE);
         view.findViewById(R.id.tvTFSTranslate4).setVisibility(View.GONE);
-        view.findViewById(R.id.tvTFSTranslate5).setVisibility(View.GONE);
+        view.findViewById(R.id.tvTFSTranslate5).setVisibility(View.GONE);*/
     }
 
     @Override
     public void hideProgress() {
-        view.findViewById(R.id.tvTFSTranslate1).setVisibility(View.VISIBLE);
+        /*view.findViewById(R.id.tvTFSTranslate1).setVisibility(View.VISIBLE);
         view.findViewById(R.id.tvTFSTranslate2).setVisibility(View.VISIBLE);
         view.findViewById(R.id.tvTFSTranslate3).setVisibility(View.VISIBLE);
         view.findViewById(R.id.tvTFSTranslate4).setVisibility(View.VISIBLE);
-        view.findViewById(R.id.tvTFSTranslate5).setVisibility(View.VISIBLE);
+        view.findViewById(R.id.tvTFSTranslate5).setVisibility(View.VISIBLE);*/
     }
 
     @Override
     public void setTranslates(final ArrayList<Map<String, Object>> translations) {
-        ((Button)view.findViewById(R.id.tvTFSTranslate1)).setText((String)translations.get(0).get(KEY_TRANSLATE));
+       /* ((Button)view.findViewById(R.id.tvTFSTranslate1)).setText((String)translations.get(0).get(KEY_TRANSLATE));
         ((Button)view.findViewById(R.id.tvTFSTranslate2)).setText((String)translations.get(1).get(KEY_TRANSLATE));
         ((Button)view.findViewById(R.id.tvTFSTranslate3)).setText((String)translations.get(2).get(KEY_TRANSLATE));
         ((Button)view.findViewById(R.id.tvTFSTranslate4)).setText((String)translations.get(3).get(KEY_TRANSLATE));
@@ -154,7 +154,7 @@ public class ViewTrainingFirstToSecondImpl extends Fragment implements ViewTrain
                 idOfSelectedView = R.id.tvTFSTranslate5;
                 presenter.translateIsSelected();
             }
-        });
+        });*/
     }
 
     @Override
@@ -174,21 +174,21 @@ public class ViewTrainingFirstToSecondImpl extends Fragment implements ViewTrain
 
     @Override
     public void setResultMessage(String message) {
-        ((TextView)view.findViewById(R.id.tvTFSWord)).setText(message);
+       /* ((TextView)view.findViewById(R.id.tvTFSWord)).setText(message);
         view.findViewById(R.id.tvTFSTranslate1).setVisibility(View.GONE);
         view.findViewById(R.id.tvTFSTranslate2).setVisibility(View.GONE);
         view.findViewById(R.id.tvTFSTranslate3).setVisibility(View.GONE);
         view.findViewById(R.id.tvTFSTranslate4).setVisibility(View.GONE);
-        view.findViewById(R.id.tvTFSTranslate5).setVisibility(View.GONE);
+        view.findViewById(R.id.tvTFSTranslate5).setVisibility(View.GONE);*/
     }
 
     @Override
     public void setErrorMessage(String message) {
-        ((TextView)view.findViewById(R.id.tvTFSWord)).setText(message);
+      /*  ((TextView)view.findViewById(R.id.tvTFSWord)).setText(message);
         view.findViewById(R.id.tvTFSTranslate1).setVisibility(View.GONE);
         view.findViewById(R.id.tvTFSTranslate2).setVisibility(View.GONE);
         view.findViewById(R.id.tvTFSTranslate3).setVisibility(View.GONE);
         view.findViewById(R.id.tvTFSTranslate4).setVisibility(View.GONE);
-        view.findViewById(R.id.tvTFSTranslate5).setVisibility(View.GONE);
+        view.findViewById(R.id.tvTFSTranslate5).setVisibility(View.GONE);*/
     }
 }

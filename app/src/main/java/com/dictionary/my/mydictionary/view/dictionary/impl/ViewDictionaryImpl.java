@@ -53,7 +53,7 @@ public class ViewDictionaryImpl extends Fragment implements ViewDictionary, Host
     private final int REQUEST_CODE_DELETE_WORDS = 4;
 
     private String[] from = Content.fromDictionary;
-    private int[] to = {R.id.word_dictionary, R.id.translate_dictionary};
+   // private int[] to = {R.id.word_dictionary, R.id.translate_dictionary};
 
     long currentDictionaryId;
     long moveToDictionaryId;
@@ -92,9 +92,9 @@ public class ViewDictionaryImpl extends Fragment implements ViewDictionary, Host
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         presenter.attach(this);
         Log.d("LOG_TAG_C/D_Dict", "DictionaryView: onCreateView() " + this.hashCode());
-        View view = inflater.inflate(R.layout.dictionary_fragment,null);
-        listView =  view.findViewById(R.id.lvDictionary);
-        fab = (FloatingActionButton) view.findViewById(R.id.dictionaryFab);
+        View view = inflater.inflate(R.layout.activity_main,null);
+      //  listView =  view.findViewById(R.id.lvDictionary);
+       // fab = (FloatingActionButton) view.findViewById(R.id.dictionaryFab);
         if(checkListMod == CHANGE_MOD){
             fab.hide();
         }else{
@@ -148,7 +148,7 @@ public class ViewDictionaryImpl extends Fragment implements ViewDictionary, Host
     @Override
     public void createAdapter(ArrayList<Map<String, Object>> data) {
         Log.d("LOG_TAG", "DictionaryView: createAdapter()");
-        adapter = new WordAdapter(getActivity(),data,R.layout.word_item,from,to);
+        //adapter = new WordAdapter(getActivity(),data,R.layout.word_item,from,to);
         sizeOfDeleteList = 0;
         mListener.checkListIsChange();
     }

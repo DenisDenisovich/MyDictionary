@@ -59,9 +59,9 @@ public class WordAdapter extends BaseAdapter {
             view = layoutInflater.inflate(resource,null);
         }
         if(deleteList.contains(getItemId(i))){
-            (view.findViewById(R.id.wordItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryLight));
+            //(view.findViewById(R.id.wordItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryLight));
         }else{
-            (view.findViewById(R.id.wordItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorDictionaryItem));
+            //(view.findViewById(R.id.wordItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorDictionaryItem));
         }
         ((TextView) view.findViewById(to[0])).setText(getWordText(i));
         ((TextView) view.findViewById(to[1])).setText(getTranslateText(i));

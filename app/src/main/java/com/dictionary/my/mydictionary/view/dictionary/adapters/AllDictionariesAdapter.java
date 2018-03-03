@@ -55,9 +55,9 @@ public class AllDictionariesAdapter extends BaseAdapter {
             view = layoutInflater.inflate(resource,null);
         }
         if(deleteList.contains(getItemId(i))){
-            (view.findViewById(R.id.dictionaryItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryLight));
+            //(view.findViewById(R.id.dictionaryItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryLight));
         }else{
-            (view.findViewById(R.id.dictionaryItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorDictionaryItem));
+            //(view.findViewById(R.id.dictionaryItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorDictionaryItem));
         }
         ((TextView) view.findViewById(to[0])).setText(getText(i));
         return view;

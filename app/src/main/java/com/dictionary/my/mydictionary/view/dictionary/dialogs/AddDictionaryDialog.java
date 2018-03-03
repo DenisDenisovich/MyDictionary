@@ -26,7 +26,7 @@ import io.reactivex.ObservableOnSubscribe;
  */
 
 public class AddDictionaryDialog extends DialogFragment {
-    @NonNull
+/*    @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -77,5 +77,5 @@ public class AddDictionaryDialog extends DialogFragment {
     public void onStart() {
         super.onStart();
         ((AlertDialog)getDialog()).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
-    }
+    }*/
 }

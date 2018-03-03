@@ -49,7 +49,7 @@ public class ViewAllDictionariesImpl extends Fragment implements ViewAllDictiona
     private final int REQUEST_CODE_DELETE_DICTIONARY = 3;
 
     private String[] from;
-    private int[] to = {R.id.dictionary};
+   // private int[] to = {R.id.dictionary};
 
     private Integer sizeOfDeleteList;
     private String newDictionary;
@@ -83,9 +83,9 @@ public class ViewAllDictionariesImpl extends Fragment implements ViewAllDictiona
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         presenter.attach(this);
         Log.d("LOG_TAG_C/D_Dict", "AllDictionariesView: onCreateView() " + this.hashCode());
-        View view = inflater.inflate(R.layout.all_dictionaries_fragment, null);
-        listView = view.findViewById(R.id.lvAllDictionaries);
-        fab = view.findViewById(R.id.allDictionariesFab);
+        View view = inflater.inflate(R.layout.activity_main, null);
+        //listView = view.findViewById(R.id.lvAllDictionaries);
+        //fab = view.findViewById(R.id.allDictionariesFab);
         if(checkListMod == CHANGE_MOD){
             fab.hide();
         }else{
@@ -138,7 +138,7 @@ public class ViewAllDictionariesImpl extends Fragment implements ViewAllDictiona
     @Override
     public void createAdapter(ArrayList<Map<String, Object>> data) {
         Log.d("LOG_TAG", "AllDictionariesView: createAdapter()");
-        adapter = new AllDictionariesAdapter(getActivity(),data,R.layout.all_dictionaries_item,from,to);
+       // adapter = new AllDictionariesAdapter(getActivity(),data,R.layout.all_dictionaries_item,from,to);
     }
 
 

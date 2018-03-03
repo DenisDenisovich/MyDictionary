@@ -40,8 +40,8 @@ public class ViewAllTrainingsImpl extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d("LOG_TAG_C/D_Training", "AllTrainingsView: onCreateView() " + this.hashCode());
-        View view = inflater.inflate(R.layout.all_trainings_fragment, null);
-        view.findViewById(R.id.btnTrainingWordTranslate).setOnClickListener(new View.OnClickListener() {
+        View view = inflater.inflate(R.layout.activity_main, null);
+       /* view.findViewById(R.id.btnTrainingWordTranslate).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mListener.openTrainingSecondToFirst();
@@ -64,7 +64,7 @@ public class ViewAllTrainingsImpl extends Fragment{
             public void onClick(View view) {
                 mListener.openTrainingSprint();
             }
-        });
+        });*/
 
         return view;
 

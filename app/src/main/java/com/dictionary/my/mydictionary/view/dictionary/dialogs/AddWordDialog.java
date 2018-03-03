@@ -25,7 +25,7 @@ import com.dictionary.my.mydictionary.data.Content;
 
 public class AddWordDialog extends DialogFragment {
 
-    boolean enableButton = false;
+   /* boolean enableButton = false;
     boolean wordFlag = false;
     boolean translateFlag = false;
     @NonNull
@@ -119,5 +119,5 @@ public class AddWordDialog extends DialogFragment {
         }else{
             ((AlertDialog)getDialog()).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
         }
-    }
+    }*/
 }

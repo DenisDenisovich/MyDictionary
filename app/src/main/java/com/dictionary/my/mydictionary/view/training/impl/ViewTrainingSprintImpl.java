@@ -45,13 +45,13 @@ public class ViewTrainingSprintImpl extends Fragment implements HostToTrainingSp
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d("LOG_TAG_C/D_Training", "TrainingSprintView: onCreateView()" + this.hashCode());
         presenter.attach(this);
-        view = inflater.inflate(R.layout.training_sprint_fragment,null);
+        view = inflater.inflate(R.layout.activity_main,null);
         if(savedInstanceState == null){
             presenter.init();
         }else{
             presenter.update();
         }
-        view.findViewById(R.id.btnTrainingSprintRight).setOnClickListener(new View.OnClickListener() {
+       /* view.findViewById(R.id.btnTrainingSprintRight).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 presenter.rightButtonClick();
@@ -62,7 +62,7 @@ public class ViewTrainingSprintImpl extends Fragment implements HostToTrainingSp
             public void onClick(View view) {
                 presenter.wrongButtonClick();
             }
-        });
+        });*/
         return view;
     }
 
@@ -93,17 +93,17 @@ public class ViewTrainingSprintImpl extends Fragment implements HostToTrainingSp
     @Override
     public void setWord(String word) {
         view.setBackgroundColor(Color.WHITE);
-        ((TextView)view.findViewById(R.id.tvTrainingSprintWord)).setText(word);
+       // ((TextView)view.findViewById(R.id.tvTrainingSprintWord)).setText(word);
     }
 
     @Override
     public void setTranslate(String translate) {
-        ((TextView)view.findViewById(R.id.tvTrainingSprintTranslate)).setText(translate);
+      //  ((TextView)view.findViewById(R.id.tvTrainingSprintTranslate)).setText(translate);
     }
 
     @Override
     public void setTime(String time) {
-        ((TextView)view.findViewById(R.id.tvTrainingSprintTime)).setText(time);
+       // ((TextView)view.findViewById(R.id.tvTrainingSprintTime)).setText(time);
     }
 
     @Override
@@ -119,11 +119,11 @@ public class ViewTrainingSprintImpl extends Fragment implements HostToTrainingSp
     @Override
     public void setResultMessage(String message) {
         view.setBackgroundColor(Color.WHITE);
-        ((TextView)view.findViewById(R.id.tvTrainingSprintWord)).setText(message);
+        /*((TextView)view.findViewById(R.id.tvTrainingSprintWord)).setText(message);
         ((TextView)view.findViewById(R.id.tvTrainingSprintTime)).setText("");
         ((TextView)view.findViewById(R.id.tvTrainingSprintTranslate)).setText("");
         view.findViewById(R.id.btnTrainingSprintRight).setVisibility(View.GONE);
-        view.findViewById(R.id.btnTrainingSprintWrong).setVisibility(View.GONE);
+        view.findViewById(R.id.btnTrainingSprintWrong).setVisibility(View.GONE);*/
     }
 
     @Override

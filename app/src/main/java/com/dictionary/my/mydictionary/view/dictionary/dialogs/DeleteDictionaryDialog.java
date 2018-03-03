@@ -27,7 +27,7 @@ public class DeleteDictionaryDialog extends DialogFragment{
         d.setArguments(arg);
         return d;
     }
-    @NonNull
+   /* @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Integer countDictionaries = getArguments().getInt(KEY_COUNT_DICTIONARIES);
@@ -54,5 +54,5 @@ public class DeleteDictionaryDialog extends DialogFragment{
                     }
                 });
         return builder.create();
-    }
+    }*/
 }
