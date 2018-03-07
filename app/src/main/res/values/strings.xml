@@ -8,4 +8,9 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+    <string-array name="dictionary_spinner_array">
+        <item>All words</item>
+        <item>Groups</item>
+    </string-array>
 </resources>
