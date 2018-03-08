@@ -17,7 +17,7 @@ import com.dictionary.my.mydictionary.view.dictionary.impl.ViewAllGroupsImpl;
 import com.dictionary.my.mydictionary.view.dictionary.impl.ViewAllWordsImpl;
 
 public class MainActivity extends AppCompatActivity implements ViewAllWordsImpl.onAllWordsSelectedListener, ViewAllGroupsImpl.onAllGroupsSelectedListener {
-    private final static String LOG_TAG = "Log_ActivityMain: ";
+    private final static String LOG_TAG = "Log_ActivityMain";
     private final static String KEY_ALL_WORDS = "allWordsFragment";
     private final static String KEY_ALL_GROUPS = "allGroupsFragment";
     private final static String KEY_TRAININGS = "trainingsFragment";

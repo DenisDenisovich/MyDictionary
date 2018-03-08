@@ -5,12 +5,18 @@
     <string name="title_dictionary">Dictionary</string>
     <string name="title_trainings">Trainings</string>
     <string name="title_notepad">Notepad</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
 
     <string-array name="dictionary_spinner_array">
         <item>All words</item>
         <item>Groups</item>
     </string-array>
+
+    <string name="word_menu_edit">Edit</string>
+    <string name="word_menu_delete">Delete</string>
+    <string name="word_menu_move">Move</string>
+
+    <string name="group_menu_edit">Edit</string>
+    <string name="group_menu_delete">Delete</string>
+
+
 </resources>

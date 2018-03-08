@@ -25,8 +25,9 @@ import com.dictionary.my.mydictionary.view.dictionary.ViewAllGroups;
  */
 
 public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
-    private final static String LOG_TAG = "Log_ViewAllGroups: ";
-    View myView;
+    private final static String LOG_TAG = "Log_ViewAllGroups";
+    private AppCompatActivity activity;
+    private View myView;
     public interface onAllGroupsSelectedListener{
         public void allWordsScreenSelected();
         public void groupOfWordsSelected(long groupId);
@@ -35,7 +36,7 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.d(LOG_TAG, "onAttach()");
+        Log.d(LOG_TAG, "onAttach()      " + this.hashCode());
         try {
             mListener = (onAllGroupsSelectedListener)context;
         }catch (ClassCastException e){
@@ -46,20 +47,26 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(LOG_TAG, "onCreate()");
+        Log.d(LOG_TAG, "onCreate()      " + this.hashCode());
+        setRetainInstance(true);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.d(LOG_TAG, "onCreateView()");
-        Log.d(LOG_TAG, "onCreateView()");
+        Log.d(LOG_TAG, "onCreateView()  " + this.hashCode());
         myView = inflater.inflate(R.layout.fragment_all_groups,null);
         Toolbar toolbar = (Toolbar)myView.findViewById(R.id.toolbar);
-        AppCompatActivity activity = (AppCompatActivity)getActivity();
+        activity = (AppCompatActivity)getActivity();
         activity.setSupportActionBar(toolbar);
+        setSpinnerView();
 
-        if(activity.getSupportActionBar() != null){
+        return myView;
+    }
+
+    private void setSpinnerView(){
+        if (activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
             ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
                     R.array.dictionary_spinner_array, android.R.layout.simple_spinner_item);
@@ -72,22 +79,18 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                    switch (i){
+                    switch (i) {
                         case 0:
                             mListener.allWordsScreenSelected();
                             break;
                     }
                 }
-
                 @Override
                 public void onNothingSelected(AdapterView<?> adapterView) {
-
                 }
             });
         }
-        return myView;
     }
-
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -101,12 +104,12 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        Log.d(LOG_TAG, "onDestroyView()");
+        Log.d(LOG_TAG, "onDestroyView() " + this.hashCode());
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(LOG_TAG, "onDestroy()");
+        Log.d(LOG_TAG, "onDestroy()     " + this.hashCode());
     }
 }
