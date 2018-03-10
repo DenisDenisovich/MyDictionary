@@ -1,8 +1,6 @@
 package com.dictionary.my.mydictionary.view.dictionary.adapters;
 
 import android.content.Context;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.data.entites.Word;
+
+import io.reactivex.subjects.PublishSubject;
 
 import java.util.ArrayList;
 
@@ -32,7 +32,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
         public ViewHolder(View itemView) {
             super(itemView);
             Log.d(LOG_TAG, "ViewHolder()");
-            checkBox = itemView.findViewById(R.id.check_box);
+            checkBox = (ImageButton) itemView.findViewById(R.id.check_box);
             tvWordEng = itemView.findViewById(R.id.tvWordEng);
             tvWordRus = itemView.findViewById(R.id.tvWordRus);
             buttonSound = (ImageButton) itemView.findViewById(R.id.btnSound);
@@ -41,12 +41,14 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
 
     private ArrayList<Word> mdata;
     private ArrayList<Long> selectedItems;
+    private PublishSubject<Integer> selectObservable;
     private boolean selectMode = false;
     private Context context;
     public WordAdapter(Context context, ArrayList<Word> data){
         mdata = data;
         selectedItems = new ArrayList<>();
         this.context = context;
+        selectObservable = PublishSubject.create();
     }
 
     @Override
@@ -62,23 +64,20 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Log.d(LOG_TAG, "onBindViewHolder(), selectMod = " + selectMode + ", position: " + position);
-
-        ConstraintLayout cl = holder.itemView.findViewById(R.id.item_RecyclerView);
-        LinearLayout ll = holder.itemView.findViewById(R.id.llWords);
-        ConstraintSet constraintSet = new ConstraintSet();
-        constraintSet.clone(cl);
-
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
         if(selectMode){
             int marginTop = (int)context.getResources().getDimension(R.dimen.llWord_top_margin);
             int marginBottom = (int)context.getResources().getDimension(R.dimen.llWord_bottom_margin);
             int marginStart = (int)context.getResources().getDimension(R.dimen.llWord_start_margin_selected);
-            constraintSet.connect(ll.getId(), ConstraintSet.TOP, cl.getId(), ConstraintSet.TOP,marginTop);
-            constraintSet.connect(ll.getId(), ConstraintSet.BOTTOM, cl.getId(), ConstraintSet.BOTTOM,marginBottom);
-            constraintSet.connect(ll.getId(), ConstraintSet.START, cl.getId(), ConstraintSet.START,marginStart);
-            constraintSet.applyTo(cl);
+            lp.setMargins(marginStart,marginTop,0,marginBottom);
+            holder.itemView.findViewById(R.id.llWords).setLayoutParams(lp);
 
             holder.checkBox.setVisibility(View.VISIBLE);
             if(selectedItems.contains(mdata.get(position).getId())){
+
                 holder.checkBox.setBackground(ContextCompat.getDrawable(context,R.drawable.ic_check_box_selected));
             }else{
                 holder.checkBox.setBackground(ContextCompat.getDrawable(context,R.drawable.ic_check_box));
@@ -89,10 +88,8 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
             int marginTop = (int)context.getResources().getDimension(R.dimen.llWord_top_margin);
             int marginBottom = (int)context.getResources().getDimension(R.dimen.llWord_bottom_margin);
             int marginStart = (int)context.getResources().getDimension(R.dimen.llWord_start_margin);
-            constraintSet.connect(ll.getId(), ConstraintSet.TOP, cl.getId(), ConstraintSet.TOP,marginTop);
-            constraintSet.connect(ll.getId(), ConstraintSet.BOTTOM, cl.getId(), ConstraintSet.BOTTOM,marginBottom);
-            constraintSet.connect(ll.getId(), ConstraintSet.START, cl.getId(), ConstraintSet.START,marginStart);
-            constraintSet.applyTo(cl);
+            lp.setMargins(marginStart,marginTop,0,marginBottom);
+            holder.itemView.findViewById(R.id.llWords).setLayoutParams(lp);
         }
         holder.tvWordEng.setText(mdata.get(position).getWord());
         holder.tvWordRus.setText(mdata.get(position).getTranslate());
@@ -131,12 +128,16 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
         } else{
             selectedItems.add(id);
         }
+        selectObservable.onNext(selectedItems.size());
         notifyDataSetChanged();
     }
     public int getSelectedItemsSize(){
         return selectedItems.size();
     }
 
+    public PublishSubject<Integer> getSelectedItemsObservable(){
+        return selectObservable;
+    }
     public ArrayList<Long> getSelectedItems(){
         return selectedItems;
     }

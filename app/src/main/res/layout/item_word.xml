@@ -1,47 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/item_RecyclerView"
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
-    <ImageButton
-        android:id="@+id/check_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="28dp"
-        android:background="@drawable/ic_check_box"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:visibility="gone"/>
+<ImageButton
+    android:id="@+id/check_box"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_centerVertical="true"
+    android:background="@drawable/ic_check_box" />
     <LinearLayout
         android:id="@+id/llWords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="72dp"
         android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
         <TextView
             android:id="@+id/tvWordEng"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Word"
-            android:textSize="16sp" />
-
+            android:textSize="16sp"
+            android:text="Word"/>
         <TextView
             android:id="@+id/tvWordRus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Слово"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:text="Слово"/>
     </LinearLayout>
 
     <ImageButton
@@ -49,12 +39,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/ic_word_item_sound"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/llWords"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/ic_word_item_sound" />
 
-
-</android.support.constraint.ConstraintLayout>
+</RelativeLayout>
