@@ -138,6 +138,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
     public PublishSubject<Integer> getSelectedItemsObservable(){
         return selectObservable;
     }
+    
     public ArrayList<Long> getSelectedItems(){
         return selectedItems;
     }

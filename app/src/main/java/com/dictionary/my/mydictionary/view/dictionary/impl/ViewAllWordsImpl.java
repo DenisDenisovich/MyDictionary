@@ -46,6 +46,7 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
 
     private ArrayList<Word> data;
 
+
     public interface onAllWordsSelectedListener{
         public void allGroupsScreenSelected();
     }
@@ -92,6 +93,7 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         rv.setLayoutManager(llm);
         wordAdapter = new WordAdapter(getActivity(),data);
         rv.setAdapter(wordAdapter);
+
         subscribeOnRecyclerView();
         return myView;
     }
@@ -121,6 +123,11 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
                 }
             });
         }
+    }
+
+    @Override
+    public void createList(ArrayList<Word> data) {
+
     }
 
     private void subscribeOnRecyclerView(){
@@ -222,6 +229,46 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void setListOfGroups() {
+
+    }
+
+    @Override
+    public Word getNewWord() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Long> getDeletedWords() {
+        return null;
+    }
+
+    @Override
+    public ArrayList<Long> getMovedWords() {
+        return null;
+    }
+
+    @Override
+    public Word getEditedWord() {
+        return null;
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void showERROR(String message) {
+
     }
 
     @Override
