@@ -41,4 +41,9 @@
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
+    <dimen name="llWord_start_margin_selected">72dp</dimen>
+    <dimen name="llWord_start_margin">16dp</dimen>
+    <dimen name="llWord_top_margin">20dp</dimen>
+    <dimen name="llWord_bottom_margin">20dp</dimen>
+
 </resources>

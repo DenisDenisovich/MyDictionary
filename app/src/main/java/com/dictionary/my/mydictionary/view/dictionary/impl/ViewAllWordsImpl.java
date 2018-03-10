@@ -77,11 +77,11 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         activity = (AppCompatActivity)getActivity();
         activity.setSupportActionBar(toolbar);
         setSpinnerView();
-        RecyclerView cv = myView.findViewById(R.id.rvAllWords);
+        RecyclerView rv = myView.findViewById(R.id.rvAllWords);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        cv.setLayoutManager(llm);
-        WordAdapter wa = new WordAdapter(data);
-        cv.setAdapter(wa);
+        rv.setLayoutManager(llm);
+        WordAdapter wa = new WordAdapter(getActivity(),data);
+        rv.setAdapter(wa);
         return myView;
     }
 
