@@ -1,6 +1,6 @@
 package com.dictionary.my.mydictionary.domain.training;
 
-import com.dictionary.my.mydictionary.data.entites.WordSecondToFirst;
+import com.dictionary.my.mydictionary.data.entites.training.WordSecondToFirst;
 
 
 import io.reactivex.Observable;

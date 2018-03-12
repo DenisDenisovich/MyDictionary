@@ -1,5 +1,5 @@
 
-package com.dictionary.my.mydictionary.data.entites.skyengapi;
+package com.dictionary.my.mydictionary.data.entites.skyengapi.meaning;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,7 +11,7 @@ public class Translation {
     private String text;
     @SerializedName("note")
     @Expose
-    private String note;
+    private Object note;
 
     public String getText() {
         return text;
@@ -21,11 +21,11 @@ public class Translation {
         this.text = text;
     }
 
-    public String getNote() {
+    public Object getNote() {
         return note;
     }
 
-    public void setNote(String note) {
+    public void setNote(Object note) {
         this.note = note;
     }
 

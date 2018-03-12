@@ -1,4 +1,4 @@
-package com.dictionary.my.mydictionary.data.repository.storage;
+package com.dictionary.my.mydictionary.data.storage.training.impl;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.data.DBHelper;
+import com.dictionary.my.mydictionary.data.storage.training.DBTraining;
 
 import java.util.ArrayList;
 
@@ -13,10 +14,10 @@ import java.util.ArrayList;
  * Created by luxso on 18.02.2018.
  */
 
-public class TrainingRepositoryImpl implements TrainingRepository {
+public class DBTrainingImpl implements DBTraining {
     DBHelper dbHelper;
     SQLiteDatabase db;
-    public TrainingRepositoryImpl(Context context){
+    public DBTrainingImpl(Context context){
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
     }

@@ -1,8 +1,5 @@
 package com.dictionary.my.mydictionary.presenter.dictionary;
 
-/**
- * Created by luxso on 10.03.2018.
- */
 
 public interface PresenterAllWords<V> {
     void attach(V view);
@@ -11,6 +8,7 @@ public interface PresenterAllWords<V> {
     void init();
     void update();
     void saveListState();
+    void getTranslation();
     void newWord();
     void deleteWords();
     void getListOfGroups();

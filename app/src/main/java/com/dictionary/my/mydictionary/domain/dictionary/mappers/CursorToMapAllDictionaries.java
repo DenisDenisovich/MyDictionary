@@ -18,8 +18,8 @@ public class CursorToMapAllDictionaries {
         long RowID = cursor.getInt(cursor.getColumnIndex(Content.COLUMN_ROWID));
         String Title = cursor.getString(cursor.getColumnIndex(Content.COLUMN_TITLE));
 
-        item.put(Content.fromAllDictionaries[0],RowID);
-        item.put(Content.fromAllDictionaries[1],Title);
+        //item.put(Content.fromAllDictionaries[0],RowID);
+       // item.put(Content.fromAllDictionaries[1],Title);
 
         return item;
     }

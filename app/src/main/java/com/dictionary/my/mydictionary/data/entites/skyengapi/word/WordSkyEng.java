@@ -1,5 +1,5 @@
 
-package com.dictionary.my.mydictionary.data.entites.skyengapi;
+package com.dictionary.my.mydictionary.data.entites.skyengapi.word;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

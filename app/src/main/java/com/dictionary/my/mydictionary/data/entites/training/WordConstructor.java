@@ -1,4 +1,6 @@
-package com.dictionary.my.mydictionary.data.entites;
+package com.dictionary.my.mydictionary.data.entites.training;
+
+import com.dictionary.my.mydictionary.data.entites.dictionary.Word;
 
 import java.util.ArrayList;
 

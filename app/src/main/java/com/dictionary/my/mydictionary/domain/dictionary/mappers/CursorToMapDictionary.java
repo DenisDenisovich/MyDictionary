@@ -16,12 +16,12 @@ public class CursorToMapDictionary {
         Map<String,Object> item = new HashMap<>();
 
         long RowID = cursor.getInt(cursor.getColumnIndex(Content.COLUMN_ROWID));
-        String Word = cursor.getString(cursor.getColumnIndex(Content.COLUMN_WORD));
-        String Translate = cursor.getString(cursor.getColumnIndex(Content.COLUMN_TRANSLATE));
+       // String Word = cursor.getString(cursor.getColumnIndex(Content.COLUMN_WORD));
+       // String Translate = cursor.getString(cursor.getColumnIndex(Content.COLUMN_TRANSLATE));
 
-        item.put(Content.fromDictionary[0],RowID);
-        item.put(Content.fromDictionary[1],Word);
-        item.put(Content.fromDictionary[2],Translate);
+        //item.put(Content.fromDictionary[0],RowID);
+       // item.put(Content.fromDictionary[1],Word);
+       // item.put(Content.fromDictionary[2],Translate);
 
         return item;
     }

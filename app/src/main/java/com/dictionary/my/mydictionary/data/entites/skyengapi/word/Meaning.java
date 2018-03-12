@@ -1,5 +1,5 @@
 
-package com.dictionary.my.mydictionary.data.entites.skyengapi;
+package com.dictionary.my.mydictionary.data.entites.skyengapi.word;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

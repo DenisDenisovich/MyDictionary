@@ -14,11 +14,11 @@ public class MapToContentValuesDictionary {
     public static ContentValues map(Map<String,Object> m){
         ContentValues cv = new ContentValues();
 
-        String Word = (String) m.get(Content.fromDictionary[1]);
-        String Translate = (String) m.get(Content.fromDictionary[2]);
+      //  String Word = (String) m.get(Content.fromDictionary[1]);
+       // String Translate = (String) m.get(Content.fromDictionary[2]);
 
-        cv.put(Content.COLUMN_WORD,Word);
-        cv.put(Content.COLUMN_TRANSLATE,Translate);
+       // cv.put(Content.COLUMN_WORD,Word);
+       // cv.put(Content.COLUMN_TRANSLATE,Translate);
 
         return cv;
     }

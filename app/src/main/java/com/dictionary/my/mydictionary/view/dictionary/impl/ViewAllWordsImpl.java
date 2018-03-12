@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,13 +21,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.dictionary.my.mydictionary.R;
-import com.dictionary.my.mydictionary.data.entites.Word;
+import com.dictionary.my.mydictionary.data.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.view.dictionary.ViewAllWords;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.WordAdapter;
 
 import java.util.ArrayList;
 
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
 /**
@@ -243,6 +241,11 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
 
     @Override
     public ArrayList<Long> getDeletedWords() {
+        return null;
+    }
+
+    @Override
+    public Long getTopVisiblePosition() {
         return null;
     }
 

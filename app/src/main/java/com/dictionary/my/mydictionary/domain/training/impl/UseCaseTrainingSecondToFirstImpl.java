@@ -2,19 +2,16 @@ package com.dictionary.my.mydictionary.domain.training.impl;
 
 import android.content.Context;
 
-import com.dictionary.my.mydictionary.data.Content;
-import com.dictionary.my.mydictionary.data.entites.WordSecondToFirst;
-import com.dictionary.my.mydictionary.data.repository.storage.TrainingRepository;
-import com.dictionary.my.mydictionary.data.repository.storage.TrainingRepositoryImpl;
-import com.dictionary.my.mydictionary.data.entites.skyengapi.Meaning;
-import com.dictionary.my.mydictionary.data.entites.skyengapi.WordSkyEng;
+import com.dictionary.my.mydictionary.data.entites.training.WordSecondToFirst;
+import com.dictionary.my.mydictionary.data.storage.training.DBTraining;
+import com.dictionary.my.mydictionary.data.storage.training.impl.DBTrainingImpl;
+import com.dictionary.my.mydictionary.data.entites.skyengapi.word.Meaning;
+import com.dictionary.my.mydictionary.data.entites.skyengapi.word.WordSkyEng;
 import com.dictionary.my.mydictionary.domain.training.UseCaseTrainingSecondToFirst;
 import com.dictionary.my.mydictionary.view.App;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 
 import io.reactivex.Observable;
@@ -28,7 +25,7 @@ import retrofit2.Response;
  */
 
 public class UseCaseTrainingSecondToFirstImpl implements UseCaseTrainingSecondToFirst {
-    private TrainingRepository repository;
+    private DBTraining repository;
     private ArrayList<String> alternativeTranslate;
     private static final int MIN_COUNT_OF_WORDS = 10;
     private static final int COUNT_OF_READY_BLOCK = 5;
@@ -38,7 +35,7 @@ public class UseCaseTrainingSecondToFirstImpl implements UseCaseTrainingSecondTo
     private int maxCountOfTryingFindTranslate = MIN_COUNT_OF_WORDS;
     private int countOfTryingFindTranslate;
     public UseCaseTrainingSecondToFirstImpl(Context context){
-        repository = new TrainingRepositoryImpl(context);
+        repository = new DBTrainingImpl(context);
     }
 
     @Override
@@ -136,7 +133,7 @@ public class UseCaseTrainingSecondToFirstImpl implements UseCaseTrainingSecondTo
         Response<ArrayList<WordSkyEng>> response;
         alternativeTranslate = new ArrayList<String>();
         ArrayList<WordSkyEng> data;
-        response = App.getSkyEngApi().getAlterTranslations(word).execute();
+        response = App.getSkyEngApi().getWord(word).execute();
         data = response.body();
         for(Meaning m: data.get(0).getMeanings()){
             alternativeTranslate.add(m.getTranslation().getText().toLowerCase());

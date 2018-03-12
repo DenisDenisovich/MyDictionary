@@ -1,6 +1,6 @@
 package com.dictionary.my.mydictionary.view.dictionary;
 
-import com.dictionary.my.mydictionary.data.entites.Word;
+import com.dictionary.my.mydictionary.data.entites.dictionary.Word;
 
 import java.util.ArrayList;
 

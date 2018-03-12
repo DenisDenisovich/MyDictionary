@@ -14,9 +14,9 @@ public class MapToContentValuesAllDictionaries {
     public static ContentValues map(Map<String,Object> m){
         ContentValues cv = new ContentValues();
 
-        String Title = (String) m.get(Content.fromAllDictionaries[1]);
+       // String Title = (String) m.get(Content.fromAllDictionaries[1]);
 
-        cv.put(Content.COLUMN_TITLE,Title);
+      //  cv.put(Content.COLUMN_TITLE,Title);
 
         return cv;
     }

@@ -1,4 +1,4 @@
-package com.dictionary.my.mydictionary.data.entites;
+package com.dictionary.my.mydictionary.data.entites.training;
 
 import java.util.ArrayList;
 import java.util.Random;

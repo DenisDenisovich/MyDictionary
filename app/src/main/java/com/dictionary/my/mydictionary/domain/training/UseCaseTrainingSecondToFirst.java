@@ -1,9 +1,6 @@
 package com.dictionary.my.mydictionary.domain.training;
 
-import com.dictionary.my.mydictionary.data.entites.WordSecondToFirst;
-
-import java.util.ArrayList;
-import java.util.Map;
+import com.dictionary.my.mydictionary.data.entites.training.WordSecondToFirst;
 
 import io.reactivex.Observable;
 

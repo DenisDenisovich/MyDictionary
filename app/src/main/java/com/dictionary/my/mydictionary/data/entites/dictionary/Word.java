@@ -1,7 +1,8 @@
-package com.dictionary.my.mydictionary.data.entites;
+package com.dictionary.my.mydictionary.data.entites.dictionary;
 
 /**
- * Created by luxso on 18.02.2018.
+ * this class use for list of words in AllWords class.
+ * He contains minimum information about word
  */
 
 public class Word {
@@ -9,6 +10,7 @@ public class Word {
     private long id;
     private String word;
     private String translate;
+    private String sound;
 
 
     public long getId() {
@@ -33,5 +35,13 @@ public class Word {
 
     public void setTranslate(String translate) {
         this.translate = translate;
+    }
+
+    public String getSound() {
+        return sound;
+    }
+
+    public void setSound(String sound) {
+        this.sound = sound;
     }
 }

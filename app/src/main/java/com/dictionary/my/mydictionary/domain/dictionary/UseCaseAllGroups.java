@@ -1,4 +1,5 @@
-package com.dictionary.my.mydictionary.data.repository.storage;
+package com.dictionary.my.mydictionary.domain.dictionary;
+
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -10,7 +11,7 @@ import io.reactivex.Single;
  * Created by luxso on 30.09.2017.
  */
 
-public interface AllDictionariesRepositories {
+public interface UseCaseAllGroups {
     Observable<Map<String,Object>> getDictionariesList();
     void setNewDictionary(Single<Map<String,Object>> observable);
     void deleteDictionaries(Single<ArrayList<Long>> observable);

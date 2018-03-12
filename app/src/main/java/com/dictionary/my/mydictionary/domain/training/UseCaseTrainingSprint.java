@@ -1,7 +1,7 @@
 package com.dictionary.my.mydictionary.domain.training;
 
 
-import com.dictionary.my.mydictionary.data.entites.WordSprint;
+import com.dictionary.my.mydictionary.data.entites.training.WordSprint;
 
 import io.reactivex.Observable;
 
