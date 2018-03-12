@@ -22,19 +22,17 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by luxso on 23.09.2017.
+ * This class working only with All_Words table of dataBase
  */
 
 public class DBAllWordsImpl implements DBAllWords {
-    DBHelper dbHelper;
-    SQLiteDatabase db;
-    Long currentDictionaryId;
-    Long moveToDictionaryId;
-    DisposableSingleObserver<WordFullInformation> disposableNewWords;
-    DisposableSingleObserver<ArrayList<Long>> disposableDelWords;
-    DisposableSingleObserver<ArrayList<Long>> disposableMoveWords;
-    DisposableSingleObserver<Long> disposableMoveToDictionaryId;
-    DisposableSingleObserver<Word> disposableEditWord;
+    private DBHelper dbHelper;
+    private SQLiteDatabase db;
+    private DisposableSingleObserver<WordFullInformation> disposableNewWords;
+    private DisposableSingleObserver<ArrayList<Long>> disposableDelWords;
+    private DisposableSingleObserver<ArrayList<Long>> disposableMoveWords;
+    private DisposableSingleObserver<Long> disposableMoveToDictionaryId;
+    private DisposableSingleObserver<Word> disposableEditWord;
 
     public DBAllWordsImpl(Context context){
         dbHelper = new DBHelper(context);
@@ -47,9 +45,9 @@ public class DBAllWordsImpl implements DBAllWords {
         return Single.create(new SingleOnSubscribe<ArrayList<Word>>() {
             @Override
             public void subscribe(SingleEmitter<ArrayList<Word>> e) throws Exception {
-                String[] column = {Content.COLUMN_ROWID, Content.COLUMN_ENG, Content.COLUMN_RUS, Content.COLUMN_SOUND};
-                Cursor cursor = db.query(Content.TABLE_ALL_WORD,column,null,null,null,null,null);
                 try{
+                    String[] column = {Content.COLUMN_ROWID, Content.COLUMN_ENG, Content.COLUMN_RUS, Content.COLUMN_SOUND};
+                    Cursor cursor = db.query(Content.TABLE_ALL_WORD,column,null,null,null,null,null);
                     if(cursor.moveToFirst()){
                         ArrayList<Word> list = new ArrayList<>();
                         do{
@@ -129,11 +127,15 @@ public class DBAllWordsImpl implements DBAllWords {
                 .subscribeWith(new DisposableSingleObserver<ArrayList<Long>>() {
                     @Override
                     public void onSuccess(@NonNull ArrayList<Long> longs) {
+                        String strPlaceholder = "(";
                         String[] whereArg = new String[longs.size()];
-                        for(int i = 0; i < longs.size();i++){
+                        for(int i = 0; i < longs.size()-1;i++){
+                            strPlaceholder = strPlaceholder.concat("?,");
                             whereArg[i] = longs.get(i).toString();
-                            //db.delete(Content.TABLE_ALL_WORD,Content.deleteDbDictionary + whereArg[i], null);
                         }
+                        strPlaceholder = strPlaceholder.concat("?)");
+                        whereArg[whereArg.length-1] = longs.get(longs.size()-1).toString();
+                        db.delete(Content.TABLE_ALL_WORD,Content.COLUMN_ROWID + " in " + strPlaceholder, whereArg);
                     }
 
                     @Override
@@ -148,14 +150,27 @@ public class DBAllWordsImpl implements DBAllWords {
         disposableMoveWords = observable.subscribeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribeWith(new DisposableSingleObserver<ArrayList<Long>>() {
+                    Long moveToDictionaryId;
                     @Override
                     public void onSuccess(ArrayList<Long> longs) {
+                        String strPlaceholder = "(";
+                        String[] strArg = new String[longs.size()-1];
+                        ContentValues cv = new ContentValues();
+                        moveToDictionaryId = longs.get(0);
+                        for(int i = 1; i < longs.size()-1; i++){
+                            strPlaceholder = strPlaceholder.concat("?,");
+                            strArg[i-1] = longs.get(i).toString();
 
+                        }
+                        strPlaceholder = strPlaceholder.concat("?)");
+                        strArg[longs.size()-2] = longs.get(longs.size()-1).toString();
+                        cv.put(Content.COLUMN_GROUP_ID, moveToDictionaryId);
+                        db.update(Content.TABLE_ALL_WORD, cv, Content.COLUMN_ROWID + " in " + strPlaceholder, strArg);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        e.printStackTrace();
                     }
                 });
 
@@ -167,12 +182,12 @@ public class DBAllWordsImpl implements DBAllWords {
                 .subscribeOn(Schedulers.io())
                 .subscribeWith(new DisposableSingleObserver<Word>() {
                     ContentValues cv = new ContentValues();
-                    Long idOfModifiedWord;
+                    String idOfModifiedWord;
                     @Override
-                    public void onSuccess(@NonNull Word stringObjectMap) {
-                        //idOfModifiedWord = (Long)stringObjectMap.get(Content.fromDictionary[0]);
-                        //cv = MapToContentValuesDictionary.map(stringObjectMap);
-                        //db.update(Content.TABLE_ALL_WORD,cv,Content.editDbDictionary + idOfModifiedWord,null);
+                    public void onSuccess(@NonNull Word word) {
+                        cv.put(Content.COLUMN_RUS, word.getTranslate());
+                        idOfModifiedWord = String.valueOf(word.getId());
+                        db.update(Content.TABLE_ALL_WORD,cv,Content.COLUMN_ROWID  + " = ?", new String[] {idOfModifiedWord});
                     }
 
                     @Override

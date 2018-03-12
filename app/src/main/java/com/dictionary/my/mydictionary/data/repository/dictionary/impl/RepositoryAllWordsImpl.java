@@ -15,6 +15,8 @@ import com.dictionary.my.mydictionary.data.storage.dictionary.impl.DBAllWordsImp
 import java.util.ArrayList;
 
 import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
 
 /**
@@ -31,41 +33,48 @@ public class RepositoryAllWordsImpl implements RepositoryAllWords {
     }
     @Override
     public Single<ArrayList<Word>> getListOfWords() {
-        return null;
+        return dbAllWords.getListOfWord();
     }
 
     @Override
     public Single<ArrayList<Group>> getListOfGroups() {
-        return null;
+        return dbAllGroups.getListOfGroups();
     }
 
     @Override
-    public Observable<Translation> getTranslation() {
-        return null;
+    public Observable<Translation> getTranslation(String word) {
+
+        return Observable.create(new ObservableOnSubscribe<Translation>() {
+            @Override
+            public void subscribe(ObservableEmitter<Translation> e) throws Exception {
+
+            }
+        });
     }
 
     @Override
     public void setNewWord(Single<WordFullInformation> observable) {
-
+        dbAllWords.setNewWord(observable);
     }
 
     @Override
     public void deleteWords(Single<ArrayList<Long>> observable) {
-
+        dbAllWords.deleteWords(observable);
     }
 
     @Override
     public void moveWords(Single<ArrayList<Long>> observable) {
-
+        dbAllWords.moveWords(observable);
     }
 
     @Override
     public void editWord(Single<Word> observable) {
-
+        dbAllWords.editWord(observable);
     }
 
     @Override
     public void destroy() {
-
+        dbAllWords.destroy();
+        dbAllGroups.destroy();
     }
 }

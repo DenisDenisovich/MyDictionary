@@ -20,21 +20,23 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 
 /**
- * Created by luxso on 30.09.2017.
+ * This class working only with Groups table of dataBase
  */
 
 public class DBAllGroupsImpl implements DBAllGroups {
-    DBHelper dbHelper;
-    SQLiteDatabase db;
-    DisposableSingleObserver<Group> disposableNewDict;
-    DisposableSingleObserver<ArrayList<Long>> disposableDelDict;
-    DisposableSingleObserver<Group> disposableEditDict;
+    private DBHelper dbHelper;
+    private SQLiteDatabase db;
+    private DisposableSingleObserver<Group> disposableNewDict;
+    private DisposableSingleObserver<ArrayList<Long>> disposableDelDict;
+    private DisposableSingleObserver<Group> disposableEditDict;
 
     public DBAllGroupsImpl(Context context){
 
@@ -43,35 +45,39 @@ public class DBAllGroupsImpl implements DBAllGroups {
     }
     @Override
     public Single<ArrayList<Group>> getListOfGroups(){
-        /*Observable<Group> observable = Observable.create(new ObservableOnSubscribe<Group>() {
+        return Single.create(new SingleOnSubscribe<ArrayList<Group>>() {
             @Override
-            public void subscribe(@NonNull ObservableEmitter<Group> e) throws Exception {
-                Cursor cursor = db.rawQuery(Content.selectDbAllDictionaries, null);
-                Map<String,Object> item;
-                try {
-                    if(cursor.moveToLast()){
-
+            public void subscribe(SingleEmitter<ArrayList<Group>> e) throws Exception {
+                try{
+                    Cursor cursor = db.query(Content.TABLE_GROUPS,null,null,null,null,null,null);
+                    if(cursor.moveToFirst()){
+                        ArrayList<Group> list = new ArrayList<>();
                         do{
-                            item = CursorToMapAllDictionaries.map(cursor);
-                            e.onNext(new Group());
-                        }while (cursor.moveToPrevious());
+                            Group item = new Group();
+                            item.setId(cursor.getInt(cursor.getColumnIndex(Content.COLUMN_ROWID)));
+                            item.setTitle(cursor.getString(cursor.getColumnIndex(Content.COLUMN_TITLE)));
+                            list.add(item);
+                        }while (cursor.moveToNext());
+                        if(!e.isDisposed()){
+                            e.onSuccess(list);
+                        }
                     }
-                    e.onComplete();
                 }catch (Throwable t){
-                    e.onError(t);
+                    if(!e.isDisposed()){
+                        e.onError(t);
+                    }
                 }
             }
-        });*/
-        return null;
+        });
     }
     @Override
     public void setNewGroup(Single<Group> observable){
         disposableNewDict = observable.subscribeOn(Schedulers.io()).subscribeWith(new DisposableSingleObserver<Group>() {
             ContentValues cv = new ContentValues();
             @Override
-            public void onSuccess(@NonNull Group stringObjectMap) {
-                //cv = MapToContentValuesAllDictionaries.map(stringObjectMap);
-                //db.insert(Content.TABLE_DICTIONARIES, null, cv);
+            public void onSuccess(@NonNull Group group) {
+                cv.put(Content.COLUMN_TITLE, group.getTitle());
+                db.insert(Content.TABLE_GROUPS, null, cv);
             }
 
             @Override
@@ -86,13 +92,15 @@ public class DBAllGroupsImpl implements DBAllGroups {
         disposableDelDict = observable.subscribeOn(Schedulers.io()).subscribeWith(new DisposableSingleObserver<ArrayList<Long>>() {
             @Override
             public void onSuccess(@NonNull ArrayList<Long> longs) {
+                String strPlaceholder = "(";
                 String[] whereArg = new String[longs.size()];
-                for(int i = 0; i < longs.size();i++){
+                for(int i = 0; i < longs.size()-1;i++){
+                    strPlaceholder = strPlaceholder.concat("?,");
                     whereArg[i] = longs.get(i).toString();
-                   //db.delete(Content.TABLE_DICTIONARIES,Content.deleteDbAllDictionaries + whereArg[i], null);
-                   // db.delete(Content.TABLE_ALL_WORD,Content.deleteDbAllDictionariesWithWords + whereArg[i], null);
                 }
-
+                strPlaceholder = strPlaceholder.concat("?)");
+                whereArg[whereArg.length-1] = longs.get(longs.size()-1).toString();
+                db.delete(Content.TABLE_GROUPS,Content.COLUMN_ROWID + " in " + strPlaceholder, whereArg);
             }
 
             @Override
@@ -106,12 +114,12 @@ public class DBAllGroupsImpl implements DBAllGroups {
     public void editGroup(Single<Group> observable) {
         disposableEditDict = observable.subscribeOn(Schedulers.io()).subscribeWith(new DisposableSingleObserver<Group>() {
             ContentValues cv = new ContentValues();
-            Long idOfModifiedDictionary;
+            String idOfModifiedGroup;
             @Override
-            public void onSuccess(@NonNull Group stringObjectMap) {
-                //idOfModifiedDictionary = (Long) stringObjectMap.get(Content.fromAllDictionaries[0]);
-                //cv = MapToContentValuesAllDictionaries.map(stringObjectMap);
-                //db.update(Content.TABLE_DICTIONARIES,cv,Content.editDbAllDictionaries + idOfModifiedDictionary,null);
+            public void onSuccess(@NonNull Group group) {
+                cv.put(Content.COLUMN_TITLE, group.getTitle());
+                idOfModifiedGroup = String.valueOf(group.getId());
+                db.update(Content.TABLE_GROUPS,cv,Content.COLUMN_ROWID  + " = ?", new String[] {idOfModifiedGroup});
             }
 
             @Override

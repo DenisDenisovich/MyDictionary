@@ -35,7 +35,7 @@ public class UseCaseAllWordsImpl implements UseCaseAllWords{
     }
 
     @Override
-    public Observable<Translation> getTranslation() {
+    public Observable<Translation> getTranslation(String word) {
         return null;
     }
 
