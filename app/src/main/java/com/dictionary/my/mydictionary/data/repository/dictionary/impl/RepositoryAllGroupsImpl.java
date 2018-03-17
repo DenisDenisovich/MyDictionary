@@ -2,10 +2,10 @@ package com.dictionary.my.mydictionary.data.repository.dictionary.impl;
 
 import android.content.Context;
 
-import com.dictionary.my.mydictionary.data.entites.dictionary.Group;
+import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryAllGroups;
-import com.dictionary.my.mydictionary.data.storage.dictionary.DBAllGroups;
-import com.dictionary.my.mydictionary.data.storage.dictionary.impl.DBAllGroupsImpl;
+import com.dictionary.my.mydictionary.data.db.dictionary.DBAllGroups;
+import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBAllGroupsImpl;
 
 import java.util.ArrayList;
 

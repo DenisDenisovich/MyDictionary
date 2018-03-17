@@ -2,15 +2,17 @@ package com.dictionary.my.mydictionary.data.repository.dictionary.impl;
 
 import android.content.Context;
 
-import com.dictionary.my.mydictionary.data.entites.dictionary.Group;
-import com.dictionary.my.mydictionary.data.entites.dictionary.WordFullInformation;
-import com.dictionary.my.mydictionary.data.entites.dictionary.Translation;
-import com.dictionary.my.mydictionary.data.entites.dictionary.Word;
+import com.dictionary.my.mydictionary.data.cloud.dictionary.CloudAllWords;
+import com.dictionary.my.mydictionary.data.cloud.dictionary.impl.CloudAllWordsImpl;
+import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
+import com.dictionary.my.mydictionary.domain.entites.dictionary.WordFullInformation;
+import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
+import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryAllWords;
-import com.dictionary.my.mydictionary.data.storage.dictionary.DBAllGroups;
-import com.dictionary.my.mydictionary.data.storage.dictionary.DBAllWords;
-import com.dictionary.my.mydictionary.data.storage.dictionary.impl.DBAllGroupsImpl;
-import com.dictionary.my.mydictionary.data.storage.dictionary.impl.DBAllWordsImpl;
+import com.dictionary.my.mydictionary.data.db.dictionary.DBAllGroups;
+import com.dictionary.my.mydictionary.data.db.dictionary.DBAllWords;
+import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBAllGroupsImpl;
+import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBAllWordsImpl;
 
 import java.util.ArrayList;
 
@@ -18,6 +20,8 @@ import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 
 /**
  * Created by luxso on 11.03.2018.
@@ -26,10 +30,12 @@ import io.reactivex.Single;
 public class RepositoryAllWordsImpl implements RepositoryAllWords {
     private DBAllWords dbAllWords;
     private DBAllGroups dbAllGroups;
+    private CloudAllWords cloudAllWords;
 
     public RepositoryAllWordsImpl(Context context){
         dbAllWords = new DBAllWordsImpl(context);
         dbAllGroups = new DBAllGroupsImpl(context);
+        cloudAllWords = new CloudAllWordsImpl();
     }
     @Override
     public Single<ArrayList<Word>> getListOfWords() {
@@ -42,19 +48,29 @@ public class RepositoryAllWordsImpl implements RepositoryAllWords {
     }
 
     @Override
-    public Observable<Translation> getTranslation(String word) {
+    public Single<ArrayList<Translation>> getTranslation(final String word) {
 
-        return Observable.create(new ObservableOnSubscribe<Translation>() {
+        return Single.create(new SingleOnSubscribe<ArrayList<Translation>>() {
             @Override
-            public void subscribe(ObservableEmitter<Translation> e) throws Exception {
-
+            public void subscribe(SingleEmitter<ArrayList<Translation>> e) throws Exception {
+                ArrayList<Translation> translations = cloudAllWords.getTranslation(word);
+                try {
+                    if(!e.isDisposed()){
+                        e.onSuccess(translations);
+                    }
+                }catch (Throwable t){
+                    if(!e.isDisposed()){
+                        e.onError(t);
+                    }
+                }
             }
         });
     }
 
     @Override
-    public void setNewWord(Single<WordFullInformation> observable) {
-        dbAllWords.setNewWord(observable);
+    public void setNewWord(Single<Translation> observable) {
+
+        //dbAllWords.setNewWord(observable);
     }
 
     @Override

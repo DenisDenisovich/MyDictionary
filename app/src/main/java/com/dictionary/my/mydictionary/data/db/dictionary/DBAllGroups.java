@@ -1,4 +1,4 @@
-package com.dictionary.my.mydictionary.data.repository.dictionary;
+package com.dictionary.my.mydictionary.data.db.dictionary;
 
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 
@@ -7,10 +7,10 @@ import java.util.ArrayList;
 import io.reactivex.Single;
 
 /**
- * Created by luxso on 11.03.2018.
+ * Created by luxso on 30.10.2017.
  */
 
-public interface RepositoryAllGroups {
+public interface DBAllGroups {
     Single<ArrayList<Group>> getListOfGroups();
     void setNewGroup(Single<Group> observable);
     void deleteGroups(Single<ArrayList<Long>> observable);

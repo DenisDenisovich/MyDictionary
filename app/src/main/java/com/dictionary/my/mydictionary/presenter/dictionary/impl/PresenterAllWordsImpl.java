@@ -2,7 +2,9 @@ package com.dictionary.my.mydictionary.presenter.dictionary.impl;
 
 import android.content.Context;
 
-import com.dictionary.my.mydictionary.data.entites.dictionary.Word;
+import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
+import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryAllWords;
+import com.dictionary.my.mydictionary.data.repository.dictionary.impl.RepositoryAllWordsImpl;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAllWords;
 import com.dictionary.my.mydictionary.view.dictionary.ViewAllWords;
 
@@ -14,11 +16,12 @@ import java.util.ArrayList;
 
 public class PresenterAllWordsImpl<V extends ViewAllWords> implements PresenterAllWords<V> {
     V view;
+    RepositoryAllWords repository;
     Long topVisiblePosition;
     ArrayList<Long> deleteWords;
     ArrayList<Word> words;
     public PresenterAllWordsImpl(Context context){
-
+        repository = new RepositoryAllWordsImpl(context);
     }
     @Override
     public void attach(V view) {
@@ -47,6 +50,11 @@ public class PresenterAllWordsImpl<V extends ViewAllWords> implements PresenterA
 
     @Override
     public void saveListState() {
+
+    }
+
+    @Override
+    public void getTranslation() {
 
     }
 

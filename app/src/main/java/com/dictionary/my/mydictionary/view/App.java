@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class App extends Application {
-    private static ApiSkyEngWord skyEngApi;
+    private static ApiSkyEngWord skyEngApiWord;
     private Retrofit retrofit;
     @Override
     public void onCreate() {
@@ -21,12 +21,11 @@ public class App extends Application {
                 .baseUrl("http://dictionary.skyeng.ru/api/public/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        skyEngApi = retrofit.create(ApiSkyEngWord.class);
-
+        skyEngApiWord = retrofit.create(ApiSkyEngWord.class);
 
     }
 
-    public static ApiSkyEngWord getSkyEngApi(){
-        return skyEngApi;
+    public static ApiSkyEngWord getSkyEngApiWord(){
+        return skyEngApiWord;
     }
 }

@@ -2,10 +2,10 @@ package com.dictionary.my.mydictionary.domain.training.impl;
 
 import android.content.Context;
 
-import com.dictionary.my.mydictionary.data.entites.training.WordSecondToFirst;
-import com.dictionary.my.mydictionary.data.entites.skyengapi.word.WordSkyEng;
-import com.dictionary.my.mydictionary.data.storage.training.DBTraining;
-import com.dictionary.my.mydictionary.data.storage.training.impl.DBTrainingImpl;
+import com.dictionary.my.mydictionary.domain.entites.training.WordSecondToFirst;
+import com.dictionary.my.mydictionary.data.cloud.pojo.word.WordSkyEng;
+import com.dictionary.my.mydictionary.data.db.training.DBTraining;
+import com.dictionary.my.mydictionary.data.db.training.impl.DBTrainingImpl;
 import com.dictionary.my.mydictionary.domain.training.UseCaseTrainingFirstToSecond;
 import com.dictionary.my.mydictionary.view.App;
 
@@ -133,7 +133,7 @@ public class UseCaseTrainingFirstToSecondImpl implements UseCaseTrainingFirstToS
         Response<ArrayList<WordSkyEng>> response;
         alternativeTranslate = new ArrayList<String>();
         ArrayList<WordSkyEng> data;
-        response = App.getSkyEngApi().getWord(word).execute();
+        response = App.getSkyEngApiWord().getWord(word).execute();
         data = response.body();
         for(WordSkyEng w: data){
             alternativeTranslate.add(w.getText().toLowerCase());

@@ -2,9 +2,9 @@ package com.dictionary.my.mydictionary.domain.training.impl;
 
 import android.content.Context;
 
-import com.dictionary.my.mydictionary.data.storage.training.DBTraining;
-import com.dictionary.my.mydictionary.data.storage.training.impl.DBTrainingImpl;
-import com.dictionary.my.mydictionary.data.entites.training.WordConstructor;
+import com.dictionary.my.mydictionary.data.db.training.DBTraining;
+import com.dictionary.my.mydictionary.data.db.training.impl.DBTrainingImpl;
+import com.dictionary.my.mydictionary.domain.entites.training.WordConstructor;
 import com.dictionary.my.mydictionary.domain.training.UseCaseTrainingConstructor;
 
 import java.util.ArrayList;

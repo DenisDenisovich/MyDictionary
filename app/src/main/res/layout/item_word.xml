@@ -25,13 +25,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            android:text="Word"/>
+            android:rus="Word"/>
         <TextView
             android:id="@+id/tvWordRus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="14sp"
-            android:text="Слово"/>
+            android:rus="Слово"/>
     </LinearLayout>
 
     <ImageButton

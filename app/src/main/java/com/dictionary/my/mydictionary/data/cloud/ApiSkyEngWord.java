@@ -2,7 +2,8 @@ package com.dictionary.my.mydictionary.data.cloud;
 
 
 
-import com.dictionary.my.mydictionary.data.entites.skyengapi.word.WordSkyEng;
+import com.dictionary.my.mydictionary.data.cloud.pojo.meaning.MeaningSkyEng;
+import com.dictionary.my.mydictionary.data.cloud.pojo.word.WordSkyEng;
 
 import java.util.ArrayList;
 
@@ -17,4 +18,7 @@ import retrofit2.http.Query;
 public interface ApiSkyEngWord {
     @GET("words/search?_format=json")
     Call<ArrayList<WordSkyEng>> getWord(@Query("search") String word);
+
+    @GET("meanings?_format=json")
+    Call<MeaningSkyEng> getMeaning(@Query("ids") Integer id);
 }
