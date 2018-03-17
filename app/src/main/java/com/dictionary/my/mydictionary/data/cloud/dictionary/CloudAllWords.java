@@ -12,6 +12,6 @@ import java.util.ArrayList;
 
 public interface CloudAllWords {
     Double MIN_FREQUENCY_PERCENT = 10.0;
-    ArrayList<Translation> getTranslation(String word) throws IOException;
-    WordFullInformation getMeaning(Translation translation) throws IOException;
+    ArrayList<Translation> getTranslation(String word) throws Exception;
+    WordFullInformation getMeaning(Translation translation) throws Exception;
 }

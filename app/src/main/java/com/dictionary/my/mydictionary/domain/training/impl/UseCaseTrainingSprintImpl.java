@@ -99,7 +99,7 @@ public class UseCaseTrainingSprintImpl implements UseCaseTrainingSprint {
     private ArrayList<String> getAlternativeTranslates(String word) throws IOException {
         alternativeTranslate = new ArrayList<String>();
         ArrayList<WordSkyEng> data;
-        response = App.getSkyEngApiWord().getWord(word).execute();
+        response = App.getSkyEngApi().getWord(word).execute();
         data = response.body();
         for(WordSkyEng w: data){
             alternativeTranslate.add(w.getText().toLowerCase());

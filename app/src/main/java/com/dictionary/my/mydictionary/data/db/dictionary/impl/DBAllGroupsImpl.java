@@ -7,19 +7,11 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.data.DBHelper;
+import com.dictionary.my.mydictionary.data.exception.DBException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.data.db.dictionary.DBAllGroups;
-import com.dictionary.my.mydictionary.domain.dictionary.mappers.CursorToMapAllDictionaries;
-import com.dictionary.my.mydictionary.domain.dictionary.mappers.MapToContentValuesAllDictionaries;
 
 import java.util.ArrayList;
-
-import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.observers.DisposableSingleObserver;
-import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -29,9 +21,6 @@ import io.reactivex.schedulers.Schedulers;
 public class DBAllGroupsImpl implements DBAllGroups {
     private DBHelper dbHelper;
     private SQLiteDatabase db;
-    private DisposableSingleObserver<Group> disposableNewDict;
-    private DisposableSingleObserver<ArrayList<Long>> disposableDelDict;
-    private DisposableSingleObserver<Group> disposableEditDict;
 
     public DBAllGroupsImpl(Context context){
 
@@ -39,102 +28,73 @@ public class DBAllGroupsImpl implements DBAllGroups {
         db = dbHelper.getWritableDatabase();
     }
     @Override
-    public Single<ArrayList<Group>> getListOfGroups(){
-        return Single.create(new SingleOnSubscribe<ArrayList<Group>>() {
-            @Override
-            public void subscribe(SingleEmitter<ArrayList<Group>> e) throws Exception {
-                try{
-                    Cursor cursor = db.query(Content.TABLE_GROUPS,null,null,null,null,null,null);
-                    if(cursor.moveToFirst()){
-                        ArrayList<Group> list = new ArrayList<>();
-                        do{
-                            Group item = new Group();
-                            item.setId(cursor.getInt(cursor.getColumnIndex(Content.COLUMN_ROWID)));
-                            item.setTitle(cursor.getString(cursor.getColumnIndex(Content.COLUMN_TITLE)));
-                            list.add(item);
-                        }while (cursor.moveToNext());
-                        if(!e.isDisposed()){
-                            e.onSuccess(list);
-                        }
-                    }
-                }catch (Throwable t){
-                    if(!e.isDisposed()){
-                        e.onError(t);
-                    }
+    public ArrayList<Group> getListOfGroups() throws Exception{
+        ArrayList<Group> list = new ArrayList<>();
+        try{
+            Cursor cursor = db.query(Content.TABLE_GROUPS,null,null,null,null,null,null);
+            try {
+                if(cursor.moveToFirst()){
+                    do{
+                        Group item = new Group();
+                        item.setId(cursor.getInt(cursor.getColumnIndex(Content.COLUMN_ROWID)));
+                        item.setTitle(cursor.getString(cursor.getColumnIndex(Content.COLUMN_TITLE)));
+                        list.add(item);
+                    }while (cursor.moveToNext());
                 }
+            }finally {
+                cursor.close();
             }
-        });
+
+        }catch (Exception exc){
+            throw new DBException(exc.toString());
+
+        }
+        return list;
     }
+
     @Override
-    public void setNewGroup(Single<Group> observable){
-        disposableNewDict = observable.subscribeOn(Schedulers.io()).subscribeWith(new DisposableSingleObserver<Group>() {
+    public void setNewGroup(Group group) throws Exception{
+        try {
             ContentValues cv = new ContentValues();
-            @Override
-            public void onSuccess(@NonNull Group group) {
-                cv.put(Content.COLUMN_TITLE, group.getTitle());
-                db.insert(Content.TABLE_GROUPS, null, cv);
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-                e.printStackTrace();
-            }
-        });
+            cv.put(Content.COLUMN_TITLE, group.getTitle());
+            db.insertOrThrow(Content.TABLE_GROUPS, null, cv);
+        }catch (Exception exc){
+            throw new DBException(exc.toString());
+        }
     }
 
     @Override
-    public void deleteGroups(Single<ArrayList<Long>> observable){
-        disposableDelDict = observable.subscribeOn(Schedulers.io()).subscribeWith(new DisposableSingleObserver<ArrayList<Long>>() {
-            @Override
-            public void onSuccess(@NonNull ArrayList<Long> longs) {
-                String strPlaceholder = "(";
-                String[] whereArg = new String[longs.size()];
-                for(int i = 0; i < longs.size()-1;i++){
-                    strPlaceholder = strPlaceholder.concat("?,");
-                    whereArg[i] = longs.get(i).toString();
-                }
-                strPlaceholder = strPlaceholder.concat("?)");
-                whereArg[whereArg.length-1] = longs.get(longs.size()-1).toString();
-                db.delete(Content.TABLE_GROUPS,Content.COLUMN_ROWID + " in " + strPlaceholder, whereArg);
+    public void deleteGroups(ArrayList<Long> delList) throws Exception{
+        try {
+            String strPlaceholder = "(";
+            String[] whereArg = new String[delList.size()];
+            for (int i = 0; i < delList.size() - 1; i++) {
+                strPlaceholder = strPlaceholder.concat("?,");
+                whereArg[i] = delList.get(i).toString();
             }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-
-            }
-        });
+            strPlaceholder = strPlaceholder.concat("?)");
+            whereArg[whereArg.length - 1] = delList.get(delList.size() - 1).toString();
+            db.delete(Content.TABLE_GROUPS, Content.COLUMN_ROWID + " in " + strPlaceholder, whereArg);
+        }catch (Exception exc){
+            throw new DBException(exc.toString());
+        }
     }
 
     @Override
-    public void editGroup(Single<Group> observable) {
-        disposableEditDict = observable.subscribeOn(Schedulers.io()).subscribeWith(new DisposableSingleObserver<Group>() {
+    public void editGroup(Group group) throws Exception{
+        try {
             ContentValues cv = new ContentValues();
             String idOfModifiedGroup;
-            @Override
-            public void onSuccess(@NonNull Group group) {
-                cv.put(Content.COLUMN_TITLE, group.getTitle());
-                idOfModifiedGroup = String.valueOf(group.getId());
-                db.update(Content.TABLE_GROUPS,cv,Content.COLUMN_ROWID  + " = ?", new String[] {idOfModifiedGroup});
-            }
-
-            @Override
-            public void onError(@NonNull Throwable e) {
-
-            }
-        });
+            cv.put(Content.COLUMN_TITLE, group.getTitle());
+            idOfModifiedGroup = String.valueOf(group.getId());
+            db.update(Content.TABLE_GROUPS, cv, Content.COLUMN_ROWID + " = ?", new String[]{idOfModifiedGroup});
+        }catch (Exception exc){
+            throw new DBException(exc.toString());
+        }
     }
 
     @Override
     public void destroy() {
-        if(disposableNewDict != null) {
-            disposableNewDict.dispose();
-        }
-        if(disposableDelDict != null) {
-            disposableDelDict.dispose();
-        }
-        if(disposableEditDict != null){
-            disposableEditDict.dispose();
-        }
         db.close();
     }
 

@@ -2,7 +2,7 @@ package com.dictionary.my.mydictionary.view;
 
 import android.app.Application;
 
-import com.dictionary.my.mydictionary.data.cloud.ApiSkyEngWord;
+import com.dictionary.my.mydictionary.data.cloud.ApiSkyEng;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 
 public class App extends Application {
-    private static ApiSkyEngWord skyEngApiWord;
+    private static ApiSkyEng skyEngApi;
     private Retrofit retrofit;
     @Override
     public void onCreate() {
@@ -21,11 +21,11 @@ public class App extends Application {
                 .baseUrl("http://dictionary.skyeng.ru/api/public/v1/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
-        skyEngApiWord = retrofit.create(ApiSkyEngWord.class);
+        skyEngApi = retrofit.create(ApiSkyEng.class);
 
     }
 
-    public static ApiSkyEngWord getSkyEngApiWord(){
-        return skyEngApiWord;
+    public static ApiSkyEng getSkyEngApi(){
+        return skyEngApi;
     }
 }

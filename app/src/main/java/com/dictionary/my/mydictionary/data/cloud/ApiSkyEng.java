@@ -15,7 +15,7 @@ import retrofit2.http.Query;
  * Created by luxso on 22.02.2018.
  */
 
-public interface ApiSkyEngWord {
+public interface ApiSkyEng {
     @GET("words/search?_format=json")
     Call<ArrayList<WordSkyEng>> getWord(@Query("search") String word);
 

@@ -11,9 +11,9 @@ import io.reactivex.Single;
  */
 
 public interface DBAllGroups {
-    Single<ArrayList<Group>> getListOfGroups();
-    void setNewGroup(Single<Group> observable);
-    void deleteGroups(Single<ArrayList<Long>> observable);
-    void editGroup(Single<Group> observable);
+    ArrayList<Group> getListOfGroups() throws Exception;
+    void setNewGroup(Group group) throws Exception;
+    void deleteGroups(ArrayList<Long> delList) throws Exception;
+    void editGroup(Group editGroup)throws Exception;
     void destroy();
 }

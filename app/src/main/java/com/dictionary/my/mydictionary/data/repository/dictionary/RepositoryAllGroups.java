@@ -4,16 +4,14 @@ import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 
 import java.util.ArrayList;
 
+import io.reactivex.Completable;
 import io.reactivex.Single;
 
-/**
- * Created by luxso on 11.03.2018.
- */
 
 public interface RepositoryAllGroups {
     Single<ArrayList<Group>> getListOfGroups();
-    void setNewGroup(Single<Group> observable);
-    void deleteGroups(Single<ArrayList<Long>> observable);
-    void editGroup(Single<Group> observable);
+    Completable setNewGroup(Group group);
+    Completable deleteGroups(ArrayList<Long> delList);
+    Completable editGroup(Group editGroup);
     void destroy();
 }

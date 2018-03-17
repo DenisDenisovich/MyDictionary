@@ -2,6 +2,7 @@ package com.dictionary.my.mydictionary.data.repository.dictionary.impl;
 
 import android.content.Context;
 
+import com.dictionary.my.mydictionary.data.exception.DBException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryAllGroups;
 import com.dictionary.my.mydictionary.data.db.dictionary.DBAllGroups;
@@ -9,10 +10,15 @@ import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBAllGroupsImpl;
 
 import java.util.ArrayList;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableEmitter;
+import io.reactivex.CompletableOnSubscribe;
 import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
 
 /**
- * Created by luxso on 11.03.2018.
+ * This class manages all necessary data for AllGroups
  */
 
 public class RepositoryAllGroupsImpl implements RepositoryAllGroups {
@@ -22,22 +28,69 @@ public class RepositoryAllGroupsImpl implements RepositoryAllGroups {
     }
     @Override
     public Single<ArrayList<Group>> getListOfGroups() {
-        return dbAllGroups.getListOfGroups();
+        return Single.create(new SingleOnSubscribe<ArrayList<Group>>() {
+            @Override
+            public void subscribe(SingleEmitter<ArrayList<Group>> e) throws Exception {
+                try{
+                    ArrayList<Group> groups = dbAllGroups.getListOfGroups();
+                    if(!e.isDisposed()){
+                        e.onSuccess(groups);
+                    }
+                }catch (DBException exc){
+                    if(!e.isDisposed()){
+                        e.onError(exc);
+                    }
+                }
+            }
+        });
     }
 
     @Override
-    public void setNewGroup(Single<Group> observable) {
-        dbAllGroups.setNewGroup(observable);
+    public Completable setNewGroup(final Group group) {
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(CompletableEmitter e) throws Exception {
+                try{
+                    dbAllGroups.setNewGroup(group);
+                }catch (DBException exc){
+                    if(!e.isDisposed()){
+                        e.onError(exc);
+                    }
+                }
+            }
+        });
     }
 
     @Override
-    public void deleteGroups(Single<ArrayList<Long>> observable) {
-        dbAllGroups.deleteGroups(observable);
+    public Completable deleteGroups(final ArrayList<Long> delList) {
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(CompletableEmitter e) throws Exception {
+                try {
+                    dbAllGroups.deleteGroups(delList);
+                }catch (DBException exc){
+                    if(!e.isDisposed()){
+                        e.onError(exc);
+                    }
+                }
+            }
+        });
     }
 
     @Override
-    public void editGroup(Single<Group> observable) {
-        dbAllGroups.editGroup(observable);
+    public Completable editGroup(final Group editGroup) {
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(CompletableEmitter e) throws Exception {
+                try {
+                    dbAllGroups.editGroup(editGroup);
+                }catch (DBException exc){
+                    if(!e.isDisposed()){
+                        e.onError(exc);
+                    }
+                }
+            }
+        });
     }
 
     @Override
