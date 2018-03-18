@@ -1,5 +1,6 @@
 package com.dictionary.my.mydictionary.view.dictionary;
 
+import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 
 import java.util.ArrayList;
@@ -12,11 +13,12 @@ public interface ViewAllWords {
     void showProgress();
     void hideProgress();
     void showERROR(String message);
-    void createList(ArrayList<Word> data);
-    void setListOfGroups(/* arrayList of group class*/);
+    void createList(ArrayList<Word> words);
+    void setListOfGroups(ArrayList<Group> groups);
     Word getNewWord();
     ArrayList<Long> getDeletedWords();
-    Long getTopVisiblePosition();
+    Integer getTopVisiblePosition();
+    void setTopVisiblePosition(Integer position);
     ArrayList<Long> getMovedWords();
     Word getEditedWord();
 }

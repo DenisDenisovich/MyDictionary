@@ -21,7 +21,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.dictionary.my.mydictionary.R;
+import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
+import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAllWords;
+import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterAllWordsImpl;
 import com.dictionary.my.mydictionary.view.dictionary.ViewAllWords;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.WordAdapter;
 
@@ -37,13 +40,15 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
     private final static String LOG_TAG = "Log_ViewAllWords";
     private AppCompatActivity activity;
     private View myView;
+
+    LinearLayoutManager llm;
     private WordAdapter wordAdapter;
+
     private Integer countOfSelectedItems;
     private Boolean toolbarSelectedMode = false;
     private DisposableObserver<Integer> selectedItemsObserver;
 
-    private ArrayList<Word> data;
-
+    private PresenterAllWords presenter;
 
     public interface onAllWordsSelectedListener{
         public void allGroupsScreenSelected();
@@ -67,32 +72,33 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         Log.d(LOG_TAG, "onCreate()      " + this.hashCode());
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        data = new ArrayList<>();
+        /*data = new ArrayList<>();
         for(int i = 0; i < 100; i++){
             Word item = new Word();
             item.setId(i);
             item.setWord("Word " + String.valueOf(i));
             item.setTranslate("Translate " + String.valueOf(i));
             data.add(item);
-        }
+        }*/
+        presenter = new PresenterAllWordsImpl(getActivity().getApplicationContext());
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView()  " + this.hashCode());
+        presenter.attach(this);
         myView = inflater.inflate(R.layout.fragment_all_words,null);
         Toolbar toolbar = (Toolbar)myView.findViewById(R.id.toolbar);
         activity = (AppCompatActivity)getActivity();
         activity.setSupportActionBar(toolbar);
         setSpinnerView();
-        RecyclerView rv = myView.findViewById(R.id.rvAllWords);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        rv.setLayoutManager(llm);
-        wordAdapter = new WordAdapter(getActivity(),data);
-        rv.setAdapter(wordAdapter);
 
-        subscribeOnRecyclerView();
+        if(savedInstanceState == null){
+            presenter.init();
+        }else {
+            presenter.update();
+        }
         return myView;
     }
 
@@ -124,8 +130,13 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
     }
 
     @Override
-    public void createList(ArrayList<Word> data) {
-
+    public void createList(ArrayList<Word> words) {
+        RecyclerView rv = myView.findViewById(R.id.rvAllWords);
+        llm = new LinearLayoutManager(getActivity());
+        rv.setLayoutManager(llm);
+        wordAdapter = new WordAdapter(getActivity(),words);
+        rv.setAdapter(wordAdapter);
+        subscribeOnRecyclerView();
     }
 
     private void subscribeOnRecyclerView(){
@@ -230,7 +241,7 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
     }
 
     @Override
-    public void setListOfGroups() {
+    public void setListOfGroups(ArrayList<Group> groups) {
 
     }
 
@@ -245,8 +256,13 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
     }
 
     @Override
-    public Long getTopVisiblePosition() {
-        return null;
+    public Integer getTopVisiblePosition() {
+        return llm.findFirstCompletelyVisibleItemPosition();
+    }
+
+    @Override
+    public void setTopVisiblePosition(Integer position) {
+        llm.scrollToPosition(position);
     }
 
     @Override
@@ -271,7 +287,7 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
 
     @Override
     public void showERROR(String message) {
-
+        Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
     @Override
