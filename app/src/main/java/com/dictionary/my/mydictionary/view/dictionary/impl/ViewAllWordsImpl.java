@@ -3,6 +3,7 @@ package com.dictionary.my.mydictionary.view.dictionary.impl;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,8 +51,15 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
 
     private PresenterAllWords presenter;
 
+    private DialogFragment dialog;
+    private final int REQUEST_CODE_NEW_WORD = 1;
+    private final int REQUEST_CODE_EDIT_WORD = 2;
+    private final int REQUEST_CODE_MOVE_WORDS = 3;
+    private final int REQUEST_CODE_DELETE_WORDS = 4;
+
     public interface onAllWordsSelectedListener{
-        public void allGroupsScreenSelected();
+        void allGroupsScreenSelected();
+        void showAddWordDialog();
     }
     private onAllWordsSelectedListener mListener;
 
@@ -234,6 +242,7 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
                     return true;
                 case R.id.word_menu_add:
                     Toast.makeText(getActivity(), "add", Toast.LENGTH_LONG).show();
+                    mListener.showAddWordDialog();
                     return true;
             }
         }
@@ -245,10 +254,6 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
 
     }
 
-    @Override
-    public Word getNewWord() {
-        return null;
-    }
 
     @Override
     public ArrayList<Long> getDeletedWords() {
@@ -289,6 +294,7 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
     public void showERROR(String message) {
         Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
+
 
     @Override
     public void onDestroyView() {

@@ -18,12 +18,12 @@
             android:id="@+id/btn1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:rus="f2"/>
+            android:text="f2"/>
         <Button
             android:id="@+id/btn2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:rus="f2"/>
+            android:text="f2"/>
        <!-- <android.support.v7.widget.RecyclerView
             android:id="@+id/allGroupsRecyclerView"
             android:layout_width="match_parent"

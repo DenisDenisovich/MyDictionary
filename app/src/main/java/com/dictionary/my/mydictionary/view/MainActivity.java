@@ -7,16 +7,17 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.dictionary.my.mydictionary.R;
+import com.dictionary.my.mydictionary.view.dictionary.impl.AddWordActivityImpl;
 import com.dictionary.my.mydictionary.view.dictionary.impl.ViewAllGroupsImpl;
 import com.dictionary.my.mydictionary.view.dictionary.impl.ViewAllWordsImpl;
 
 public class MainActivity extends AppCompatActivity implements ViewAllWordsImpl.onAllWordsSelectedListener, ViewAllGroupsImpl.onAllGroupsSelectedListener {
+    private final int REQUEST_CODE_NEW_WORD = 1;
+
     private final static String LOG_TAG = "Log_ActivityMain";
     private final static String KEY_ALL_WORDS = "allWordsFragment";
     private final static String KEY_ALL_GROUPS = "allGroupsFragment";
@@ -77,5 +78,22 @@ public class MainActivity extends AppCompatActivity implements ViewAllWordsImpl.
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.mainActivityContainer,new ViewAllGroupsImpl(),KEY_ALL_GROUPS);
         ft.commit();
+    }
+
+    @Override
+    public void showAddWordDialog() {
+        Intent intent = new Intent(this,AddWordActivityImpl.class);
+        startActivityForResult(intent, REQUEST_CODE_NEW_WORD);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == Activity.RESULT_OK){
+            switch (requestCode){
+                case REQUEST_CODE_NEW_WORD:
+                    allWordsScreenSelected();
+                    break;
+            }
+        }
     }
 }
