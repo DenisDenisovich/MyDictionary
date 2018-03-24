@@ -1,5 +1,6 @@
 package com.dictionary.my.mydictionary.data;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -17,6 +18,9 @@ public class DBHelper extends SQLiteOpenHelper{
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         sqLiteDatabase.execSQL("Create table " + Content.TABLE_GROUPS + " ( " +
                 Content.COLUMN_TITLE + " text " + ");");
+        ContentValues cv = new ContentValues();
+        cv.put(Content.COLUMN_TITLE,"Without group");
+        sqLiteDatabase.insert(Content.TABLE_GROUPS,null,cv);
         sqLiteDatabase.execSQL("Create table " + Content.TABLE_ALL_WORD + " ( " +
                                 Content.COLUMN_ENG + " text, " +
                                 Content.COLUMN_RUS + " text, " +
@@ -26,7 +30,6 @@ public class DBHelper extends SQLiteOpenHelper{
                                 Content.COLUMN_PART_OF_SPEECH + " text, " +
                                 Content.COLUMN_PREVIEW_IMAGE + " text, " +
                                 Content.COLUMN_IMAGE + " text, " +
-                                Content.COLUMN_DEFINITION + " text, " +
                                 Content.COLUMN_DEFINITION + " text, " +
                                 Content.COLUMN_EXAMPLES + " text, " +
                                 Content.COLUMN_ALTERNATIVE + " text, " +

@@ -36,8 +36,8 @@ public class DBAllWordsImpl implements DBAllWords {
     public ArrayList<Word> getListOfWord() throws Exception{
         ArrayList<Word> list = new ArrayList<>();
         try{
-            String[] column = {Content.COLUMN_ROWID, Content.COLUMN_ENG, Content.COLUMN_RUS, Content.COLUMN_SOUND};
-            Cursor cursor = db.query(Content.TABLE_ALL_WORD,column,null,null,null,null,null);
+            String[] columns = {Content.COLUMN_ROWID, Content.COLUMN_ENG, Content.COLUMN_RUS, Content.COLUMN_SOUND};
+            Cursor cursor = db.query(Content.TABLE_ALL_WORD,columns,null,null,null,null,null);
             try {
                 if (cursor.moveToFirst()) {
                     do {

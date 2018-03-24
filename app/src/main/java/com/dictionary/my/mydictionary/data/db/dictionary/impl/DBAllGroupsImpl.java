@@ -31,7 +31,8 @@ public class DBAllGroupsImpl implements DBAllGroups {
     public ArrayList<Group> getListOfGroups() throws Exception{
         ArrayList<Group> list = new ArrayList<>();
         try{
-            Cursor cursor = db.query(Content.TABLE_GROUPS,null,null,null,null,null,null);
+            String[] columns = {Content.COLUMN_ROWID, Content.COLUMN_TITLE};
+            Cursor cursor = db.query(Content.TABLE_GROUPS,columns,null,null,null,null,null);
             try {
                 if(cursor.moveToFirst()){
                     do{

@@ -49,7 +49,7 @@
 
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/tvForSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -61,42 +61,48 @@
         app:layout_constraintTop_toBottomOf="@id/etNewWordContainer" />
 
     <Spinner
-        android:id="@+id/spinner"
+        android:id="@+id/spinnerAddWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="16dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/etNewWordContainer">
 
     </Spinner>
 
+    <ProgressBar
+        android:id="@+id/pbAddWord"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/tvForSpinner"
+        android:layout_marginTop="50dp"
+        android:visibility="gone"/>
+
     <RelativeLayout
-        android:id="@+id/selectedTranslationLayout"
+        android:id="@+id/rlSelectedTranslation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:orientation="horizontal"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spinner">
+        app:layout_constraintTop_toBottomOf="@+id/spinnerAddWord"
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/ivSelectedTranslation"
             android:layout_marginStart="16dp"
             android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@mipmap/first"/>
+            android:layout_height="60dp"/>
         <TextView
             android:id="@+id/tvSelectedTranslation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_toRightOf="@id/ivSelectedTranslation"
+            android:layout_marginStart="90dp"
             android:layout_centerVertical="true"
             android:textSize="16sp"
-            android:textColor="#000000"
-            android:text="Президент"/>
+            android:textColor="#000000"/>
 
         <ImageButton
             android:id="@+id/btnAddWord"
@@ -115,7 +121,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/selectedTranslationLayout"
+        app:layout_constraintTop_toBottomOf="@+id/rlSelectedTranslation"
         android:layout_marginTop="8dp"
         android:paddingLeft="16dp"
         android:paddingTop="8dp"
@@ -123,7 +129,8 @@
         android:background="#dfdfdf"
         android:textColor="#000000"
         android:textSize="16sp"
-        android:text="Other translation"/>
+        android:text="Other translation"
+        android:visibility="gone"/>
 
     <ListView
         android:id="@+id/lvAddWord"
@@ -134,9 +141,38 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp">
+        android:layout_marginStart="16dp"
+        android:visibility="gone">
 
     </ListView>
+    <EditText
+        android:id="@+id/etAlternativeTranslation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tvForSpinner"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:hint="Inter your translation"
+        android:maxLines="1"
+        android:inputType="text"
+        android:visibility="gone"/>
+
+    <Button
+        android:id="@+id/btnAddAlternativeTranslation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/etAlternativeTranslation"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/btn_background"
+        android:text="Add"
+        android:visibility="gone"/>
 
 
 </android.support.constraint.ConstraintLayout>

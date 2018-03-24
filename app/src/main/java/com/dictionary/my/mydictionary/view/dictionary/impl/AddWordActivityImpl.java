@@ -12,21 +12,31 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.dictionary.my.mydictionary.R;
+import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAddWordActivity;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterAddWordActivityImpl;
 import com.dictionary.my.mydictionary.view.dictionary.AddWordActivity;
+import com.dictionary.my.mydictionary.view.dictionary.adapters.GroupAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.TranslationAdapter;
+import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by luxso on 18.03.2018.
@@ -36,7 +46,10 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
     private final static String LOG_TAG = "Log_AddWordActivity";
     private PresenterAddWordActivity presenter;
     private EditText wordEditText;
-    private Word word = new Word();
+    private EditText alternativeTranslation;
+    private Spinner spinner;
+    private GroupAdapter groupAdapter;
+    private Translation selectedTranslation;
     private boolean alternativeTranslationMode = false;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -60,6 +73,8 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
                 return false;
             }
         });
+        spinner = findViewById(R.id.spinnerAddWord);
+
         if(savedInstanceState != null){
             presenter = (PresenterAddWordActivity) getLastCustomNonConfigurationInstance();
             presenter.attach(this);
@@ -67,10 +82,21 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
         }else{
             presenter = new PresenterAddWordActivityImpl(getApplicationContext());
             presenter.attach(this);
+            presenter.initGroupList();
         }
-
+        initAlternativeTranslationObjects();
     }
 
+    private void initAlternativeTranslationObjects(){
+        alternativeTranslation = findViewById(R.id.etAlternativeTranslation);
+        Button btn = findViewById(R.id.btnAddAlternativeTranslation);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.translationIsReady();
+            }
+        });
+    }
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
         return presenter;
@@ -112,52 +138,114 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
 
     @Override
     public void showProgress() {
-
+        findViewById(R.id.pbAddWord).setVisibility(View.VISIBLE);
+        findViewById(R.id.rlSelectedTranslation).setVisibility(View.GONE);
+        findViewById(R.id.tvOtherTranslate).setVisibility(View.GONE);
+        findViewById(R.id.lvAddWord).setVisibility(View.GONE);
     }
 
     @Override
     public void hideProgress() {
-
+        findViewById(R.id.pbAddWord).setVisibility(View.GONE);
+        findViewById(R.id.rlSelectedTranslation).setVisibility(View.VISIBLE);
+        findViewById(R.id.tvOtherTranslate).setVisibility(View.VISIBLE);
+        findViewById(R.id.lvAddWord).setVisibility(View.VISIBLE);
     }
 
     @Override
     public void showERROR(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
 
+    @Override
+    public void setGroups(ArrayList<Group> groups) {
+        String[] stringGroups = new String[groups.size()];
+        for(int i = 0; i < groups.size(); i++){
+            stringGroups[i] = groups.get(i).getTitle();
+        }
+        groupAdapter = new GroupAdapter(this, android.R.layout.simple_spinner_item, stringGroups, groups);
+        groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner.setAdapter(groupAdapter);
+        spinner.setSelection(0);
     }
 
     @Override
     public void createListOfTranslation(ArrayList<Translation> words) {
-        final TranslationAdapter adapter = new TranslationAdapter(this,words);
+        final TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(),words);
         ListView listView = findViewById(R.id.lvAddWord);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ((TextView)findViewById(R.id.tvSelectedTranslation)).setText(((Translation)adapter.getItem(i)).getRus());
+                selectedTranslation = (Translation)adapter.getItem(i);
+                ((TextView)findViewById(R.id.tvSelectedTranslation)).setText(selectedTranslation.getRus());
+                ImageView imageView = findViewById(R.id.ivSelectedTranslation);
+                Picasso.with(getApplicationContext())
+                        .load(selectedTranslation.getPreview_image())
+                        .into(imageView);
+
             }
         });
+
+        selectedTranslation = words.get(0);
+        ((TextView)findViewById(R.id.tvSelectedTranslation)).setText(selectedTranslation.getRus());
+        ImageView imageView = findViewById(R.id.ivSelectedTranslation);
+        ImageButton btn = (ImageButton) findViewById(R.id.btnAddWord);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.translationIsReady();
+            }
+        });
+        Picasso.with(getApplicationContext())
+                .load(selectedTranslation.getPreview_image())
+                .into(imageView);
     }
 
     @Override
     public void setAlternativeTranslationMode() {
         alternativeTranslationMode = true;
+        findViewById(R.id.rlSelectedTranslation).setVisibility(View.GONE);
+        findViewById(R.id.tvOtherTranslate).setVisibility(View.GONE);
+        findViewById(R.id.lvAddWord).setVisibility(View.GONE);
+        findViewById(R.id.etAlternativeTranslation).setVisibility(View.VISIBLE);
+        findViewById(R.id.btnAddAlternativeTranslation).setVisibility(View.VISIBLE);
         invalidateOptionsMenu();
     }
 
     @Override
     public void setDefaultTranslationMode() {
         alternativeTranslationMode = false;
+        findViewById(R.id.rlSelectedTranslation).setVisibility(View.GONE);
+        findViewById(R.id.tvOtherTranslate).setVisibility(View.GONE);
+        findViewById(R.id.lvAddWord).setVisibility(View.GONE);
+        findViewById(R.id.etAlternativeTranslation).setVisibility(View.GONE);
+        findViewById(R.id.btnAddAlternativeTranslation).setVisibility(View.GONE);
         invalidateOptionsMenu();
     }
 
     @Override
-    public String getNewWord() {
+    public String getPrintedWord() {
         return wordEditText.getText().toString().trim().replaceAll("\\s{2,}", " ").toLowerCase();
     }
 
     @Override
     public Translation getNewTranslation() {
-        return null;
+        Translation translation;
+        if(selectedTranslation != null) {
+            translation = selectedTranslation;
+        }else{
+            translation = new Translation();
+            translation.setRus(alternativeTranslation.getText().toString());
+        }
+        translation.setEng(wordEditText.getText().toString());
+        translation.setGroupId(spinner.getSelectedItemId());
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd'_'HH:mm");
+        String formattedDate = df.format(c);
+        translation.setDate(formattedDate);
+        Log.d(LOG_TAG, formattedDate);
+        return translation;
     }
 
     @Override

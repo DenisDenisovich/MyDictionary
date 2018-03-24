@@ -37,7 +37,9 @@ public class CloudAllWordsImpl implements CloudAllWords{
                 Translation item = new Translation();
                 item.setRus(meaning.getTranslation().getText());
                 item.setSound(meaning.getSoundUrl());
-                item.setPreview_image(meaning.getPreviewUrl());
+                String urlImage = "http:";
+                urlImage = urlImage.concat(meaning.getPreviewUrl());
+                item.setPreview_image(urlImage);
                 item.setMeaningId(meaning.getId());
                 translations.add(item);
             }

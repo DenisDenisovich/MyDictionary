@@ -9,8 +9,9 @@ public interface PresenterAddWordActivity<V> {
     void detach();
     void destroy();
     void update();
+    void initGroupList();
     void wordHasPrinted();
     void alternativeTranslationModeHasSelected();
     void defaultTranslationModeHasSelected();
-    void translationHasSelected();
+    void translationIsReady();
 }

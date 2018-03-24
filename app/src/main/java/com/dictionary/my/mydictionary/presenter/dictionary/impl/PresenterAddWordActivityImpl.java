@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryAllWords;
 import com.dictionary.my.mydictionary.data.repository.dictionary.impl.RepositoryAllWordsImpl;
+import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAddWordActivity;
 import com.dictionary.my.mydictionary.view.dictionary.AddWordActivity;
@@ -23,7 +24,8 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
     private final static String LOG_TAG = "Log_PresenterAddWord";
     private V view;
     private RepositoryAllWords repository;
-    private ArrayList<Translation> data;
+    private ArrayList<Translation> words;
+    private ArrayList<Group> groups;
     private Translation newWord;
     boolean alternativeTranslationMode = false;
     boolean defaultTranslationMode = true;
@@ -54,31 +56,53 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
         Log.d(LOG_TAG, "update()");
         if(defaultTranslationMode){
             view.setDefaultTranslationMode();
-            view.createListOfTranslation(data);
+            view.createListOfTranslation(words);
         } else if(alternativeTranslationMode){
             view.setAlternativeTranslationMode();
         }
+        view.setGroups(groups);
+    }
+
+    @Override
+    public void initGroupList() {
+        repository.getListOfGroups()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<ArrayList<Group>>() {
+                    @Override
+                    public void onSuccess(ArrayList<Group> data) {
+                        groups = data;
+                        view.setGroups(groups);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        view.showERROR("GROUP_ERROR");
+                        Log.d(LOG_TAG, e.getMessage());
+                    }
+                });
     }
 
     @Override
     public void wordHasPrinted() {
         Log.d(LOG_TAG, "wordHasPrinted()");
         view.showProgress();
-        String word = view.getNewWord();
+        String word = view.getPrintedWord();
         repository.getTranslation(word)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<ArrayList<Translation>>() {
                     @Override
                     public void onSuccess(ArrayList<Translation> translations) {
-                        data = translations;
+                        words = translations;
                         view.hideProgress();
-                        view.createListOfTranslation(data);
+                        view.setDefaultTranslationMode();
+                        view.createListOfTranslation(words);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        view.showERROR("ERROR");
+                        view.showERROR("TRANSLATION_ERROR");
                         view.setAlternativeTranslationMode();
                     }
                 });
@@ -97,8 +121,8 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
     }
 
     @Override
-    public void translationHasSelected() {
-        Log.d(LOG_TAG, "translationHasSelected()");
+    public void translationIsReady() {
+        Log.d(LOG_TAG, "translationIsReady()");
         newWord = view.getNewTranslation();
     }
 }
