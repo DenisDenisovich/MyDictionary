@@ -51,8 +51,10 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
     private GroupAdapter groupAdapter;
     private Translation selectedTranslation;
     private boolean alternativeTranslationMode = false;
+    private final static String KEY_TRANSLATION_MODE = "translationMod";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        Log.d(LOG_TAG, "onCreate()  " + this.hashCode());
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_word);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarAddWord);
@@ -79,6 +81,7 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
             presenter = (PresenterAddWordActivity) getLastCustomNonConfigurationInstance();
             presenter.attach(this);
             presenter.update();
+            alternativeTranslationMode = savedInstanceState.getBoolean(KEY_TRANSLATION_MODE);
         }else{
             presenter = new PresenterAddWordActivityImpl(getApplicationContext());
             presenter.attach(this);
@@ -97,6 +100,13 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
             }
         });
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(KEY_TRANSLATION_MODE, alternativeTranslationMode);
+        super.onSaveInstanceState(outState);
+    }
+
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
         return presenter;
@@ -227,7 +237,6 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
     @Override
     public void closeActivity() {
         onBackPressed();
-        presenter.destroy();
     }
 
 
@@ -269,7 +278,8 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
 
     @Override
     protected void onDestroy() {
+        Log.d(LOG_TAG, "onDestroy() " + this.hashCode());
         super.onDestroy();
-        presenter.detach();
+        presenter.destroy();
     }
 }

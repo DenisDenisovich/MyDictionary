@@ -31,7 +31,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
         public ImageButton buttonSound;
         public ViewHolder(View itemView) {
             super(itemView);
-            Log.d(LOG_TAG, "ViewHolder()");
+            //Log.d(LOG_TAG, "ViewHolder()");
             checkBox = (ImageButton) itemView.findViewById(R.id.check_box);
             tvWordEng = itemView.findViewById(R.id.tvWordEng);
             tvWordRus = itemView.findViewById(R.id.tvWordRus);
@@ -53,7 +53,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d(LOG_TAG, "onCreateViewHolder(), selectMod = " + selectMode);
+        //Log.d(LOG_TAG, "onCreateViewHolder(), selectMod = " + selectMode);
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word, parent, false);
         ViewHolder vh = new ViewHolder(v);
 
@@ -63,7 +63,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Log.d(LOG_TAG, "onBindViewHolder(), selectMod = " + selectMode + ", position: " + position);
+        //Log.d(LOG_TAG, "onBindViewHolder(), selectMod = " + selectMode + ", position: " + position);
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT

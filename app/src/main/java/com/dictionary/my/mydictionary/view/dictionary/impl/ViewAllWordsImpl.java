@@ -47,15 +47,17 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
 
     private Integer countOfSelectedItems;
     private Boolean toolbarSelectedMode = false;
+    private final static String KEY_TOOLBAR_SELECTED_MODE = "toolbarSelectedMode";
     private DisposableObserver<Integer> selectedItemsObserver;
 
     private PresenterAllWords presenter;
 
     private DialogFragment dialog;
-    private final int REQUEST_CODE_EDIT_WORD = 2;
-    private final int REQUEST_CODE_MOVE_WORDS = 3;
-    private final int REQUEST_CODE_DELETE_WORDS = 4;
+    private final static int REQUEST_CODE_EDIT_WORD = 2;
+    private final static int REQUEST_CODE_MOVE_WORDS = 3;
+    private final static int REQUEST_CODE_DELETE_WORDS = 4;
     private boolean onNewWordClicked = false;
+    private final static String KEY_ON_NEW_WORD_CLICKED = "onNewWordClicked";
 
     public interface onAllWordsSelectedListener{
         void allGroupsScreenSelected();
@@ -83,6 +85,17 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         presenter = new PresenterAllWordsImpl(getActivity().getApplicationContext());
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        // use this method, because fragment don't call onCreateView after closing AddWordActivity
+        Log.d(LOG_TAG, "onStart()  " + this.hashCode());
+        if(onNewWordClicked){
+            presenter.init();
+            onNewWordClicked = false;
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -97,13 +110,10 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         if(savedInstanceState == null){
             presenter.init();
         }else {
-            Log.d(LOG_TAG, "onNEwWorddClicked" + onNewWordClicked);
-            if(onNewWordClicked){
-                presenter.init();
-                onNewWordClicked = false;
-            }else {
-                presenter.update();
-            }
+            onNewWordClicked = savedInstanceState.getBoolean(KEY_ON_NEW_WORD_CLICKED);
+            toolbarSelectedMode = savedInstanceState.getBoolean(KEY_TOOLBAR_SELECTED_MODE);
+            presenter.update();
+
         }
         return myView;
     }
@@ -166,6 +176,13 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
 
                     }
                 });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putBoolean(KEY_ON_NEW_WORD_CLICKED, onNewWordClicked);
+        outState.putBoolean(KEY_TOOLBAR_SELECTED_MODE, toolbarSelectedMode);
+        super.onSaveInstanceState(outState);
     }
 
     @Override

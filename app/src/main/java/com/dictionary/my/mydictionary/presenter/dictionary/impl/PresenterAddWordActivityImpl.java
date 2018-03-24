@@ -139,13 +139,11 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
                     @Override
                     public void onComplete() {
                         view.closeActivity();
-                        Log.d(LOG_TAG, "in translationIsReady onComplete");
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         view.showERROR("Set word ERROR");
-                        Log.d(LOG_TAG, "in translationIsReady onError");
                     }
                 });
     }
