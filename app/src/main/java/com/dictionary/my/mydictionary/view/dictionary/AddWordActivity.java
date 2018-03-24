@@ -13,12 +13,17 @@ import java.util.ArrayList;
 public interface AddWordActivity {
     void showProgress();
     void hideProgress();
+    void hideAlternativeTranslationMode();
+    void showAlternativeTranslationMode();
+    void hideDefaultTranslationMode();
+    void showDefaultTranslationMode();
     void showERROR(String message);
     void setGroups(ArrayList<Group> groups);
     void createListOfTranslation(ArrayList<Translation> words);
-    void setAlternativeTranslationMode();
-    void setDefaultTranslationMode();
+    void closeActivity();
+
     String getPrintedWord();
     Translation getNewTranslation();
+    Translation getNewTranslationWithoutInternet();
 
 }

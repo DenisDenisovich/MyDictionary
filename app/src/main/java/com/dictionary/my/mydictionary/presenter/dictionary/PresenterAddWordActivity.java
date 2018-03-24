@@ -14,4 +14,5 @@ public interface PresenterAddWordActivity<V> {
     void alternativeTranslationModeHasSelected();
     void defaultTranslationModeHasSelected();
     void translationIsReady();
+    void translationIsReadyWithoutInternet();
 }

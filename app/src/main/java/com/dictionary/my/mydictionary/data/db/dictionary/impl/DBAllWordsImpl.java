@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.data.DBHelper;
@@ -23,6 +24,7 @@ import java.util.List;
  */
 
 public class DBAllWordsImpl implements DBAllWords {
+    private final static String LOG_TAG = "Log_DBAllWords";
     private DBHelper dbHelper;
     private SQLiteDatabase db;
 
@@ -34,12 +36,13 @@ public class DBAllWordsImpl implements DBAllWords {
 
     @Override
     public ArrayList<Word> getListOfWord() throws Exception{
+        Log.d(LOG_TAG, "getListOfWords()");
         ArrayList<Word> list = new ArrayList<>();
         try{
             String[] columns = {Content.COLUMN_ROWID, Content.COLUMN_ENG, Content.COLUMN_RUS, Content.COLUMN_SOUND};
             Cursor cursor = db.query(Content.TABLE_ALL_WORD,columns,null,null,null,null,null);
             try {
-                if (cursor.moveToFirst()) {
+                if (cursor.moveToLast()) {
                     do {
                         Word item = new Word();
                         item.setId(cursor.getInt(cursor.getColumnIndex(Content.COLUMN_ROWID)));
@@ -47,7 +50,7 @@ public class DBAllWordsImpl implements DBAllWords {
                         item.setTranslate(cursor.getString(cursor.getColumnIndex(Content.COLUMN_RUS)));
                         item.setSound(cursor.getString(cursor.getColumnIndex(Content.COLUMN_SOUND)));
                         list.add(item);
-                    } while (cursor.moveToNext());
+                    } while (cursor.moveToPrevious());
                 }
             }finally {
                 cursor.close();
@@ -60,6 +63,7 @@ public class DBAllWordsImpl implements DBAllWords {
 
     @Override
     public void setNewWord(final WordFullInformation word) throws Exception{
+        Log.d(LOG_TAG, "setNewWord()");
         try {
             ContentValues cv = new ContentValues();
             cv.put(Content.COLUMN_ENG, word.getEng());
@@ -92,6 +96,21 @@ public class DBAllWordsImpl implements DBAllWords {
                 }
             }
             cv.put(Content.COLUMN_ALTERNATIVE, str);
+
+            /*Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_ENG));
+            Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_RUS));
+            Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_NOTE));
+            Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_TRANSCRIPTION));
+            Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_SOUND));
+            Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_PART_OF_SPEECH));
+            Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_PREVIEW_IMAGE));
+            Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_IMAGE));
+            Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_DEFINITION));
+            Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_DATE));
+            Log.d(LOG_TAG,String.valueOf(cv.get(Content.COLUMN_GROUP_ID)));
+            Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_EXAMPLES));
+            Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_ALTERNATIVE));*/
+
             db.insertOrThrow(Content.TABLE_ALL_WORD,null,cv);
         }catch (Exception exc){
             throw new DBException(exc.toString());
@@ -100,12 +119,19 @@ public class DBAllWordsImpl implements DBAllWords {
 
     @Override
     public void setNewWordWithoutInternet(final Translation translation) throws Exception{
+        Log.d(LOG_TAG, "setNewWordWithoutInternet()");
         try{
             ContentValues cv = new ContentValues();
             cv.put(Content.COLUMN_ENG, translation.getEng());
             cv.put(Content.COLUMN_RUS, translation.getRus());
             cv.put(Content.COLUMN_GROUP_ID, translation.getGroupId());
             cv.put(Content.COLUMN_DATE, translation.getDate());
+
+            /*Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_ENG));
+            Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_RUS));
+            Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_DATE));
+            Log.d(LOG_TAG,String.valueOf(cv.get(Content.COLUMN_GROUP_ID)));*/
+
             db.insertOrThrow(Content.TABLE_ALL_WORD,null,cv);
         }catch (Exception exc){
             throw new DBException(exc.toString());
@@ -114,6 +140,7 @@ public class DBAllWordsImpl implements DBAllWords {
 
     @Override
     public void deleteWords(final ArrayList<Long> delList) throws Exception{
+        Log.d(LOG_TAG, "deleteWords()");
         try {
             String strPlaceholder = "(";
             String[] whereArg = new String[delList.size()];
@@ -131,6 +158,7 @@ public class DBAllWordsImpl implements DBAllWords {
 
     @Override
     public void moveWords(final ArrayList<Long> moveList) throws Exception{
+        Log.d(LOG_TAG, "moveWords()");
         try {
             Long moveToDictionaryId;
             String strPlaceholder = "(";
@@ -153,6 +181,7 @@ public class DBAllWordsImpl implements DBAllWords {
 
     @Override
     public void editWord(final Word word) throws Exception{
+        Log.d(LOG_TAG, "editWord()");
         try {
             ContentValues cv = new ContentValues();
             String idOfModifiedWord;

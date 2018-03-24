@@ -34,13 +34,13 @@ public class DBAllGroupsImpl implements DBAllGroups {
             String[] columns = {Content.COLUMN_ROWID, Content.COLUMN_TITLE};
             Cursor cursor = db.query(Content.TABLE_GROUPS,columns,null,null,null,null,null);
             try {
-                if(cursor.moveToFirst()){
+                if(cursor.moveToLast()){
                     do{
                         Group item = new Group();
                         item.setId(cursor.getInt(cursor.getColumnIndex(Content.COLUMN_ROWID)));
                         item.setTitle(cursor.getString(cursor.getColumnIndex(Content.COLUMN_TITLE)));
                         list.add(item);
-                    }while (cursor.moveToNext());
+                    }while (cursor.moveToPrevious());
                 }
             }finally {
                 cursor.close();

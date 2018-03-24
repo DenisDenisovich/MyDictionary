@@ -20,5 +20,5 @@ public interface ApiSkyEng {
     Call<ArrayList<WordSkyEng>> getWord(@Query("search") String word);
 
     @GET("meanings?_format=json")
-    Call<MeaningSkyEng> getMeaning(@Query("ids") Integer id);
+    Call<ArrayList<MeaningSkyEng>> getMeaning(@Query("ids") String id);
 }

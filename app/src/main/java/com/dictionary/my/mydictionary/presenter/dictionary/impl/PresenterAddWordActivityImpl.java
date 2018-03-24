@@ -13,6 +13,7 @@ import com.dictionary.my.mydictionary.view.dictionary.AddWordActivity;
 import java.util.ArrayList;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -55,11 +56,12 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
     public void update() {
         Log.d(LOG_TAG, "update()");
         if(defaultTranslationMode){
-            view.setDefaultTranslationMode();
+            view.showDefaultTranslationMode();
             view.createListOfTranslation(words);
         } else if(alternativeTranslationMode){
-            view.setAlternativeTranslationMode();
+            view.showAlternativeTranslationMode();
         }
+        view.hideProgress();
         view.setGroups(groups);
     }
 
@@ -95,15 +97,16 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
                     @Override
                     public void onSuccess(ArrayList<Translation> translations) {
                         words = translations;
-                        view.hideProgress();
-                        view.setDefaultTranslationMode();
                         view.createListOfTranslation(words);
+                        view.hideProgress();
+                        view.showDefaultTranslationMode();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         view.showERROR("TRANSLATION_ERROR");
-                        view.setAlternativeTranslationMode();
+                        view.hideProgress();
+                        view.showAlternativeTranslationMode();
                     }
                 });
     }
@@ -111,18 +114,59 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
     @Override
     public void alternativeTranslationModeHasSelected() {
         Log.d(LOG_TAG, "alternativeTranslationModeHasSelected()");
-        view.setAlternativeTranslationMode();
+        view.hideProgress();
+        view.hideDefaultTranslationMode();
+        view.showAlternativeTranslationMode();
     }
 
     @Override
     public void defaultTranslationModeHasSelected() {
         Log.d(LOG_TAG, "defaultTranslationModeHasSelected()");
-        view.setDefaultTranslationMode();
+        if(words != null){
+            view.showDefaultTranslationMode();
+        }
+        view.hideAlternativeTranslationMode();
     }
 
     @Override
     public void translationIsReady() {
         Log.d(LOG_TAG, "translationIsReady()");
         newWord = view.getNewTranslation();
+        repository.setNewWord(newWord)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        view.closeActivity();
+                        Log.d(LOG_TAG, "in translationIsReady onComplete");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        view.showERROR("Set word ERROR");
+                        Log.d(LOG_TAG, "in translationIsReady onError");
+                    }
+                });
+    }
+
+    @Override
+    public void translationIsReadyWithoutInternet() {
+        Log.d(LOG_TAG, "translationIsReady()");
+        newWord = view.getNewTranslationWithoutInternet();
+        repository.setNewWordWithoutInternet(newWord)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        view.closeActivity();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        view.showERROR("Set word ERROR");
+                    }
+                });
     }
 }

@@ -14,7 +14,6 @@ public interface ViewAllWords {
     void hideProgress();
     void showERROR(String message);
     void createList(ArrayList<Word> words);
-    void setListOfGroups(ArrayList<Group> groups);
     ArrayList<Long> getDeletedWords();
     Integer getTopVisiblePosition();
     void setTopVisiblePosition(Integer position);

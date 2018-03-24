@@ -1,5 +1,9 @@
 package com.dictionary.my.mydictionary.data.cloud.dictionary.impl;
 
+import android.util.Log;
+import android.widget.ArrayAdapter;
+
+import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.data.cloud.dictionary.CloudAllWords;
 import com.dictionary.my.mydictionary.data.cloud.pojo.meaning.MeaningSkyEng;
 import com.dictionary.my.mydictionary.data.cloud.pojo.meaning.MeaningsWithSimilarTranslation;
@@ -21,14 +25,15 @@ import retrofit2.Response;
  */
 
 public class CloudAllWordsImpl implements CloudAllWords{
+    private final static String LOG_TAG = "Log_CloudAllWords";
     @Override
     public ArrayList<Translation> getTranslation(String word) throws Exception{
+        Log.d(LOG_TAG, "getTranslation()");
         ArrayList<Translation> translations = new ArrayList<>();
         try {
             Response<ArrayList<WordSkyEng>> response = App.getSkyEngApi().getWord(word).execute();
             WordSkyEng wordSkyEng = response.body().get(0);
             List<Meaning> meanings = wordSkyEng.getMeanings();
-
             for (int i = 0; i < meanings.size(); i++) {
                 if (i > 4) {
                     break;
@@ -40,7 +45,7 @@ public class CloudAllWordsImpl implements CloudAllWords{
                 String urlImage = "http:";
                 urlImage = urlImage.concat(meaning.getPreviewUrl());
                 item.setPreview_image(urlImage);
-                item.setMeaningId(meaning.getId());
+                item.setMeaningId(String.valueOf(meaning.getId()));
                 translations.add(item);
             }
         }catch (Exception exc){
@@ -52,14 +57,25 @@ public class CloudAllWordsImpl implements CloudAllWords{
 
     @Override
     public WordFullInformation getMeaning(Translation translation) throws Exception {
+        Log.d(LOG_TAG, "getMeaning()");
+
+        Log.d(LOG_TAG,translation.getEng());
+        Log.d(LOG_TAG,translation.getRus());
+        Log.d(LOG_TAG,translation.getSound());
+        Log.d(LOG_TAG,translation.getPreview_image());
+        Log.d(LOG_TAG,translation.getMeaningId());
+        Log.d(LOG_TAG,translation.getDate());
+        Log.d(LOG_TAG,String.valueOf(translation.getGroupId()));
+
         WordFullInformation word = new WordFullInformation();
         try {
-            Response<MeaningSkyEng> response = App.getSkyEngApi().getMeaning(translation.getMeaningId()).execute();
-            MeaningSkyEng meaning = response.body();
-
+            Response<ArrayList<MeaningSkyEng>> response = App.getSkyEngApi().getMeaning(translation.getMeaningId()).execute();
+            MeaningSkyEng meaning = response.body().get(0);
             word.setEng(translation.getEng());
             word.setRus(translation.getRus());
-            word.setPreviewImage(translation.getPreview_image());
+            String urlImage = "http:";
+            urlImage = urlImage.concat(translation.getPreview_image());
+            word.setPreviewImage(urlImage);
             word.setSound(translation.getSound());
             word.setDate(translation.getDate());
             word.setGroupId(translation.getGroupId());
@@ -69,16 +85,14 @@ public class CloudAllWordsImpl implements CloudAllWords{
             word.setPartOfSpeech(meaning.getPartOfSpeechCode());
             word.setImage(meaning.getImages().get(0).getUrl());
             word.setDefinition(meaning.getDefinition().getText());
-
             ArrayList<String> alternativeTranslations = new ArrayList<>();
             List<MeaningsWithSimilarTranslation> mwst = meaning.getMeaningsWithSimilarTranslation();
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < mwst.size(); i++) {
                 if (i > 4) {
                     break;
                 }
                 alternativeTranslations.add(mwst.get(i).getTranslation().getText());
             }
-
             word.setAlternative(alternativeTranslations);
             word.setExamples(meaning.getExamples());
         }catch (Exception exc){

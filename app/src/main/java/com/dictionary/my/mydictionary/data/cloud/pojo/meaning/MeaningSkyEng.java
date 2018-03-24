@@ -32,7 +32,7 @@ public class MeaningSkyEng {
     @Expose
     private String transcription;
 
-    private String properties;
+    private Object properties;
     private String updatedAt;
     private Object mnemonics;
 
@@ -52,7 +52,7 @@ public class MeaningSkyEng {
     @Expose
     private List<MeaningsWithSimilarTranslation> meaningsWithSimilarTranslation = null;
 
-    private List<String> alternativeTranslations = null;
+    private List<Object> alternativeTranslations = null;
 
     public String getId() {
         return id;

@@ -74,7 +74,7 @@ public class PresenterAllWordsImpl<V extends ViewAllWords> implements PresenterA
     public void update() {
         Log.d(LOG_TAG, "update()");
         view.createList(words);
-        //view.setTopVisiblePosition(topVisiblePosition);
+        view.setTopVisiblePosition(topVisiblePosition);
     }
 
     @Override

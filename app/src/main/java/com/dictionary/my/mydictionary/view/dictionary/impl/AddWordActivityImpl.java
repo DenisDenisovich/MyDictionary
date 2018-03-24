@@ -93,7 +93,7 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                presenter.translationIsReady();
+                presenter.translationIsReadyWithoutInternet();
             }
         });
     }
@@ -127,31 +127,53 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
                 onBackPressed();
                 break;
             case R.id.add_word_menu_edit:
+                alternativeTranslationMode = true;
                 presenter.alternativeTranslationModeHasSelected();
                 break;
             case R.id.add_word_menu_internet:
+                alternativeTranslationMode = false;
                 presenter.defaultTranslationModeHasSelected();
                 break;
         }
+        invalidateOptionsMenu();
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void showProgress() {
         findViewById(R.id.pbAddWord).setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideProgress() {
+        findViewById(R.id.pbAddWord).setVisibility(View.GONE);
+    }
+
+    @Override
+    public void hideAlternativeTranslationMode() {
+        findViewById(R.id.etAlternativeTranslation).setVisibility(View.GONE);
+        findViewById(R.id.btnAddAlternativeTranslation).setVisibility(View.GONE);
+    }
+
+    @Override
+    public void showAlternativeTranslationMode() {
+        findViewById(R.id.etAlternativeTranslation).setVisibility(View.VISIBLE);
+        findViewById(R.id.btnAddAlternativeTranslation).setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideDefaultTranslationMode() {
         findViewById(R.id.rlSelectedTranslation).setVisibility(View.GONE);
         findViewById(R.id.tvOtherTranslate).setVisibility(View.GONE);
         findViewById(R.id.lvAddWord).setVisibility(View.GONE);
     }
 
     @Override
-    public void hideProgress() {
-        findViewById(R.id.pbAddWord).setVisibility(View.GONE);
+    public void showDefaultTranslationMode() {
         findViewById(R.id.rlSelectedTranslation).setVisibility(View.VISIBLE);
         findViewById(R.id.tvOtherTranslate).setVisibility(View.VISIBLE);
         findViewById(R.id.lvAddWord).setVisibility(View.VISIBLE);
     }
-
     @Override
     public void showERROR(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
@@ -203,26 +225,11 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
     }
 
     @Override
-    public void setAlternativeTranslationMode() {
-        alternativeTranslationMode = true;
-        findViewById(R.id.rlSelectedTranslation).setVisibility(View.GONE);
-        findViewById(R.id.tvOtherTranslate).setVisibility(View.GONE);
-        findViewById(R.id.lvAddWord).setVisibility(View.GONE);
-        findViewById(R.id.etAlternativeTranslation).setVisibility(View.VISIBLE);
-        findViewById(R.id.btnAddAlternativeTranslation).setVisibility(View.VISIBLE);
-        invalidateOptionsMenu();
+    public void closeActivity() {
+        onBackPressed();
+        presenter.destroy();
     }
 
-    @Override
-    public void setDefaultTranslationMode() {
-        alternativeTranslationMode = false;
-        findViewById(R.id.rlSelectedTranslation).setVisibility(View.GONE);
-        findViewById(R.id.tvOtherTranslate).setVisibility(View.GONE);
-        findViewById(R.id.lvAddWord).setVisibility(View.GONE);
-        findViewById(R.id.etAlternativeTranslation).setVisibility(View.GONE);
-        findViewById(R.id.btnAddAlternativeTranslation).setVisibility(View.GONE);
-        invalidateOptionsMenu();
-    }
 
     @Override
     public String getPrintedWord() {
@@ -231,20 +238,32 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
 
     @Override
     public Translation getNewTranslation() {
-        Translation translation;
-        if(selectedTranslation != null) {
-            translation = selectedTranslation;
-        }else{
-            translation = new Translation();
-            translation.setRus(alternativeTranslation.getText().toString());
-        }
-        translation.setEng(wordEditText.getText().toString());
+        Translation translation = selectedTranslation;
+        translation.setEng(getPrintedWord());
         translation.setGroupId(spinner.getSelectedItemId());
+
         Date c = Calendar.getInstance().getTime();
         SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd'_'HH:mm");
         String formattedDate = df.format(c);
+
         translation.setDate(formattedDate);
         Log.d(LOG_TAG, formattedDate);
+        return translation;
+    }
+
+    @Override
+    public Translation getNewTranslationWithoutInternet() {
+        Translation translation = new Translation();
+        translation.setEng(getPrintedWord());
+        translation.setRus(alternativeTranslation.getText().toString().trim().replaceAll("\\s{2,}", " ").toLowerCase());
+
+        Date c = Calendar.getInstance().getTime();
+        SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd'_'HH:mm");
+        String formattedDate = df.format(c);
+
+        translation.setDate(formattedDate);
+        Log.d(LOG_TAG, formattedDate);
+        translation.setGroupId(spinner.getSelectedItemId());
         return translation;
     }
 

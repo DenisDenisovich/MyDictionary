@@ -52,10 +52,10 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
     private PresenterAllWords presenter;
 
     private DialogFragment dialog;
-    private final int REQUEST_CODE_NEW_WORD = 1;
     private final int REQUEST_CODE_EDIT_WORD = 2;
     private final int REQUEST_CODE_MOVE_WORDS = 3;
     private final int REQUEST_CODE_DELETE_WORDS = 4;
+    private boolean onNewWordClicked = false;
 
     public interface onAllWordsSelectedListener{
         void allGroupsScreenSelected();
@@ -80,14 +80,6 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         Log.d(LOG_TAG, "onCreate()      " + this.hashCode());
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        /*data = new ArrayList<>();
-        for(int i = 0; i < 100; i++){
-            Word item = new Word();
-            item.setId(i);
-            item.setWord("Word " + String.valueOf(i));
-            item.setTranslate("Translate " + String.valueOf(i));
-            data.add(item);
-        }*/
         presenter = new PresenterAllWordsImpl(getActivity().getApplicationContext());
     }
 
@@ -105,7 +97,13 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         if(savedInstanceState == null){
             presenter.init();
         }else {
-            presenter.update();
+            Log.d(LOG_TAG, "onNEwWorddClicked" + onNewWordClicked);
+            if(onNewWordClicked){
+                presenter.init();
+                onNewWordClicked = false;
+            }else {
+                presenter.update();
+            }
         }
         return myView;
     }
@@ -225,23 +223,19 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
                     getActivity().invalidateOptionsMenu();
                     return true;
                 case R.id.word_menu_delete:
-                    Toast.makeText(getActivity(), "delete", Toast.LENGTH_LONG).show();
                     return true;
                 case R.id.word_menu_edit:
-                    Toast.makeText(getActivity(), "edit", Toast.LENGTH_LONG).show();
                     return true;
                 case R.id.word_menu_move:
-                    Toast.makeText(getActivity(), "move", Toast.LENGTH_LONG).show();
                     return true;
             }
         }else{
             int id = item.getItemId();
             switch (id){
                 case R.id.word_menu_search:
-                    Toast.makeText(getActivity(), "search", Toast.LENGTH_LONG).show();
                     return true;
                 case R.id.word_menu_add:
-                    Toast.makeText(getActivity(), "add", Toast.LENGTH_LONG).show();
+                    onNewWordClicked = true;
                     mListener.showAddWordDialog();
                     return true;
             }
@@ -249,10 +243,6 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void setListOfGroups(ArrayList<Group> groups) {
-
-    }
 
 
     @Override
@@ -303,11 +293,13 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         if(selectedItemsObserver != null) {
             selectedItemsObserver.dispose();
         }
+        presenter.saveListState();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Log.d(LOG_TAG, "onDestroy()     " + this.hashCode());
+        presenter.destroy();
     }
 }

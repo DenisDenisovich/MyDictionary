@@ -14,7 +14,7 @@ public class Translation {
     private String rus;
     private String sound;
     private String preview_image;
-    private Integer meaningId;
+    private String meaningId;
 
     public String getEng() {
         return eng;
@@ -51,11 +51,11 @@ public class Translation {
     }
 
 
-    public Integer getMeaningId() {
+    public String getMeaningId() {
         return meaningId;
     }
 
-    public void setMeaningId(Integer meaningId) {
+    public void setMeaningId(String meaningId) {
         this.meaningId = meaningId;
     }
 
