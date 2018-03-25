@@ -35,20 +35,21 @@ public class DeleteWordDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.delete_dialog,null);
-        ((TextView)view.findViewById(R.id.tvDialogDeleteHead)).setText(getResources().getString(R.string.dialog_delete_word_TextView_head));
         if(countWords == 1){
-            ((TextView)view.findViewById(R.id.tvDialogDeleteMessage)).setText(getResources().getString(R.string.dialog_delete_one_word_message));
+            ((TextView)view.findViewById(R.id.tvDialogDeleteMessage)).setText(getResources().getString(R.string.delete_dialog_message_one_word));
         }else{
-            ((TextView)view.findViewById(R.id.tvDialogDeleteMessage)).setText(getResources().getString(R.string.dialog_delete_words_message));
+            String message = getResources().getString(R.string.delete_dialog_message_couple_words);
+            message = message.replace("this",String.valueOf(countWords));
+            ((TextView)view.findViewById(R.id.tvDialogDeleteMessage)).setText(message);
         }
         builder.setView(view)
-                .setPositiveButton(getResources().getString(R.string.dialog_delete_positive_button), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.delete_dialog_positive_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,null);
                     }
                 })
-                .setNegativeButton(getResources().getString(R.string.dialog_delete_negative_button), new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.delete_dialog_negative_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED,null);

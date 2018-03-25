@@ -9,8 +9,8 @@ public class SkyEngWordException extends Exception {
     public SkyEngWordException(){
 
     }
-    public SkyEngWordException(String message){
-        super(message);
+    public SkyEngWordException(Throwable e){
+        initCause(e);
     }
 
 }

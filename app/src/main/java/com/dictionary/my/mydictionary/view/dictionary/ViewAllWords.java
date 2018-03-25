@@ -14,9 +14,12 @@ public interface ViewAllWords {
     void hideProgress();
     void showERROR(String message);
     void createList(ArrayList<Word> words);
+    void createDeleteDialog();
     ArrayList<Long> getDeletedWords();
+    void deleteWordsFromList();
     Integer getTopVisiblePosition();
     void setTopVisiblePosition(Integer position);
-    ArrayList<Long> getMovedWords();
-    Word getEditedWord();
+    void createMoveToGroupDialog(ArrayList<Group> groups);
+    ArrayList<Long> getMovedToGroupWords();
+    void createMoveToTrainingDialog();
 }

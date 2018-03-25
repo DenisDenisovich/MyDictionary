@@ -40,13 +40,13 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
     }
 
     private ArrayList<Word> mdata;
-    private ArrayList<Long> selectedItems;
+    private ArrayList<Long> selectedItemIds;
     private PublishSubject<Integer> selectObservable;
     private boolean selectMode = false;
     private Context context;
     public WordAdapter(Context context, ArrayList<Word> data){
         mdata = data;
-        selectedItems = new ArrayList<>();
+        selectedItemIds = new ArrayList<>();
         this.context = context;
         selectObservable = PublishSubject.create();
     }
@@ -76,7 +76,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
             holder.itemView.findViewById(R.id.llWords).setLayoutParams(lp);
 
             holder.checkBox.setVisibility(View.VISIBLE);
-            if(selectedItems.contains(mdata.get(position).getId())){
+            if(selectedItemIds.contains(mdata.get(position).getId())){
 
                 holder.checkBox.setBackground(ContextCompat.getDrawable(context,R.drawable.ic_check_box_selected));
             }else{
@@ -103,7 +103,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
             @Override
             public boolean onLongClick(View view) {
                 selectMode = true;
-                selectItem(mdata.get(position).getId());
+                selectItem(mdata.get(position).getId(), position);
                 return true;
             }
         });
@@ -111,7 +111,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
             @Override
             public void onClick(View view) {
                 if(selectMode) {
-                    selectItem(mdata.get(position).getId());
+                    selectItem(mdata.get(position).getId(), position);
                 }
             }
         });
@@ -122,30 +122,43 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
         return mdata.size();
     }
 
-    private void selectItem(Long id){
-        if(selectedItems.contains(id)){
-            selectedItems.remove(id);
+    private void selectItem(Long id, Integer position){
+        if(selectedItemIds.contains(id)){
+            selectedItemIds.remove(id);
         } else{
-            selectedItems.add(id);
+            selectedItemIds.add(id);
         }
-        selectObservable.onNext(selectedItems.size());
+        selectObservable.onNext(selectedItemIds.size());
         notifyDataSetChanged();
     }
     public int getSelectedItemsSize(){
-        return selectedItems.size();
+        return selectedItemIds.size();
     }
 
     public PublishSubject<Integer> getSelectedItemsObservable(){
         return selectObservable;
     }
     
-    public ArrayList<Long> getSelectedItems(){
-        return selectedItems;
+    public ArrayList<Long> getSelectedItemIds(){
+        return selectedItemIds;
     }
 
     public void selectModeOff(){
         selectMode = false;
-        selectedItems.clear();
+        selectedItemIds.clear();
         notifyDataSetChanged();
+    }
+
+    public void deleteSelectedWords(){
+        ArrayList<Word> deleteList = new ArrayList<>();
+        int dataSize = mdata.size();
+        for(int i = 0; i < mdata.size(); i++){
+            if(selectedItemIds.contains(mdata.get(i).getId())){
+                deleteList.add(mdata.get(i));
+            }
+        }
+        mdata.removeAll(deleteList);
+        selectModeOff();
+
     }
 }

@@ -29,11 +29,6 @@
             app:showAsAction="always"/>
 
         <item
-            android:id="@+id/word_menu_edit"
-            android:title="@string/word_menu_edit"
-            app:showAsAction="never"/>
-
-        <item
             android:id="@+id/word_menu_move_to_group"
             android:title="@string/word_menu_move_to_group"
             app:showAsAction="never"/>

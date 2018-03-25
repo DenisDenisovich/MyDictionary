@@ -8,8 +8,9 @@ public interface PresenterAllWords<V> {
     void init();
     void update();
     void saveListState();
-    void deleteWords();
-    void getListOfGroups();
-    void moveWords();
-    void editWord();
+    void deleteSelected();
+    void deleteWordsIsReady();
+    void moveToGroupSelected();
+    void moveToGroupWordsIsReady();
+    void moveToTrainingSelected();
 }

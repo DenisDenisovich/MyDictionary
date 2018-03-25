@@ -19,5 +19,22 @@
     <string name="group_menu_edit">Edit</string>
     <string name="group_menu_delete">Delete</string>
 
+    <string name="delete_dialog_header">Delete</string>
+    <string name="delete_dialog_message_one_word">Do you really want to delete this word?</string>
+    <string name="delete_dialog_message_couple_words">Do you really want to delete this words?</string>
+    <string name="delete_dialog_positive_button">Delete</string>
+    <string name="delete_dialog_negative_button">Cancel</string>
+
+    <string name="edit_dialog_header">Edit</string>
+    <string name="edit_dialog_message">Old title</string>
+    <string name="edit_dialog_hint">Inter new title there</string>
+    <string name="edit_dialog_positive_button">Edit</string>
+    <string name="edit_dialog_negative_button">Cancel</string>
+
+    <string name="move_to_group_dialog_header">Move to group</string>
+    <string name="move_to_group_positive_button">Move</string>
+    <string name="move_to_group_negative_button">Cancel</string>
+
+
 
 </resources>

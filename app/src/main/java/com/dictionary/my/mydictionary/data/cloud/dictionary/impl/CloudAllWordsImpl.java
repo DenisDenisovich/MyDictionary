@@ -49,7 +49,7 @@ public class CloudAllWordsImpl implements CloudAllWords{
                 translations.add(item);
             }
         }catch (Exception exc){
-            throw new SkyEngWordException(exc.toString());
+            throw new SkyEngWordException(exc);
         }
 
         return translations;
@@ -96,7 +96,7 @@ public class CloudAllWordsImpl implements CloudAllWords{
             word.setAlternative(alternativeTranslations);
             word.setExamples(meaning.getExamples());
         }catch (Exception exc){
-            throw new SkyEngWordException(exc.toString());
+            throw new SkyEngWordException(exc);
         }
 
         return word;

@@ -5,6 +5,7 @@ import android.util.AndroidException;
 import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.exception.DBException;
+import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryAllWords;
 import com.dictionary.my.mydictionary.data.repository.dictionary.impl.RepositoryAllWordsImpl;
@@ -14,6 +15,7 @@ import com.dictionary.my.mydictionary.view.dictionary.ViewAllWords;
 import java.util.ArrayList;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
@@ -27,7 +29,10 @@ public class PresenterAllWordsImpl<V extends ViewAllWords> implements PresenterA
     RepositoryAllWords repository;
     Integer topVisiblePosition;
     ArrayList<Long> deleteWords;
+    ArrayList<Long> moveWords;
     ArrayList<Word> words;
+    DisposableCompletableObserver delDisposable;
+    DisposableCompletableObserver moveDisposable;
     public PresenterAllWordsImpl(Context context){
         repository = new RepositoryAllWordsImpl(context);
     }
@@ -46,6 +51,12 @@ public class PresenterAllWordsImpl<V extends ViewAllWords> implements PresenterA
     @Override
     public void destroy() {
         Log.d(LOG_TAG, "destroy()");
+        if(delDisposable != null){
+            delDisposable.dispose();
+        }
+        if(moveDisposable != null){
+            moveDisposable.dispose();
+        }
         repository.destroy();
     }
 
@@ -64,7 +75,7 @@ public class PresenterAllWordsImpl<V extends ViewAllWords> implements PresenterA
 
                     @Override
                     public void onError(Throwable e) {
-                        view.showERROR("ERROR");
+                        view.showERROR("Get list of words ERROR");
                     }
                 });
     }
@@ -82,24 +93,73 @@ public class PresenterAllWordsImpl<V extends ViewAllWords> implements PresenterA
         topVisiblePosition = view.getTopVisiblePosition();
     }
 
-
     @Override
-    public void deleteWords() {
-        Log.d(LOG_TAG, "deleteWords()");
+    public void deleteSelected() {
+        view.createDeleteDialog();
     }
 
     @Override
-    public void getListOfGroups() {
-        Log.d(LOG_TAG, "getListOfGroups()");
+    public void deleteWordsIsReady() {
+        deleteWords = view.getDeletedWords();
+        delDisposable = repository.deleteWords(deleteWords)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        view.deleteWordsFromList();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        view.showERROR("Delete word ERROR");
+                    }
+                });
     }
 
     @Override
-    public void moveWords() {
-        Log.d(LOG_TAG, "moveWords()");
+    public void moveToGroupSelected() {
+        repository.getListOfGroups()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<ArrayList<Group>>() {
+                    @Override
+                    public void onSuccess(ArrayList<Group> groups) {
+                        view.createMoveToGroupDialog(groups);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        view.showERROR("Group ERROR");
+                    }
+                });
+
     }
 
     @Override
-    public void editWord() {
-        Log.d(LOG_TAG, "editWord()");
+    public void moveToTrainingSelected() {
+
     }
+
+    @Override
+    public void moveToGroupWordsIsReady() {
+        moveWords = view.getMovedToGroupWords();
+        moveDisposable = repository.moveWords(moveWords)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        view.showERROR("Move ERROR");
+                    }
+                });
+    }
+
+
 }

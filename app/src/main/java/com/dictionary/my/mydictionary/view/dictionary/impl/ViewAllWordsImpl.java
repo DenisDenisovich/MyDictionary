@@ -1,6 +1,8 @@
 package com.dictionary.my.mydictionary.view.dictionary.impl;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -22,12 +24,15 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.dictionary.my.mydictionary.R;
+import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAllWords;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterAllWordsImpl;
 import com.dictionary.my.mydictionary.view.dictionary.ViewAllWords;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.WordAdapter;
+import com.dictionary.my.mydictionary.view.dictionary.dialogs.DeleteWordDialog;
+import com.dictionary.my.mydictionary.view.dictionary.dialogs.MoveToGroupDialog;
 
 import java.util.ArrayList;
 
@@ -52,10 +57,10 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
 
     private PresenterAllWords presenter;
 
-    private DialogFragment dialog;
-    private final static int REQUEST_CODE_EDIT_WORD = 2;
-    private final static int REQUEST_CODE_MOVE_WORDS = 3;
-    private final static int REQUEST_CODE_DELETE_WORDS = 4;
+    private final static int REQUEST_CODE_MOVE_TO_GROUP = 3;
+    private ArrayList<Long> movedWords;
+    private final static int REQUEST_CODE_MOVE_TO_TRAINING = 4;
+    private final static int REQUEST_CODE_DELETE = 5;
     private boolean onNewWordClicked = false;
     private final static String KEY_ON_NEW_WORD_CLICKED = "onNewWordClicked";
 
@@ -213,11 +218,6 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
                 menu.findItem(R.id.word_menu_move_to_training).setEnabled(true);
                 menu.findItem(R.id.word_menu_delete).setEnabled(true);
             }
-            if(countOfSelectedItems == 1){
-                menu.findItem(R.id.word_menu_edit).setEnabled(true);
-            }else{
-                menu.findItem(R.id.word_menu_edit).setEnabled(false);
-            }
         }else{
             menu.setGroupVisible(R.id.word_menu_group_context,false);
             menu.setGroupVisible(R.id.word_menu_group_base,true);
@@ -242,10 +242,10 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
                     getActivity().invalidateOptionsMenu();
                     return true;
                 case R.id.word_menu_delete:
-                    return true;
-                case R.id.word_menu_edit:
+                    presenter.deleteSelected();
                     return true;
                 case R.id.word_menu_move_to_group:
+                    presenter.moveToGroupSelected();
                     return true;
                 case R.id.word_menu_move_to_training:
                     return true;
@@ -264,12 +264,70 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         return super.onOptionsItemSelected(item);
     }
 
-
+    @Override
+    public void createDeleteDialog(){
+        Log.d(LOG_TAG, "createDeleteDialog()");
+        DialogFragment dialog = DeleteWordDialog.newInstance(wordAdapter.getSelectedItemsSize());
+        dialog.setTargetFragment(this, REQUEST_CODE_DELETE);
+        dialog.show(getFragmentManager(),null);
+    }
 
     @Override
     public ArrayList<Long> getDeletedWords() {
-        return null;
+        return wordAdapter.getSelectedItemIds();
     }
+
+    @Override
+    public void deleteWordsFromList() {
+        wordAdapter.deleteSelectedWords();
+        toolbarSelectedMode = false;
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void createMoveToGroupDialog(ArrayList<Group> groups){
+        Log.d(LOG_TAG, "createMoveToGroupDialog()");
+        DialogFragment dialog = MoveToGroupDialog.newInstance(groups);
+        dialog.setTargetFragment(this, REQUEST_CODE_MOVE_TO_GROUP);
+        dialog.show(getFragmentManager(),null);
+    }
+
+    @Override
+    public void createMoveToTrainingDialog(){
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(LOG_TAG, "onActivityResult()");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK){
+            switch (requestCode){
+                case REQUEST_CODE_DELETE:
+                    presenter.deleteWordsIsReady();
+                    break;
+                case REQUEST_CODE_MOVE_TO_GROUP:
+                    movedWords = (ArrayList<Long>) wordAdapter.getSelectedItemIds().clone();
+                    Long groupId = data.getLongExtra(Content.COLUMN_ROWID,0);
+                    movedWords.add(0, groupId);
+                    presenter.moveToGroupWordsIsReady();
+                    break;
+                case REQUEST_CODE_MOVE_TO_TRAINING:
+                    break;
+            }
+        }else if(resultCode == Activity.RESULT_CANCELED){
+            switch (requestCode){
+                case REQUEST_CODE_DELETE:
+                    break;
+                case REQUEST_CODE_MOVE_TO_GROUP:
+                    break;
+                case REQUEST_CODE_MOVE_TO_TRAINING:
+                    break;
+            }
+        }
+    }
+
+
 
     @Override
     public Integer getTopVisiblePosition() {
@@ -282,14 +340,13 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
     }
 
     @Override
-    public ArrayList<Long> getMovedWords() {
-        return null;
+    public ArrayList<Long> getMovedToGroupWords() {
+        wordAdapter.selectModeOff();
+        toolbarSelectedMode = false;
+        getActivity().invalidateOptionsMenu();
+        return movedWords;
     }
 
-    @Override
-    public Word getEditedWord() {
-        return null;
-    }
 
     @Override
     public void showProgress() {
@@ -315,6 +372,7 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
             selectedItemsObserver.dispose();
         }
         presenter.saveListState();
+        presenter.detach();
     }
 
     @Override

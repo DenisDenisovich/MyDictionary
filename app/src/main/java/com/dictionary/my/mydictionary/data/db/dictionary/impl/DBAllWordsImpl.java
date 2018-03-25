@@ -56,7 +56,7 @@ public class DBAllWordsImpl implements DBAllWords {
                 cursor.close();
             }
         }catch (Exception exc){
-            throw new DBException(exc.toString());
+            throw new DBException(exc);
         }
         return list;
     }
@@ -113,7 +113,7 @@ public class DBAllWordsImpl implements DBAllWords {
 
             db.insertOrThrow(Content.TABLE_ALL_WORD,null,cv);
         }catch (Exception exc){
-            throw new DBException(exc.toString());
+            throw new DBException(exc);
         }
     }
 
@@ -134,7 +134,7 @@ public class DBAllWordsImpl implements DBAllWords {
 
             db.insertOrThrow(Content.TABLE_ALL_WORD,null,cv);
         }catch (Exception exc){
-            throw new DBException(exc.toString());
+            throw new DBException(exc);
         }
     }
 
@@ -152,7 +152,7 @@ public class DBAllWordsImpl implements DBAllWords {
             whereArg[whereArg.length-1] = delList.get(delList.size()-1).toString();
             db.delete(Content.TABLE_ALL_WORD,Content.COLUMN_ROWID + " in " + strPlaceholder, whereArg);
         }catch (Exception exc){
-            throw new DBException(exc.toString());
+            throw new DBException(exc);
         }
     }
 
@@ -175,7 +175,7 @@ public class DBAllWordsImpl implements DBAllWords {
             cv.put(Content.COLUMN_GROUP_ID, moveToDictionaryId);
             db.update(Content.TABLE_ALL_WORD, cv, Content.COLUMN_ROWID + " in " + strPlaceholder, strArg);
         }catch (Exception exc){
-            throw new DBException(exc.toString());
+            throw new DBException(exc);
         }
     }
 
@@ -189,7 +189,7 @@ public class DBAllWordsImpl implements DBAllWords {
             idOfModifiedWord = String.valueOf(word.getId());
             db.update(Content.TABLE_ALL_WORD,cv,Content.COLUMN_ROWID  + " = ?", new String[] {idOfModifiedWord});
         }catch (Exception exc){
-            throw new DBException(exc.toString());
+            throw new DBException(exc);
         }
     }
 

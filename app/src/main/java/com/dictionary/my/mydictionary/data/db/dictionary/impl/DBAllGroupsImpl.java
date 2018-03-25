@@ -47,7 +47,7 @@ public class DBAllGroupsImpl implements DBAllGroups {
             }
 
         }catch (Exception exc){
-            throw new DBException(exc.toString());
+            throw new DBException(exc);
 
         }
         return list;
@@ -60,7 +60,7 @@ public class DBAllGroupsImpl implements DBAllGroups {
             cv.put(Content.COLUMN_TITLE, group.getTitle());
             db.insertOrThrow(Content.TABLE_GROUPS, null, cv);
         }catch (Exception exc){
-            throw new DBException(exc.toString());
+            throw new DBException(exc);
         }
     }
 
@@ -77,7 +77,7 @@ public class DBAllGroupsImpl implements DBAllGroups {
             whereArg[whereArg.length - 1] = delList.get(delList.size() - 1).toString();
             db.delete(Content.TABLE_GROUPS, Content.COLUMN_ROWID + " in " + strPlaceholder, whereArg);
         }catch (Exception exc){
-            throw new DBException(exc.toString());
+            throw new DBException(exc);
         }
     }
 
@@ -90,7 +90,7 @@ public class DBAllGroupsImpl implements DBAllGroups {
             idOfModifiedGroup = String.valueOf(group.getId());
             db.update(Content.TABLE_GROUPS, cv, Content.COLUMN_ROWID + " = ?", new String[]{idOfModifiedGroup});
         }catch (Exception exc){
-            throw new DBException(exc.toString());
+            throw new DBException(exc);
         }
     }
 

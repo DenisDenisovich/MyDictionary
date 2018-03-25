@@ -9,7 +9,7 @@ public class SkyEngMeaningException extends Exception {
     public SkyEngMeaningException(){
 
     }
-    public SkyEngMeaningException(String message){
-        super(message);
+    public SkyEngMeaningException(Throwable e){
+        initCause(e);
     }
 }

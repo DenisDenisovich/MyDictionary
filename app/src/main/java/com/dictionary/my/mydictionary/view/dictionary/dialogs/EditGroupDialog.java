@@ -22,14 +22,17 @@ import com.dictionary.my.mydictionary.data.Content;
  * Created by luxso on 01.11.2017.
  */
 
-public class EditWordDialog extends DialogFragment{
-    private final String KEY_OLD_TITLE = "oldTranslate";
+public class EditGroupDialog extends DialogFragment{
+    private final static String KEY_OLD_TITLE = "oldTitle";
+    private final static String KEY = "key";
 
-    public static EditWordDialog newInstance(String oldTitle){
-        final String KEY_OLD_TITLE = "oldTranslate";
-        EditWordDialog d = new EditWordDialog();
+    public static EditGroupDialog newInstance(String oldTitle, String KEY_NEW_TITLE){
+        final String KEY_OLD_TITLE = "oldTitle";
+        final String KEY = "key";
+        EditGroupDialog d = new EditGroupDialog();
         Bundle arg = new Bundle();
         arg.putString(KEY_OLD_TITLE,oldTitle);
+        arg.putString(KEY, KEY_NEW_TITLE);
         d.setArguments(arg);
         return d;
     }
@@ -37,6 +40,7 @@ public class EditWordDialog extends DialogFragment{
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        final String KEY_NEW_TITLE = savedInstanceState.getString(KEY);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.edit_word_dialog,null);
@@ -64,15 +68,15 @@ public class EditWordDialog extends DialogFragment{
             }
         });
         builder.setView(view)
-                .setPositiveButton(getResources().getString(R.string.dialog_edit_dictionary_positive_button), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.edit_dialog_positive_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent data = new Intent();
-                        data.putExtra(Content.fromDictionary[2], etWordNewTranslate.getText().toString().trim().replaceAll("\\s{2,}", " "));
+                        data.putExtra(KEY_NEW_TITLE, etWordNewTranslate.getText().toString().trim().replaceAll("\\s{2,}", " "));
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,data);
                     }
                 })
-                .setNegativeButton(getResources().getString(R.string.dialog_edit_dictionary_negative_button), new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.edit_dialog_negative_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED,null);
