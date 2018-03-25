@@ -28,7 +28,6 @@ public class PresenterAllWordsImpl<V extends ViewAllWords> implements PresenterA
     Integer topVisiblePosition;
     ArrayList<Long> deleteWords;
     ArrayList<Word> words;
-
     public PresenterAllWordsImpl(Context context){
         repository = new RepositoryAllWordsImpl(context);
     }

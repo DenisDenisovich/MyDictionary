@@ -26,10 +26,12 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
     private V view;
     private RepositoryAllWords repository;
     private ArrayList<Translation> words;
+    DisposableSingleObserver<ArrayList<Translation>> wordDisposable;
     private ArrayList<Group> groups;
     private Translation newWord;
     boolean alternativeTranslationMode = false;
-    boolean defaultTranslationMode = true;
+    boolean defaultTranslationModeERROR = false;
+    boolean searchForTranslation = false;
     public PresenterAddWordActivityImpl(Context context){
         repository = new RepositoryAllWordsImpl(context);
     }
@@ -48,6 +50,9 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
     @Override
     public void destroy() {
         Log.d(LOG_TAG, "destroy()");
+        if(wordDisposable != null){
+            wordDisposable.dispose();
+        }
         repository.destroy();
     }
 
@@ -55,14 +60,24 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
     @Override
     public void update() {
         Log.d(LOG_TAG, "update()");
-        if(defaultTranslationMode){
-            view.showDefaultTranslationMode();
-            view.createListOfTranslation(words);
-        } else if(alternativeTranslationMode){
-            view.showAlternativeTranslationMode();
-        }
         view.hideProgress();
         view.setGroups(groups);
+        if(words != null) {
+            view.createListOfTranslation(words);
+        }
+        if(!alternativeTranslationMode){
+            if(searchForTranslation){
+                view.showProgress();
+            }else{
+                view.hideProgress();
+                if(words != null) {
+                    view.showDefaultTranslationMode();
+                }
+            }
+        }else{
+            view.hideProgress();
+            view.showAlternativeTranslationMode();
+        }
     }
 
     @Override
@@ -89,23 +104,35 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
     public void wordHasPrinted() {
         Log.d(LOG_TAG, "wordHasPrinted()");
         view.showProgress();
+        view.hideDefaultTranslationMode();
         String word = view.getPrintedWord();
-        repository.getTranslation(word)
+        searchForTranslation = true;
+        if(wordDisposable != null){
+            wordDisposable.dispose();
+        }
+        wordDisposable = repository.getTranslation(word)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<ArrayList<Translation>>() {
                     @Override
                     public void onSuccess(ArrayList<Translation> translations) {
                         words = translations;
+                        defaultTranslationModeERROR = false;
+                        searchForTranslation = false;
                         view.createListOfTranslation(words);
                         view.hideProgress();
-                        view.showDefaultTranslationMode();
+                        if(!alternativeTranslationMode) {
+                            view.showDefaultTranslationMode();
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         view.showERROR("TRANSLATION_ERROR");
+                        defaultTranslationModeERROR = true;
+                        searchForTranslation = false;
                         view.hideProgress();
+                        view.hideDefaultTranslationMode();
                         view.showAlternativeTranslationMode();
                     }
                 });
@@ -114,6 +141,7 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
     @Override
     public void alternativeTranslationModeHasSelected() {
         Log.d(LOG_TAG, "alternativeTranslationModeHasSelected()");
+        alternativeTranslationMode = true;
         view.hideProgress();
         view.hideDefaultTranslationMode();
         view.showAlternativeTranslationMode();
@@ -122,10 +150,14 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
     @Override
     public void defaultTranslationModeHasSelected() {
         Log.d(LOG_TAG, "defaultTranslationModeHasSelected()");
-        if(words != null){
+        alternativeTranslationMode = false;
+        view.hideAlternativeTranslationMode();
+        if(words != null && !defaultTranslationModeERROR && !searchForTranslation){
             view.showDefaultTranslationMode();
         }
-        view.hideAlternativeTranslationMode();
+        if(searchForTranslation){
+            view.showProgress();
+        }
     }
 
     @Override

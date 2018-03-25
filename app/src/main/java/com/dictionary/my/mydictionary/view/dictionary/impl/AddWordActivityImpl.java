@@ -25,7 +25,6 @@ import android.widget.Toast;
 import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
-import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAddWordActivity;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterAddWordActivityImpl;
 import com.dictionary.my.mydictionary.view.dictionary.AddWordActivity;
@@ -51,7 +50,7 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
     private GroupAdapter groupAdapter;
     private Translation selectedTranslation;
     private boolean alternativeTranslationMode = false;
-    private final static String KEY_TRANSLATION_MODE = "translationMod";
+    private final static String KEY_ALT_TRANS_MODE = "altTranslationMode";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreate()  " + this.hashCode());
@@ -70,7 +69,9 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if(i == EditorInfo.IME_ACTION_DONE){
-                    presenter.wordHasPrinted();
+                    if(!alternativeTranslationMode) {
+                        presenter.wordHasPrinted();
+                    }
                 }
                 return false;
             }
@@ -81,7 +82,7 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
             presenter = (PresenterAddWordActivity) getLastCustomNonConfigurationInstance();
             presenter.attach(this);
             presenter.update();
-            alternativeTranslationMode = savedInstanceState.getBoolean(KEY_TRANSLATION_MODE);
+            alternativeTranslationMode = savedInstanceState.getBoolean(KEY_ALT_TRANS_MODE);
         }else{
             presenter = new PresenterAddWordActivityImpl(getApplicationContext());
             presenter.attach(this);
@@ -103,7 +104,7 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(KEY_TRANSLATION_MODE, alternativeTranslationMode);
+        outState.putBoolean(KEY_ALT_TRANS_MODE, alternativeTranslationMode);
         super.onSaveInstanceState(outState);
     }
 
@@ -169,6 +170,8 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
     public void showAlternativeTranslationMode() {
         findViewById(R.id.etAlternativeTranslation).setVisibility(View.VISIBLE);
         findViewById(R.id.btnAddAlternativeTranslation).setVisibility(View.VISIBLE);
+        alternativeTranslationMode = true;
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -176,6 +179,7 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
         findViewById(R.id.rlSelectedTranslation).setVisibility(View.GONE);
         findViewById(R.id.tvOtherTranslate).setVisibility(View.GONE);
         findViewById(R.id.lvAddWord).setVisibility(View.GONE);
+
     }
 
     @Override
@@ -183,6 +187,8 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
         findViewById(R.id.rlSelectedTranslation).setVisibility(View.VISIBLE);
         findViewById(R.id.tvOtherTranslate).setVisibility(View.VISIBLE);
         findViewById(R.id.lvAddWord).setVisibility(View.VISIBLE);
+        alternativeTranslationMode = false;
+        invalidateOptionsMenu();
     }
     @Override
     public void showERROR(String message) {
@@ -203,42 +209,48 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
 
     @Override
     public void createListOfTranslation(ArrayList<Translation> words) {
-        final TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(),words);
-        ListView listView = findViewById(R.id.lvAddWord);
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                selectedTranslation = (Translation)adapter.getItem(i);
-                ((TextView)findViewById(R.id.tvSelectedTranslation)).setText(selectedTranslation.getRus());
-                ImageView imageView = findViewById(R.id.ivSelectedTranslation);
-                Picasso.with(getApplicationContext())
-                        .load(selectedTranslation.getPreview_image())
-                        .into(imageView);
+            final TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(), words);
+            ListView listView = findViewById(R.id.lvAddWord);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    selectedTranslation = (Translation) adapter.getItem(i);
+                    ((TextView) findViewById(R.id.tvSelectedTranslation)).setText(selectedTranslation.getRus());
+                    ImageView imageView = findViewById(R.id.ivSelectedTranslation);
+                    Picasso.with(getApplicationContext())
+                            .load(selectedTranslation.getPreview_image())
+                            .into(imageView);
 
-            }
-        });
+                }
+            });
 
-        selectedTranslation = words.get(0);
-        ((TextView)findViewById(R.id.tvSelectedTranslation)).setText(selectedTranslation.getRus());
-        ImageView imageView = findViewById(R.id.ivSelectedTranslation);
-        ImageButton btn = (ImageButton) findViewById(R.id.btnAddWord);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                presenter.translationIsReady();
-            }
-        });
-        Picasso.with(getApplicationContext())
-                .load(selectedTranslation.getPreview_image())
-                .into(imageView);
+            selectedTranslation = words.get(0);
+            ((TextView) findViewById(R.id.tvSelectedTranslation)).setText(selectedTranslation.getRus());
+            ImageView imageView = findViewById(R.id.ivSelectedTranslation);
+            ImageButton btn = (ImageButton) findViewById(R.id.btnAddWord);
+            btn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    presenter.translationIsReady();
+                }
+            });
+            Picasso.with(getApplicationContext())
+                    .load(selectedTranslation.getPreview_image())
+                    .into(imageView);
     }
 
+    // call this method from presenter, when translation set to db success
     @Override
     public void closeActivity() {
         onBackPressed();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        presenter.destroy();
+    }
 
     @Override
     public String getPrintedWord() {
@@ -280,6 +292,6 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
     protected void onDestroy() {
         Log.d(LOG_TAG, "onDestroy() " + this.hashCode());
         super.onDestroy();
-        presenter.destroy();
+        presenter.detach();
     }
 }
