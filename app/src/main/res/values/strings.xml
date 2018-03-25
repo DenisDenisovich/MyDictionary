@@ -13,7 +13,8 @@
 
     <string name="word_menu_edit">Edit</string>
     <string name="word_menu_delete">Delete</string>
-    <string name="word_menu_move">Move</string>
+    <string name="word_menu_move_to_group">Move to group</string>
+    <string name="word_menu_move_to_training">Move to training</string>
 
     <string name="group_menu_edit">Edit</string>
     <string name="group_menu_delete">Delete</string>

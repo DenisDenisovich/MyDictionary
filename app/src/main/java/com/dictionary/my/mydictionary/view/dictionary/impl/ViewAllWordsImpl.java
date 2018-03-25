@@ -205,10 +205,12 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
                 activity.setTitle(String.valueOf(countOfSelectedItems));
             }
             if(countOfSelectedItems == 0){
-                menu.findItem(R.id.word_menu_move).setEnabled(false);
+                menu.findItem(R.id.word_menu_move_to_group).setEnabled(false);
+                menu.findItem(R.id.word_menu_move_to_training).setEnabled(false);
                 menu.findItem(R.id.word_menu_delete).setEnabled(false);
             }else{
-                menu.findItem(R.id.word_menu_move).setEnabled(true);
+                menu.findItem(R.id.word_menu_move_to_group).setEnabled(true);
+                menu.findItem(R.id.word_menu_move_to_training).setEnabled(true);
                 menu.findItem(R.id.word_menu_delete).setEnabled(true);
             }
             if(countOfSelectedItems == 1){
@@ -243,7 +245,9 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
                     return true;
                 case R.id.word_menu_edit:
                     return true;
-                case R.id.word_menu_move:
+                case R.id.word_menu_move_to_group:
+                    return true;
+                case R.id.word_menu_move_to_training:
                     return true;
             }
         }else{
