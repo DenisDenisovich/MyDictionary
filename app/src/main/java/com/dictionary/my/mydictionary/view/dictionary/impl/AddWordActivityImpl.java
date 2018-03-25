@@ -47,7 +47,6 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
     private EditText wordEditText;
     private EditText alternativeTranslation;
     private Spinner spinner;
-    private GroupAdapter groupAdapter;
     private Translation selectedTranslation;
     private boolean alternativeTranslationMode = false;
     private final static String KEY_ALT_TRANS_MODE = "altTranslationMode";
@@ -201,7 +200,7 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
         for(int i = 0; i < groups.size(); i++){
             stringGroups[i] = groups.get(i).getTitle();
         }
-        groupAdapter = new GroupAdapter(this, android.R.layout.simple_spinner_item, stringGroups, groups);
+        GroupAdapter groupAdapter = new GroupAdapter(this, android.R.layout.simple_spinner_item, stringGroups, groups);
         groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(groupAdapter);
         spinner.setSelection(0);

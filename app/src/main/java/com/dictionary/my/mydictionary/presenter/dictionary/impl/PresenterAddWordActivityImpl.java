@@ -26,12 +26,12 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
     private V view;
     private RepositoryAllWords repository;
     private ArrayList<Translation> words;
-    DisposableSingleObserver<ArrayList<Translation>> wordDisposable;
+    private DisposableSingleObserver<ArrayList<Translation>> wordDisposable;
     private ArrayList<Group> groups;
     private Translation newWord;
-    boolean alternativeTranslationMode = false;
-    boolean defaultTranslationModeERROR = false;
-    boolean searchForTranslation = false;
+    private boolean alternativeTranslationMode = false;
+    private boolean defaultTranslationModeERROR = false;
+    private boolean searchForTranslation = false;
     public PresenterAddWordActivityImpl(Context context){
         repository = new RepositoryAllWordsImpl(context);
     }
