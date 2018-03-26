@@ -13,6 +13,8 @@ public interface ViewAllGroups {
     void hideProgress();
     void showERROR(String message);
     void createList(ArrayList<Group> words);
+    void createNewGroupDialog();
+    Group getNewGroup();
     void createDeleteDialog();
     ArrayList<Long> getDeletedGroups();
     void deleteGroupFromList();

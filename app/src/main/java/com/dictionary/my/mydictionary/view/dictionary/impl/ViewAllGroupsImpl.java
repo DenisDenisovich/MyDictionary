@@ -32,57 +32,6 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
     private AppCompatActivity activity;
     private View myView;
 
-    @Override
-    public void showProgress() {
-
-    }
-
-    @Override
-    public void hideProgress() {
-
-    }
-
-    @Override
-    public void showERROR(String message) {
-
-    }
-
-    @Override
-    public void createList(ArrayList<Group> words) {
-
-    }
-
-    @Override
-    public void createDeleteDialog() {
-
-    }
-
-    @Override
-    public ArrayList<Long> getDeletedGroups() {
-        return null;
-    }
-
-    @Override
-    public void deleteGroupFromList() {
-
-    }
-
-    @Override
-    public void createEditDialog() {
-
-    }
-
-    @Override
-    public Group getEditedGroup() {
-        return null;
-    }
-
-    @Override
-    public void editGroupInList() {
-
-    }
-    
-
     public interface onAllGroupsSelectedListener{
         public void allWordsScreenSelected();
         public void groupOfWordsSelected(long groupId);
@@ -154,6 +103,67 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
         super.onPrepareOptionsMenu(menu);
+    }
+
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void showERROR(String message) {
+
+    }
+
+    @Override
+    public void createList(ArrayList<Group> words) {
+
+    }
+
+    @Override
+    public void createNewGroupDialog() {
+
+    }
+
+    @Override
+    public Group getNewGroup() {
+        return null;
+    }
+
+    @Override
+    public void createDeleteDialog() {
+
+    }
+
+    @Override
+    public ArrayList<Long> getDeletedGroups() {
+        return null;
+    }
+
+    @Override
+    public void deleteGroupFromList() {
+
+    }
+
+    @Override
+    public void createEditDialog() {
+
+    }
+
+    @Override
+    public Group getEditedGroup() {
+        return null;
+    }
+
+    @Override
+    public void editGroupInList() {
+
     }
 
     @Override
