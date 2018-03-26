@@ -17,8 +17,6 @@ public interface ViewAllWords {
     void createDeleteDialog();
     ArrayList<Long> getDeletedWords();
     void deleteWordsFromList();
-    Integer getTopVisiblePosition();
-    void setTopVisiblePosition(Integer position);
     void createMoveToGroupDialog(ArrayList<Group> groups);
     ArrayList<Long> getMovedToGroupWords();
     void createMoveToTrainingDialog();

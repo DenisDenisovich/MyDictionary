@@ -27,7 +27,6 @@ public class PresenterAllWordsImpl<V extends ViewAllWords> implements PresenterA
     private final static String LOG_TAG = "Log_PresenterAllWord";
     V view;
     RepositoryAllWords repository;
-    Integer topVisiblePosition;
     ArrayList<Long> deleteWords;
     ArrayList<Long> moveWords;
     ArrayList<Word> words;
@@ -84,14 +83,8 @@ public class PresenterAllWordsImpl<V extends ViewAllWords> implements PresenterA
     public void update() {
         Log.d(LOG_TAG, "update()");
         view.createList(words);
-        view.setTopVisiblePosition(topVisiblePosition);
     }
 
-    @Override
-    public void saveListState() {
-        Log.d(LOG_TAG, "saveListState()");
-        topVisiblePosition = view.getTopVisiblePosition();
-    }
 
     @Override
     public void deleteSelected() {

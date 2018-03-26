@@ -329,15 +329,7 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
 
 
 
-    @Override
-    public Integer getTopVisiblePosition() {
-        return llm.findFirstCompletelyVisibleItemPosition();
-    }
 
-    @Override
-    public void setTopVisiblePosition(Integer position) {
-        llm.scrollToPosition(position);
-    }
 
     @Override
     public ArrayList<Long> getMovedToGroupWords() {
@@ -371,7 +363,6 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         if(selectedItemsObserver != null) {
             selectedItemsObserver.dispose();
         }
-        presenter.saveListState();
         presenter.detach();
     }
 

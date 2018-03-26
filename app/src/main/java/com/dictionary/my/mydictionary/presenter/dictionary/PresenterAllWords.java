@@ -7,7 +7,6 @@ public interface PresenterAllWords<V> {
     void destroy();
     void init();
     void update();
-    void saveListState();
     void deleteSelected();
     void deleteWordsIsReady();
     void moveToGroupSelected();

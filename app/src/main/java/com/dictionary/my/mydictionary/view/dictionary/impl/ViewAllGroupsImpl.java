@@ -18,7 +18,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 
 import com.dictionary.my.mydictionary.R;
+import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.view.dictionary.ViewAllGroups;
+
+import java.util.ArrayList;
 
 /**
  * Created by luxso on 07.03.2018.
@@ -28,6 +31,67 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
     private final static String LOG_TAG = "Log_ViewAllGroups";
     private AppCompatActivity activity;
     private View myView;
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void showERROR(String message) {
+
+    }
+
+    @Override
+    public void createList(ArrayList<Group> words) {
+
+    }
+
+    @Override
+    public void createDeleteDialog() {
+
+    }
+
+    @Override
+    public ArrayList<Long> getDeletedGroups() {
+        return null;
+    }
+
+    @Override
+    public void deleteGroupFromList() {
+
+    }
+
+    @Override
+    public void createEditDialog() {
+
+    }
+
+    @Override
+    public Group getEditedGroup() {
+        return null;
+    }
+
+    @Override
+    public void editGroupInList() {
+
+    }
+
+    @Override
+    public Integer getTopVisiblePosition() {
+        return null;
+    }
+
+    @Override
+    public void setTopVisiblePosition(Integer position) {
+
+    }
+
     public interface onAllGroupsSelectedListener{
         public void allWordsScreenSelected();
         public void groupOfWordsSelected(long groupId);

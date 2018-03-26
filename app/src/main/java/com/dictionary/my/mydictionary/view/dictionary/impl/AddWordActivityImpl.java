@@ -208,35 +208,37 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
 
     @Override
     public void createListOfTranslation(ArrayList<Translation> words) {
-            final TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(), words);
-            ListView listView = findViewById(R.id.lvAddWord);
-            listView.setAdapter(adapter);
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    selectedTranslation = (Translation) adapter.getItem(i);
-                    ((TextView) findViewById(R.id.tvSelectedTranslation)).setText(selectedTranslation.getRus());
-                    ImageView imageView = findViewById(R.id.ivSelectedTranslation);
-                    Picasso.with(getApplicationContext())
-                            .load(selectedTranslation.getPreview_image())
-                            .into(imageView);
+        for (int i = 0; i < words.size(); i++){
+            words.get(i).setEng(getPrintedWord());
+        }
+        final TranslationAdapter adapter = new TranslationAdapter(getApplicationContext(), words);
+        ListView listView = findViewById(R.id.lvAddWord);
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                selectedTranslation = (Translation) adapter.getItem(i);
+                ((TextView) findViewById(R.id.tvSelectedTranslation)).setText(selectedTranslation.getRus());
+                ImageView imageView = findViewById(R.id.ivSelectedTranslation);
+                Picasso.with(getApplicationContext())
+                        .load(selectedTranslation.getPreview_image())
+                        .into(imageView);
+            }
+        });
 
-                }
-            });
-
-            selectedTranslation = words.get(0);
-            ((TextView) findViewById(R.id.tvSelectedTranslation)).setText(selectedTranslation.getRus());
-            ImageView imageView = findViewById(R.id.ivSelectedTranslation);
-            ImageButton btn = (ImageButton) findViewById(R.id.btnAddWord);
-            btn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    presenter.translationIsReady();
-                }
-            });
-            Picasso.with(getApplicationContext())
-                    .load(selectedTranslation.getPreview_image())
-                    .into(imageView);
+        selectedTranslation = words.get(0);
+        ((TextView) findViewById(R.id.tvSelectedTranslation)).setText(selectedTranslation.getRus());
+        ImageView imageView = findViewById(R.id.ivSelectedTranslation);
+        ImageButton btn = (ImageButton) findViewById(R.id.btnAddWord);
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                presenter.translationIsReady();
+            }
+        });
+        Picasso.with(getApplicationContext())
+                .load(selectedTranslation.getPreview_image())
+                .into(imageView);
     }
 
     // call this method from presenter, when translation set to db success
@@ -259,7 +261,6 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
     @Override
     public Translation getNewTranslation() {
         Translation translation = selectedTranslation;
-        translation.setEng(getPrintedWord());
         translation.setGroupId(spinner.getSelectedItemId());
 
         Date c = Calendar.getInstance().getTime();
