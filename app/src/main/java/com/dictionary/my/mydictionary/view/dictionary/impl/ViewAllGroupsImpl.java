@@ -81,16 +81,7 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
     public void editGroupInList() {
 
     }
-
-    @Override
-    public Integer getTopVisiblePosition() {
-        return null;
-    }
-
-    @Override
-    public void setTopVisiblePosition(Integer position) {
-
-    }
+    
 
     public interface onAllGroupsSelectedListener{
         public void allWordsScreenSelected();
