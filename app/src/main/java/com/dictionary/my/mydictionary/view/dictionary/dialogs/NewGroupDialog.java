@@ -13,37 +13,23 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.data.Content;
 
 /**
- * Created by luxso on 01.11.2017.
+ * Created by luxso on 27.03.2018.
  */
 
-public class EditGroupDialog extends DialogFragment{
-    private final static String KEY_OLD_TITLE = "oldTitle";
-
-    public static EditGroupDialog newInstance(String oldTitle){
-        final String KEY_OLD_TITLE = "oldTitle";
-        EditGroupDialog d = new EditGroupDialog();
-        Bundle arg = new Bundle();
-        arg.putString(KEY_OLD_TITLE,oldTitle);
-        d.setArguments(arg);
-        return d;
-    }
-
+public class NewGroupDialog extends DialogFragment{
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View view = inflater.inflate(R.layout.dialog_edit_group,null);
-        TextView tvWordOldTranslate = view.findViewById(R.id.tvEditWordDialogOldTitle);
-        tvWordOldTranslate.setText(getArguments().getString(KEY_OLD_TITLE));
-        final EditText etWordNewTitle = view.findViewById(R.id.etEditWordDialogNewTitle);
-        etWordNewTitle.addTextChangedListener(new TextWatcher() {
+        View view = inflater.inflate(R.layout.dialog_new_group,null);
+        final EditText etTitle = view.findViewById(R.id.etGroupNewTitle);
+        etTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
@@ -63,19 +49,20 @@ public class EditGroupDialog extends DialogFragment{
                 }
             }
         });
+
         builder.setView(view)
-                .setPositiveButton(getResources().getString(R.string.edit_dialog_positive_button), new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.new_group_dialog_positive_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Intent data = new Intent();
-                        data.putExtra(Content.COLUMN_TITLE, etWordNewTitle.getText().toString().trim().replaceAll("\\s{2,}", " "));
+                        data.putExtra(Content.COLUMN_TITLE, etTitle.getText().toString().trim().replaceAll("\\s{2,}", " "));
                         getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,data);
                     }
                 })
-                .setNegativeButton(getResources().getString(R.string.edit_dialog_negative_button), new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.new_group_dialog_negative_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED,null);
+
                     }
                 });
         return builder.create();
@@ -84,8 +71,5 @@ public class EditGroupDialog extends DialogFragment{
     @Override
     public void onStart() {
         super.onStart();
-        ((AlertDialog)getDialog()).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
     }
 }
-
-

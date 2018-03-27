@@ -9,25 +9,9 @@
         android:textColor="#000000"
         android:gravity="center"
         android:background="@color/colorPrimary"
-        android:text="@string/edit_dialog_header"/>
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:textSize="20dp"
-        android:gravity="center"
-        android:textColor="#000000"
-        android:text="@string/edit_dialog_message"
-        />
-    <TextView
-        android:id="@+id/tvEditWordDialogOldTranslate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="16dp"
-        android:gravity="center"
-        android:textColor="@color/colorAccent" />
+        android:text="@string/new_group_dialog_header"/>
     <EditText
-        android:id="@+id/etEditWordDialogNewTranslate"
+        android:id="@+id/etGroupNewTitle"
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -35,5 +19,5 @@
         android:inputType="text"
         android:textSize="20dp"
         android:textColor="#000000"
-        android:hint="@string/edit_dialog_hint"/>
+        android:hint="@string/new_group_dialog_hint"/>
 </LinearLayout>

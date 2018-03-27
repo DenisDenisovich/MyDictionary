@@ -13,7 +13,7 @@ public interface PresenterAllGroups<V> {
     void newSelected();
     void newGroupIsReady();
     void deleteSelected();
-    void deleteWordsIsReady();
+    void deleteGroupsIsReady();
     void editSelected();
     void editGroupIsReady();
 }

@@ -47,7 +47,6 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
     private AppCompatActivity activity;
     private View myView;
 
-    LinearLayoutManager llm;
     private WordAdapter wordAdapter;
 
     private Integer countOfSelectedItems;
@@ -57,10 +56,10 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
 
     private PresenterAllWords presenter;
 
-    private final static int REQUEST_CODE_MOVE_TO_GROUP = 3;
+    private final static int REQUEST_CODE_MOVE_TO_GROUP = 1;
     private ArrayList<Long> movedWords;
-    private final static int REQUEST_CODE_MOVE_TO_TRAINING = 4;
-    private final static int REQUEST_CODE_DELETE = 5;
+    private final static int REQUEST_CODE_MOVE_TO_TRAINING = 2;
+    private final static int REQUEST_CODE_DELETE = 3;
     private boolean onNewWordClicked = false;
     private final static String KEY_ON_NEW_WORD_CLICKED = "onNewWordClicked";
 
@@ -153,7 +152,7 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
     @Override
     public void createList(ArrayList<Word> words) {
         RecyclerView rv = myView.findViewById(R.id.rvAllWords);
-        llm = new LinearLayoutManager(getActivity());
+        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
         wordAdapter = new WordAdapter(getActivity(),words);
         rv.setAdapter(wordAdapter);

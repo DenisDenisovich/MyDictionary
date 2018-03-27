@@ -53,7 +53,6 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        //Log.d(LOG_TAG, "onCreateViewHolder(), selectMod = " + selectMode);
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word, parent, false);
         ViewHolder vh = new ViewHolder(v);
 
@@ -63,7 +62,6 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        //Log.d(LOG_TAG, "onBindViewHolder(), selectMod = " + selectMode + ", position: " + position);
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
@@ -103,7 +101,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
             @Override
             public boolean onLongClick(View view) {
                 selectMode = true;
-                selectItem(mdata.get(position).getId(), position);
+                selectItem(mdata.get(position).getId());
                 return true;
             }
         });
@@ -111,7 +109,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
             @Override
             public void onClick(View view) {
                 if(selectMode) {
-                    selectItem(mdata.get(position).getId(), position);
+                    selectItem(mdata.get(position).getId());
                 }
             }
         });
@@ -122,7 +120,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
         return mdata.size();
     }
 
-    private void selectItem(Long id, Integer position){
+    private void selectItem(Long id){
         if(selectedItemIds.contains(id)){
             selectedItemIds.remove(id);
         } else{

@@ -22,6 +22,8 @@
     <string name="delete_dialog_header">Delete</string>
     <string name="delete_dialog_message_one_word">Do you really want to delete this word?</string>
     <string name="delete_dialog_message_couple_words">Do you really want to delete this words?</string>
+    <string name="delete_dialog_message_one_group">Do you really want to delete this group?</string>
+    <string name="delete_dialog_message_couple_groups">Do you really want to delete this groups?</string>
     <string name="delete_dialog_positive_button">Delete</string>
     <string name="delete_dialog_negative_button">Cancel</string>
 
@@ -34,6 +36,11 @@
     <string name="move_to_group_dialog_header">Move to group</string>
     <string name="move_to_group_positive_button">Move</string>
     <string name="move_to_group_negative_button">Cancel</string>
+
+    <string name="new_group_dialog_header">Add new group</string>
+    <string name="new_group_dialog_hint">Inter title there</string>
+    <string name="new_group_dialog_positive_button">Add</string>
+    <string name="new_group_dialog_negative_button">Cancel</string>
 
 
 

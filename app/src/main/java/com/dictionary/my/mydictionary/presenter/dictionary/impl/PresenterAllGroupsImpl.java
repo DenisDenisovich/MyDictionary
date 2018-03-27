@@ -114,7 +114,7 @@ public class PresenterAllGroupsImpl<V extends ViewAllGroups> implements Presente
     }
 
     @Override
-    public void deleteWordsIsReady() {
+    public void deleteGroupsIsReady() {
         ArrayList<Long> delList = view.getDeletedGroups();
         delDisposable = repository.deleteGroups(delList)
                 .subscribeOn(Schedulers.io())

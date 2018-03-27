@@ -28,7 +28,7 @@ import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAddWordActivity;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterAddWordActivityImpl;
 import com.dictionary.my.mydictionary.view.dictionary.AddWordActivity;
-import com.dictionary.my.mydictionary.view.dictionary.adapters.GroupAdapter;
+import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerGroupAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.TranslationAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -200,7 +200,7 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
         for(int i = 0; i < groups.size(); i++){
             stringGroups[i] = groups.get(i).getTitle();
         }
-        GroupAdapter groupAdapter = new GroupAdapter(this, android.R.layout.simple_spinner_item, stringGroups, groups);
+        SpinnerGroupAdapter groupAdapter = new SpinnerGroupAdapter(this, android.R.layout.simple_spinner_item, stringGroups, groups);
         groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(groupAdapter);
         spinner.setSelection(0);
