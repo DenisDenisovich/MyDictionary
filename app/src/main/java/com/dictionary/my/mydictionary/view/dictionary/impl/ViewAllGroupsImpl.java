@@ -51,7 +51,8 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
     private Integer countOfSelectedItems;
     private Boolean toolbarSelectedMode = false;
     private final static String KEY_TOOLBAR_SELECTED_MODE = "toolbarSelectedMode";
-    private DisposableObserver<Integer> selectedItemsObserver;
+    private DisposableObserver<Integer> countOfSelectObserver;
+    private DisposableObserver<Long> choiceGroupObservable;
 
     private PresenterAllGroups presenter;
 
@@ -145,7 +146,7 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
     }
 
     private void subscribeOnRecyclerView(){
-        selectedItemsObserver = groupAdapter.getSelectedItemsObservable()
+        countOfSelectObserver = groupAdapter.getcountOfSelectObservable()
                 .subscribeWith(new DisposableObserver<Integer>() {
                     @Override
                     public void onNext(Integer integer) {
@@ -153,6 +154,23 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
                         countOfSelectedItems = integer;
                         toolbarSelectedMode = true;
                         getActivity().invalidateOptionsMenu();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(getActivity(), "Something was wrong", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+        choiceGroupObservable = groupAdapter.getChoiceGroupObservable()
+                .subscribeWith(new DisposableObserver<Long>() {
+                    @Override
+                    public void onNext(Long aLong) {
+                        mListener.groupOfWordsSelected(aLong);
                     }
 
                     @Override
@@ -295,21 +313,23 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
     public void createEditDialog() {
         Log.d(LOG_TAG, "createEditDialog()");
         editGroup = groupAdapter.getSelectedGroup();
-        String title = groupAdapter.getSelectedGroup().getTitle();
+        String title = editGroup.getTitle();
         DialogFragment dialog = EditGroupDialog.newInstance(title);
-        dialog.setTargetFragment(this, REQUEST_CODE_DELETE_GROUP);
+        dialog.setTargetFragment(this, REQUEST_CODE_EDIT_GROUP);
         dialog.show(getFragmentManager(),null);
 
     }
 
     @Override
     public Group getEditedGroup() {
-        return groupAdapter.getSelectedGroup();
+        return editGroup;
     }
 
     @Override
     public void editGroupInList() {
-        groupAdapter.editSelectedGroup(newGroup);
+        groupAdapter.editSelectedGroup(editGroup);
+        toolbarSelectedMode = false;
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override
@@ -330,7 +350,7 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
                     newGroup = new Group();
                     String title = data.getStringExtra(Content.COLUMN_TITLE);
                     newGroup.setTitle(title);
-                    presenter.editGroupIsReady();
+                    presenter.newGroupIsReady();
                     break;
             }
         }else if(resultCode == Activity.RESULT_CANCELED){
@@ -349,8 +369,11 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
     public void onDestroyView() {
         super.onDestroyView();
         Log.d(LOG_TAG, "onDestroyView() " + this.hashCode());
-        if(selectedItemsObserver != null) {
-            selectedItemsObserver.dispose();
+        if(countOfSelectObserver != null) {
+            countOfSelectObserver.dispose();
+        }
+        if(choiceGroupObservable != null){
+            choiceGroupObservable.dispose();
         }
         presenter.detach();
     }

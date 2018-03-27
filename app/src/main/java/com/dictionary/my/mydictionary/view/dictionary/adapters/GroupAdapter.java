@@ -37,14 +37,15 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder>{
 
     private ArrayList<Group> mdata;
     private ArrayList<Long> selectedItemIds;
-    private PublishSubject<Integer> selectObservable;
+    private PublishSubject<Integer> countOfSelectObservable;
+    private PublishSubject<Long> choiceGroupObservable;
     private boolean selectMode = false;
     private Context context;
     public GroupAdapter(Context context, ArrayList<Group> data){
         this.context = context;
         mdata = data;
         selectedItemIds = new ArrayList<>();
-        selectObservable = PublishSubject.create();
+        countOfSelectObservable = PublishSubject.create();
     }
 
     @Override
@@ -100,6 +101,8 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder>{
             public void onClick(View view) {
                 if(selectMode) {
                     selectItem(mdata.get(position).getId());
+                }else{
+                    choiceGroupObservable.onNext(mdata.get(position).getId());
                 }
             }
         });
@@ -116,15 +119,18 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder>{
         } else{
             selectedItemIds.add(id);
         }
-        selectObservable.onNext(selectedItemIds.size());
+        countOfSelectObservable.onNext(selectedItemIds.size());
         notifyDataSetChanged();
     }
     public int getSelectedItemsSize(){
         return selectedItemIds.size();
     }
 
-    public PublishSubject<Integer> getSelectedItemsObservable(){
-        return selectObservable;
+    public PublishSubject<Integer> getcountOfSelectObservable(){
+        return countOfSelectObservable;
+    }
+    public PublishSubject<Long> getChoiceGroupObservable(){
+        return choiceGroupObservable;
     }
 
     public ArrayList<Long> getSelectedItemIds(){

@@ -71,5 +71,6 @@ public class NewGroupDialog extends DialogFragment{
     @Override
     public void onStart() {
         super.onStart();
+        ((AlertDialog)getDialog()).getButton(Dialog.BUTTON_POSITIVE).setEnabled(false);
     }
 }

@@ -86,11 +86,13 @@ public class PresenterAllGroupsImpl<V extends ViewAllGroups> implements Presente
 
     @Override
     public void newSelected() {
+        Log.d(LOG_TAG, "newSelected()");
         view.createNewGroupDialog();
     }
 
     @Override
     public void newGroupIsReady() {
+        Log.d(LOG_TAG, "newGroupIsReady()");
         Group group = view.getNewGroup();
         newDisposable = repository.setNewGroup(group)
                 .subscribeOn(Schedulers.io())
@@ -103,6 +105,7 @@ public class PresenterAllGroupsImpl<V extends ViewAllGroups> implements Presente
 
                     @Override
                     public void onError(Throwable e) {
+                        e.printStackTrace();
                         view.showERROR("Set new group ERROR");
                     }
                 });
@@ -110,11 +113,13 @@ public class PresenterAllGroupsImpl<V extends ViewAllGroups> implements Presente
 
     @Override
     public void deleteSelected() {
+        Log.d(LOG_TAG, "deleteSelected()");
         view.createDeleteDialog();
     }
 
     @Override
     public void deleteGroupsIsReady() {
+        Log.d(LOG_TAG, "deleteGroupsIsReady()");
         ArrayList<Long> delList = view.getDeletedGroups();
         delDisposable = repository.deleteGroups(delList)
                 .subscribeOn(Schedulers.io())
@@ -127,6 +132,7 @@ public class PresenterAllGroupsImpl<V extends ViewAllGroups> implements Presente
 
                     @Override
                     public void onError(Throwable e) {
+                        e.printStackTrace();
                         view.showERROR("Delete group ERROR");
                     }
                 });
@@ -134,11 +140,13 @@ public class PresenterAllGroupsImpl<V extends ViewAllGroups> implements Presente
 
     @Override
     public void editSelected() {
+        Log.d(LOG_TAG, "editSelected()");
         view.createEditDialog();
     }
 
     @Override
     public void editGroupIsReady() {
+        Log.d(LOG_TAG, "editGroupIsReady()");
         Group group = view.getEditedGroup();
         editDisposable = repository.editGroup(group)
                 .subscribeOn(Schedulers.io())
@@ -151,6 +159,7 @@ public class PresenterAllGroupsImpl<V extends ViewAllGroups> implements Presente
 
                     @Override
                     public void onError(Throwable e) {
+                        e.printStackTrace();
                         view.showERROR("Edit group ERROR");
                     }
                 });

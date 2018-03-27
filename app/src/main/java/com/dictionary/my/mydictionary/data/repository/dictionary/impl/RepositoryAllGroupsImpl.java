@@ -52,6 +52,9 @@ public class RepositoryAllGroupsImpl implements RepositoryAllGroups {
             public void subscribe(CompletableEmitter e) throws Exception {
                 try{
                     dbAllGroups.setNewGroup(group);
+                    if(!e.isDisposed()){
+                        e.onComplete();
+                    }
                 }catch (DBException exc){
                     if(!e.isDisposed()){
                         e.onError(exc);
@@ -68,6 +71,9 @@ public class RepositoryAllGroupsImpl implements RepositoryAllGroups {
             public void subscribe(CompletableEmitter e) throws Exception {
                 try {
                     dbAllGroups.deleteGroups(delList);
+                    if(!e.isDisposed()){
+                        e.onComplete();
+                    }
                 }catch (DBException exc){
                     if(!e.isDisposed()){
                         e.onError(exc);
@@ -84,6 +90,9 @@ public class RepositoryAllGroupsImpl implements RepositoryAllGroups {
             public void subscribe(CompletableEmitter e) throws Exception {
                 try {
                     dbAllGroups.editGroup(editGroup);
+                    if(!e.isDisposed()){
+                        e.onComplete();
+                    }
                 }catch (DBException exc){
                     if(!e.isDisposed()){
                         e.onError(exc);

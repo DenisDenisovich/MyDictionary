@@ -7,6 +7,7 @@ import android.support.v4.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -19,9 +20,9 @@ import com.dictionary.my.mydictionary.R;
 
 public class DeleteGroupDialog extends DialogFragment{
     private final static String KEY_COUNT_GROUPS = "CountGroups";
-    public static DeleteWordDialog newInstance(Integer wordsCount){
+    public static DeleteGroupDialog newInstance(Integer wordsCount){
         final String KEY_COUNT_GROUPS = "CountGroups";
-        DeleteWordDialog d = new DeleteWordDialog();
+        DeleteGroupDialog d = new DeleteGroupDialog();
         Bundle arg = new Bundle();
         arg.putInt(KEY_COUNT_GROUPS, wordsCount);
         d.setArguments(arg);
