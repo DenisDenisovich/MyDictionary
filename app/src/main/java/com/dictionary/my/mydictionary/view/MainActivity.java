@@ -17,6 +17,7 @@ import com.dictionary.my.mydictionary.view.dictionary.impl.ViewAllWordsImpl;
 
 public class MainActivity extends AppCompatActivity implements ViewAllWordsImpl.onAllWordsSelectedListener, ViewAllGroupsImpl.onAllGroupsSelectedListener {
     private final int REQUEST_CODE_NEW_WORD = 1;
+    private final int REQEST_CODE_GROUP_OF_WORDS = 2;
 
     private final static String LOG_TAG = "Log_ActivityMain";
     private final static String KEY_ALL_WORDS = "allWordsFragment";

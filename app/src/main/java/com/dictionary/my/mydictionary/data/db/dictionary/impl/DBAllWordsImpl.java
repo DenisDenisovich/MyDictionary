@@ -27,10 +27,15 @@ public class DBAllWordsImpl implements DBAllWords {
     private final static String LOG_TAG = "Log_DBAllWords";
     private DBHelper dbHelper;
     private SQLiteDatabase db;
+    private Long groupId = null;
 
     public DBAllWordsImpl(Context context){
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
+    }
+
+    public DBAllWordsImpl(Context context, Long groupId){
+        this.groupId = groupId;
     }
 
 
@@ -40,7 +45,14 @@ public class DBAllWordsImpl implements DBAllWords {
         ArrayList<Word> list = new ArrayList<>();
         try{
             String[] columns = {Content.COLUMN_ROWID, Content.COLUMN_ENG, Content.COLUMN_RUS, Content.COLUMN_SOUND};
-            Cursor cursor = db.query(Content.TABLE_ALL_WORD,columns,null,null,null,null,null);
+            Cursor cursor;
+            if(groupId != null){
+                String whereClause = "id = ";
+                String[] whereArg = {String.valueOf(groupId)};
+                cursor = db.query(Content.TABLE_ALL_WORD,columns,whereClause,whereArg,null,null,null);
+            }else {
+                cursor = db.query(Content.TABLE_ALL_WORD,columns,null,null,null,null,null);
+            }
             try {
                 if (cursor.moveToLast()) {
                     do {

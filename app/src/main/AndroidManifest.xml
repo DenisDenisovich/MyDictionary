@@ -24,6 +24,7 @@
         <activity android:name=".view.dictionary.impl.AddWordActivityImpl">
 
         </activity>
+        <activity android:name=".view.dictionary.impl.GroupOfWordsActivityImpl"/>
     </application>
 
 </manifest>

@@ -61,6 +61,7 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
     private final static int REQUEST_CODE_NEW_GROUP = 3;
     Group newGroup;
     Group editGroup;
+
     public interface onAllGroupsSelectedListener{
         void allWordsScreenSelected();
         void groupOfWordsSelected(long groupId);
@@ -85,6 +86,7 @@ public class ViewAllGroupsImpl extends Fragment implements ViewAllGroups {
         setHasOptionsMenu(true);
         presenter = new PresenterAllGroupsImpl(getActivity().getApplicationContext());
     }
+
 
     @Nullable
     @Override

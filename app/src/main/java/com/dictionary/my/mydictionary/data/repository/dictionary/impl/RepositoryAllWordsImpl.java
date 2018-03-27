@@ -41,6 +41,11 @@ public class RepositoryAllWordsImpl implements RepositoryAllWords {
         dbAllGroups = new DBAllGroupsImpl(context);
         cloudAllWords = new CloudAllWordsImpl();
     }
+    public RepositoryAllWordsImpl(Context context, Long groupId){
+        dbAllWords = new DBAllWordsImpl(context, groupId);
+        dbAllGroups = new DBAllGroupsImpl(context);
+        cloudAllWords = new CloudAllWordsImpl();
+    }
     @Override
     public Single<ArrayList<Word>> getListOfWords() {
         Log.d(LOG_TAG, "getListOfWords()");

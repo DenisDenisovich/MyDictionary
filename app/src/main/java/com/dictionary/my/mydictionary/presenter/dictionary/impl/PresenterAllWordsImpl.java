@@ -30,9 +30,15 @@ public class PresenterAllWordsImpl<V extends ViewAllWords> implements PresenterA
     private ArrayList<Word> words;
     private DisposableCompletableObserver delDisposable;
     private DisposableCompletableObserver moveDisposable;
+
     public PresenterAllWordsImpl(Context context){
         repository = new RepositoryAllWordsImpl(context);
     }
+
+    public PresenterAllWordsImpl(Context context, Long groupId){
+        repository = new RepositoryAllWordsImpl(context,groupId);
+    }
+
     @Override
     public void attach(V view) {
         Log.d(LOG_TAG, "attach()");
