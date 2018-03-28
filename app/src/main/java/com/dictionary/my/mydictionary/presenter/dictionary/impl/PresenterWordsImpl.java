@@ -8,7 +8,7 @@ import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryWords;
 import com.dictionary.my.mydictionary.data.repository.dictionary.impl.RepositoryWordsImpl;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterWords;
-import com.dictionary.my.mydictionary.view.dictionary.AllWordsFragment;
+import com.dictionary.my.mydictionary.view.dictionary.ViewAllWords;
 
 import java.util.ArrayList;
 
@@ -21,7 +21,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by luxso on 11.03.2018.
  */
 
-public class PresenterWordsImpl<V extends AllWordsFragment> implements PresenterWords<V> {
+public class PresenterWordsImpl<V extends ViewAllWords> implements PresenterWords<V> {
     private final static String LOG_TAG = "Log_PresenterAllWord";
     private V view;
     private RepositoryWords repository;
@@ -148,7 +148,7 @@ public class PresenterWordsImpl<V extends AllWordsFragment> implements Presenter
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-
+                        view.moveWordsFromList();
                     }
 
                     @Override

@@ -29,7 +29,7 @@ import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterWords;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterWordsImpl;
-import com.dictionary.my.mydictionary.view.dictionary.AllWordsFragment;
+import com.dictionary.my.mydictionary.view.dictionary.ViewAllWords;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.WordAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.DeleteWordDialog;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.MoveToGroupDialog;
@@ -42,7 +42,7 @@ import io.reactivex.observers.DisposableObserver;
  * Created by luxso on 04.03.2018.
  */
 
-public class AllWordsFragmentImpl extends Fragment implements AllWordsFragment {
+public class AllWordsFragment extends Fragment implements ViewAllWords {
     private final static String LOG_TAG = "Log_ViewAllWords";
     private AppCompatActivity activity;
     private View myView;
@@ -58,6 +58,7 @@ public class AllWordsFragmentImpl extends Fragment implements AllWordsFragment {
 
     private final static int REQUEST_CODE_MOVE_TO_GROUP = 1;
     private ArrayList<Long> movedWords;
+    private String moveGroupTitle;
     private final static int REQUEST_CODE_MOVE_TO_TRAINING = 2;
     private final static int REQUEST_CODE_DELETE = 3;
     private boolean onNewWordClicked = false;
@@ -292,6 +293,19 @@ public class AllWordsFragmentImpl extends Fragment implements AllWordsFragment {
     }
 
     @Override
+    public ArrayList<Long> getMovedToGroupWords() {
+        return movedWords;
+    }
+
+    @Override
+    public void moveWordsFromList() {
+        Toast.makeText(getActivity(),"Words are moved to " + moveGroupTitle,Toast.LENGTH_LONG).show();
+        wordAdapter.selectModeOff();
+        toolbarSelectedMode = false;
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
     public void createMoveToTrainingDialog(){
 
     }
@@ -308,6 +322,7 @@ public class AllWordsFragmentImpl extends Fragment implements AllWordsFragment {
                 case REQUEST_CODE_MOVE_TO_GROUP:
                     movedWords = (ArrayList<Long>) wordAdapter.getSelectedItemIds().clone();
                     Long groupId = data.getLongExtra(Content.COLUMN_ROWID,0);
+                    moveGroupTitle = data.getStringExtra(Content.COLUMN_TITLE);
                     movedWords.add(0, groupId);
                     presenter.moveToGroupWordsIsReady();
                     break;
@@ -324,18 +339,6 @@ public class AllWordsFragmentImpl extends Fragment implements AllWordsFragment {
                     break;
             }
         }
-    }
-
-
-
-
-
-    @Override
-    public ArrayList<Long> getMovedToGroupWords() {
-        wordAdapter.selectModeOff();
-        toolbarSelectedMode = false;
-        getActivity().invalidateOptionsMenu();
-        return movedWords;
     }
 
 

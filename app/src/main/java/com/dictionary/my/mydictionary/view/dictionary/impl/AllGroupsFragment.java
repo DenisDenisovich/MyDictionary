@@ -28,7 +28,7 @@ import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterGroups;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterGroupsImpl;
-import com.dictionary.my.mydictionary.view.dictionary.AllGroupsFragment;
+import com.dictionary.my.mydictionary.view.dictionary.ViewAllGroups;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.GroupAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.DeleteGroupDialog;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.EditGroupDialog;
@@ -42,7 +42,7 @@ import io.reactivex.observers.DisposableObserver;
  * Created by luxso on 07.03.2018.
  */
 
-public class AllGroupsFragmentImpl extends Fragment implements AllGroupsFragment {
+public class AllGroupsFragment extends Fragment implements ViewAllGroups {
     private final static String LOG_TAG = "Log_ViewAllGroups";
     private AppCompatActivity activity;
     private View myView;

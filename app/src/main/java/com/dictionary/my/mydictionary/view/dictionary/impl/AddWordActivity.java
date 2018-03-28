@@ -27,7 +27,7 @@ import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAddWord;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterAddWordImpl;
-import com.dictionary.my.mydictionary.view.dictionary.AddWordActivity;
+import com.dictionary.my.mydictionary.view.dictionary.ViewAddWord;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerGroupAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.TranslationAdapter;
 import com.squareup.picasso.Picasso;
@@ -41,7 +41,7 @@ import java.util.Date;
  * Created by luxso on 18.03.2018.
  */
 
-public class AddWordActivityImpl extends AppCompatActivity implements AddWordActivity{
+public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
     private final static String LOG_TAG = "Log_AddWordActivity";
     private PresenterAddWord presenter;
     private EditText wordEditText;

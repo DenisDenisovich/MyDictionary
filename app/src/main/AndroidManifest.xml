@@ -21,10 +21,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.dictionary.impl.AddWordActivityImpl">
+        <activity android:name=".view.dictionary.impl.AddWordActivity">
 
         </activity>
-        <activity android:name=".view.dictionary.impl.GroupOfWordsActivityImpl"/>
+        <activity android:name=".view.dictionary.impl.GroupOfWordsActivity"/>
     </application>
 
 </manifest>

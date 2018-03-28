@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by luxso on 04.03.2018.
  */
 
-public interface AllWordsFragment {
+public interface ViewAllWords {
     void showProgress();
     void hideProgress();
     void showERROR(String message);
@@ -19,5 +19,6 @@ public interface AllWordsFragment {
     void deleteWordsFromList();
     void createMoveToGroupDialog(ArrayList<Group> groups);
     ArrayList<Long> getMovedToGroupWords();
+    void moveWordsFromList();
     void createMoveToTrainingDialog();
 }

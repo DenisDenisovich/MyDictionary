@@ -8,7 +8,7 @@ import java.util.ArrayList;
  * Created by luxso on 04.03.2018.
  */
 
-public interface AllGroupsFragment {
+public interface ViewAllGroups {
     void showProgress();
     void hideProgress();
     void showERROR(String message);

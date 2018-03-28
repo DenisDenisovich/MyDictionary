@@ -3,6 +3,7 @@ package com.dictionary.my.mydictionary.view.dictionary.dialogs;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -28,6 +29,23 @@ public class DeleteWordDialog extends DialogFragment {
         d.setArguments(arg);
         return d;
     }
+
+    public interface DeleteWordListener{
+        public void onDeleteWordPositiveClick();
+    }
+    DeleteWordListener mListener;
+    private boolean isActivity = false;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (DeleteWordListener) context;
+            isActivity = true;
+        }catch (ClassCastException e){
+            isActivity = false;
+        }
+    }
+
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -46,13 +64,21 @@ public class DeleteWordDialog extends DialogFragment {
                 .setPositiveButton(getResources().getString(R.string.delete_dialog_positive_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK,null);
+                        if (isActivity){
+                            mListener.onDeleteWordPositiveClick();
+                        }else {
+                            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, null);
+                        }
                     }
                 })
                 .setNegativeButton(getResources().getString(R.string.delete_dialog_negative_button), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED,null);
+                        if (isActivity){
+                            dismiss();
+                        }else {
+                            getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_CANCELED, null);
+                        }
                     }
                 });
         return builder.create();

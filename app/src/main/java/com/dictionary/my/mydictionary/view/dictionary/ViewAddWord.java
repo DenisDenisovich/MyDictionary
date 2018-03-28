@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Created by luxso on 19.03.2018.
  */
 
-public interface AddWordActivity {
+public interface ViewAddWord {
     void showProgress();
     void hideProgress();
     void hideAlternativeTranslationMode();

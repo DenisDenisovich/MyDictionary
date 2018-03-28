@@ -1,8 +1,10 @@
 package com.dictionary.my.mydictionary.view.dictionary.impl;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,18 +12,18 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
-import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAddWord;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterWords;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterWordsImpl;
-import com.dictionary.my.mydictionary.view.dictionary.AllWordsFragment;
+import com.dictionary.my.mydictionary.view.dictionary.ViewAllWords;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.WordAdapter;
+import com.dictionary.my.mydictionary.view.dictionary.dialogs.DeleteWordDialog;
+import com.dictionary.my.mydictionary.view.dictionary.dialogs.MoveToGroupDialog;
 
 import java.util.ArrayList;
 
@@ -31,7 +33,8 @@ import io.reactivex.observers.DisposableObserver;
  * Created by luxso on 28.03.2018.
  */
 
-public class GroupOfWordsActivityImpl extends AppCompatActivity implements AllWordsFragment {
+public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWords, DeleteWordDialog.DeleteWordListener,
+                                                                                     MoveToGroupDialog.MoveToGroupListener {
     private final static String LOG_TAG = "Log_GroupOfWords";
     private PresenterWords presenter;
     private WordAdapter wordAdapter;
@@ -43,10 +46,9 @@ public class GroupOfWordsActivityImpl extends AppCompatActivity implements AllWo
     private final static String KEY_TOOLBAR_SELECTED_MODE = "toolbarSelectedMode";
     private DisposableObserver<Integer> selectedItemsObserver;
 
-    private final static int REQUEST_CODE_MOVE_TO_GROUP = 1;
     private ArrayList<Long> movedWords;
-    private final static int REQUEST_CODE_MOVE_TO_TRAINING = 2;
-    private final static int REQUEST_CODE_DELETE = 3;
+    private String moveGroupTitle;
+    private final static int REQUEST_CODE_NEW_WORD = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -158,8 +160,9 @@ public class GroupOfWordsActivityImpl extends AppCompatActivity implements AllWo
                 case R.id.word_menu_search:
                     return true;
                 case R.id.word_menu_add:
-                    //onNewWordClicked = true;
-                    //mListener.showAddWordDialog();
+                    //Intent intent = new Intent();
+
+
                     return true;
             }
         }
@@ -218,32 +221,71 @@ public class GroupOfWordsActivityImpl extends AppCompatActivity implements AllWo
 
     @Override
     public void createDeleteDialog() {
+        Log.d(LOG_TAG, "createDeleteDialog()");
+        DialogFragment dialog = DeleteWordDialog.newInstance(wordAdapter.getSelectedItemsSize());
+        dialog.show(getSupportFragmentManager(),null);
+    }
 
+    @Override
+    public void onDeleteWordPositiveClick() {
+        presenter.deleteWordsIsReady();
     }
 
     @Override
     public ArrayList<Long> getDeletedWords() {
-        return null;
+        return wordAdapter.getSelectedItemIds();
     }
 
     @Override
     public void deleteWordsFromList() {
-
+        wordAdapter.deleteSelectedWords();
+        toolbarSelectedMode = false;
+        invalidateOptionsMenu();
     }
 
     @Override
     public void createMoveToGroupDialog(ArrayList<Group> groups) {
-
+        Log.d(LOG_TAG, "createMoveToGroupDialog()");
+        DialogFragment dialog = MoveToGroupDialog.newInstance(groups);
+        dialog.show(getSupportFragmentManager(),null);
     }
 
     @Override
     public ArrayList<Long> getMovedToGroupWords() {
-        return null;
+        return movedWords;
+    }
+
+    @Override
+    public void onMoveToGroupPositiveClick(Long groupId, String groupTitle) {
+        movedWords = (ArrayList<Long>) wordAdapter.getSelectedItemIds().clone();
+        moveGroupTitle = groupTitle;
+        movedWords.add(0, groupId);
+        presenter.moveToGroupWordsIsReady();
+    }
+
+    @Override
+    public void moveWordsFromList() {
+        Toast.makeText(this,"Words are moved to " + moveGroupTitle,Toast.LENGTH_LONG).show();
+        wordAdapter.deleteSelectedWords();
+        toolbarSelectedMode = false;
+        invalidateOptionsMenu();
     }
 
     @Override
     public void createMoveToTrainingDialog() {
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == Activity.RESULT_OK) {
+            switch (requestCode) {
+                case REQUEST_CODE_NEW_WORD:
+                    presenter.init();
+                    break;
+            }
+        }
     }
 
     @Override

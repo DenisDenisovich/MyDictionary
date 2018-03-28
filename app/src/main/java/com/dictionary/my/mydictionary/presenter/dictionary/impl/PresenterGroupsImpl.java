@@ -7,7 +7,7 @@ import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryGroup
 import com.dictionary.my.mydictionary.data.repository.dictionary.impl.RepositoryGroupsImpl;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterGroups;
-import com.dictionary.my.mydictionary.view.dictionary.AllGroupsFragment;
+import com.dictionary.my.mydictionary.view.dictionary.ViewAllGroups;
 
 import java.util.ArrayList;
 
@@ -20,7 +20,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by luxso on 27.03.2018.
  */
 
-public class PresenterGroupsImpl<V extends AllGroupsFragment> implements PresenterGroups<V> {
+public class PresenterGroupsImpl<V extends ViewAllGroups> implements PresenterGroups<V> {
     private final static String LOG_TAG = "Log_PresenterAllGroup";
     private V view;
     private RepositoryGroups repository;
