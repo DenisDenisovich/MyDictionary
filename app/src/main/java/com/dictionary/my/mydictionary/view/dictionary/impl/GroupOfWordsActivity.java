@@ -49,6 +49,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
     private ArrayList<Long> movedWords;
     private String moveGroupTitle;
     private final static int REQUEST_CODE_NEW_WORD = 1;
+    private final static String KEY_CURRENT_GROUP = "currentGroup";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -160,9 +161,9 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
                 case R.id.word_menu_search:
                     return true;
                 case R.id.word_menu_add:
-                    //Intent intent = new Intent();
-
-
+                    Intent intent = new Intent(this,AddWordActivity.class);
+                    intent.putExtra(KEY_CURRENT_GROUP, groupTitle);
+                    startActivityForResult(intent, REQUEST_CODE_NEW_WORD);
                     return true;
             }
         }
@@ -282,7 +283,10 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
         if(resultCode == Activity.RESULT_OK) {
             switch (requestCode) {
                 case REQUEST_CODE_NEW_WORD:
-                    presenter.init();
+                    Boolean result = data.getBooleanExtra("RESULT", false);
+                    if (result) {
+                        presenter.init();
+                    }
                     break;
             }
         }

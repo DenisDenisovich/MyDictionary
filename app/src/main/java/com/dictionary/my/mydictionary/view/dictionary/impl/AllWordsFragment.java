@@ -67,6 +67,7 @@ public class AllWordsFragment extends Fragment implements ViewAllWords {
     public interface onAllWordsSelectedListener{
         void allGroupsScreenSelected();
         void showAddWordDialog();
+        boolean wordIsAdded();
     }
     private onAllWordsSelectedListener mListener;
 
@@ -96,7 +97,9 @@ public class AllWordsFragment extends Fragment implements ViewAllWords {
         // use this method, because fragment don't call onCreateView after closing AddWordActivity
         Log.d(LOG_TAG, "onStart()  " + this.hashCode());
         if(onNewWordClicked){
-            presenter.init();
+            if(mListener.wordIsAdded()) {
+                presenter.init();
+            }
             onNewWordClicked = false;
         }
     }

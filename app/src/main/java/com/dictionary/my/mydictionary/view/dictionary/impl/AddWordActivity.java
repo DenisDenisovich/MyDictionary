@@ -1,5 +1,6 @@
 package com.dictionary.my.mydictionary.view.dictionary.impl;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -50,6 +51,7 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
     private Translation selectedTranslation;
     private boolean alternativeTranslationMode = false;
     private final static String KEY_ALT_TRANS_MODE = "altTranslationMode";
+    private final static String KEY_CURRENT_GROUP = "currentGroup";
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreate()  " + this.hashCode());
@@ -196,14 +198,28 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
 
     @Override
     public void setGroups(ArrayList<Group> groups) {
+        Intent intent = getIntent();
+        String currentTitle = intent.getStringExtra(KEY_CURRENT_GROUP);
+        Integer currentTitlePosition = 0;
         String[] stringGroups = new String[groups.size()];
-        for(int i = 0; i < groups.size(); i++){
-            stringGroups[i] = groups.get(i).getTitle();
+        if(currentTitle == null) {
+            // if activity is opened from allWords fragment and we don't have current title of group
+            for (int i = 0; i < groups.size(); i++) {
+                stringGroups[i] = groups.get(i).getTitle();
+            }
+        }else {
+            // if activity is opened from groupOfWords activity and we have current title of group
+            for (int i = 0; i < groups.size(); i++) {
+                stringGroups[i] = groups.get(i).getTitle();
+                if(currentTitle.equals(groups.get(i).getTitle())){
+                    currentTitlePosition = i;
+                }
+            }
         }
         SpinnerGroupAdapter groupAdapter = new SpinnerGroupAdapter(this, android.R.layout.simple_spinner_item, stringGroups, groups);
         groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(groupAdapter);
-        spinner.setSelection(0);
+        spinner.setSelection(currentTitlePosition);
     }
 
     @Override
@@ -244,7 +260,11 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
     // call this method from presenter, when translation set to db success
     @Override
     public void closeActivity() {
-        onBackPressed();
+        presenter.destroy();
+        Intent intent = new Intent();
+        intent.putExtra("RESULT", true);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     @Override

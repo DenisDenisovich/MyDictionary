@@ -19,7 +19,8 @@ import com.dictionary.my.mydictionary.view.dictionary.impl.GroupOfWordsActivity;
 
 public class MainActivity extends AppCompatActivity implements AllWordsFragment.onAllWordsSelectedListener, AllGroupsFragment.onAllGroupsSelectedListener {
     private final int REQUEST_CODE_NEW_WORD = 1;
-    private final int REQEST_CODE_GROUP_OF_WORDS = 2;
+    private Boolean addWordResult = false;
+    private final int REQUEST_CODE_GROUP_OF_WORDS = 2;
 
     private final static String LOG_TAG = "Log_ActivityMain";
     private final static String KEY_ALL_WORDS = "allWordsFragment";
@@ -93,11 +94,27 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
     }
 
     @Override
+    public boolean wordIsAdded() {
+        return addWordResult;
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == Activity.RESULT_OK){
             switch (requestCode){
                 case REQUEST_CODE_NEW_WORD:
-                    allWordsScreenSelected();
+                    Boolean result = data.getBooleanExtra("RESULT", false);
+                    if (result) {
+                        addWordResult = true;
+                    }else {
+                        addWordResult = false;
+                    }
+                    break;
+            }
+        }else {
+            switch (requestCode){
+                case REQUEST_CODE_NEW_WORD:
+                    addWordResult = false;
                     break;
             }
         }
