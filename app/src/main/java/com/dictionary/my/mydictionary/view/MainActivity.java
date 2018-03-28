@@ -11,11 +11,13 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.dictionary.my.mydictionary.R;
+import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.view.dictionary.impl.AddWordActivityImpl;
-import com.dictionary.my.mydictionary.view.dictionary.impl.ViewAllGroupsImpl;
-import com.dictionary.my.mydictionary.view.dictionary.impl.ViewAllWordsImpl;
+import com.dictionary.my.mydictionary.view.dictionary.impl.AllGroupsFragmentImpl;
+import com.dictionary.my.mydictionary.view.dictionary.impl.AllWordsFragmentImpl;
+import com.dictionary.my.mydictionary.view.dictionary.impl.GroupOfWordsActivityImpl;
 
-public class MainActivity extends AppCompatActivity implements ViewAllWordsImpl.onAllWordsSelectedListener, ViewAllGroupsImpl.onAllGroupsSelectedListener {
+public class MainActivity extends AppCompatActivity implements AllWordsFragmentImpl.onAllWordsSelectedListener, AllGroupsFragmentImpl.onAllGroupsSelectedListener {
     private final int REQUEST_CODE_NEW_WORD = 1;
     private final int REQEST_CODE_GROUP_OF_WORDS = 2;
 
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements ViewAllWordsImpl.
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_dictionary:
-                    ft.replace(R.id.mainActivityContainer,new ViewAllWordsImpl(),KEY_ALL_WORDS);
+                    ft.replace(R.id.mainActivityContainer,new AllWordsFragmentImpl(),KEY_ALL_WORDS);
                     ft.commit();
                     return true;
                 case R.id.navigation_trainings:
@@ -56,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements ViewAllWordsImpl.
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         if(savedInstanceState == null){
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.mainActivityContainer,new ViewAllWordsImpl(),KEY_ALL_WORDS);
+            ft.replace(R.id.mainActivityContainer,new AllWordsFragmentImpl(),KEY_ALL_WORDS);
             ft.commit();
         }
     }
@@ -65,19 +67,22 @@ public class MainActivity extends AppCompatActivity implements ViewAllWordsImpl.
     @Override
     public void allWordsScreenSelected() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.mainActivityContainer,new ViewAllWordsImpl(),KEY_ALL_WORDS);
+        ft.replace(R.id.mainActivityContainer,new AllWordsFragmentImpl(),KEY_ALL_WORDS);
         ft.commit();
     }
 
     @Override
-    public void groupOfWordsSelected(long groupId) {
-
+    public void groupOfWordsSelected(long groupId, String title) {
+        Intent intent = new Intent(this,GroupOfWordsActivityImpl.class);
+        intent.putExtra(Content.COLUMN_ROWID, groupId);
+        intent.putExtra(Content.COLUMN_TITLE, title);
+        startActivity(intent);
     }
 
     @Override
     public void allGroupsScreenSelected() {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.mainActivityContainer,new ViewAllGroupsImpl(),KEY_ALL_GROUPS);
+        ft.replace(R.id.mainActivityContainer,new AllGroupsFragmentImpl(),KEY_ALL_GROUPS);
         ft.commit();
     }
 

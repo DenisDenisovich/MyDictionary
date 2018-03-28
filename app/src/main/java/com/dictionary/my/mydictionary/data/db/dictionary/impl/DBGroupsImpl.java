@@ -9,7 +9,7 @@ import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.data.DBHelper;
 import com.dictionary.my.mydictionary.data.exception.DBException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
-import com.dictionary.my.mydictionary.data.db.dictionary.DBAllGroups;
+import com.dictionary.my.mydictionary.data.db.dictionary.DBGroups;
 
 import java.util.ArrayList;
 
@@ -18,11 +18,11 @@ import java.util.ArrayList;
  * This class working only with Groups table of dataBase
  */
 
-public class DBAllGroupsImpl implements DBAllGroups {
+public class DBGroupsImpl implements DBGroups {
     private DBHelper dbHelper;
     private SQLiteDatabase db;
 
-    public DBAllGroupsImpl(Context context){
+    public DBGroupsImpl(Context context){
 
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();

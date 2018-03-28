@@ -4,9 +4,9 @@ import android.content.Context;
 
 import com.dictionary.my.mydictionary.data.exception.DBException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
-import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryAllGroups;
-import com.dictionary.my.mydictionary.data.db.dictionary.DBAllGroups;
-import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBAllGroupsImpl;
+import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryGroups;
+import com.dictionary.my.mydictionary.data.db.dictionary.DBGroups;
+import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBGroupsImpl;
 
 import java.util.ArrayList;
 
@@ -21,10 +21,10 @@ import io.reactivex.SingleOnSubscribe;
  * This class manages all necessary data for AllGroups
  */
 
-public class RepositoryAllGroupsImpl implements RepositoryAllGroups {
-    private DBAllGroups dbAllGroups;
-    public RepositoryAllGroupsImpl(Context context){
-        dbAllGroups = new DBAllGroupsImpl(context);
+public class RepositoryGroupsImpl implements RepositoryGroups {
+    private DBGroups dbGroups;
+    public RepositoryGroupsImpl(Context context){
+        dbGroups = new DBGroupsImpl(context);
     }
     @Override
     public Single<ArrayList<Group>> getListOfGroups() {
@@ -32,7 +32,7 @@ public class RepositoryAllGroupsImpl implements RepositoryAllGroups {
             @Override
             public void subscribe(SingleEmitter<ArrayList<Group>> e) throws Exception {
                 try{
-                    ArrayList<Group> groups = dbAllGroups.getListOfGroups();
+                    ArrayList<Group> groups = dbGroups.getListOfGroups();
                     if(!e.isDisposed()){
                         e.onSuccess(groups);
                     }
@@ -51,7 +51,7 @@ public class RepositoryAllGroupsImpl implements RepositoryAllGroups {
             @Override
             public void subscribe(CompletableEmitter e) throws Exception {
                 try{
-                    dbAllGroups.setNewGroup(group);
+                    dbGroups.setNewGroup(group);
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
@@ -70,7 +70,7 @@ public class RepositoryAllGroupsImpl implements RepositoryAllGroups {
             @Override
             public void subscribe(CompletableEmitter e) throws Exception {
                 try {
-                    dbAllGroups.deleteGroups(delList);
+                    dbGroups.deleteGroups(delList);
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
@@ -89,7 +89,7 @@ public class RepositoryAllGroupsImpl implements RepositoryAllGroups {
             @Override
             public void subscribe(CompletableEmitter e) throws Exception {
                 try {
-                    dbAllGroups.editGroup(editGroup);
+                    dbGroups.editGroup(editGroup);
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
@@ -104,6 +104,6 @@ public class RepositoryAllGroupsImpl implements RepositoryAllGroups {
 
     @Override
     public void destroy() {
-        dbAllGroups.destroy();
+        dbGroups.destroy();
     }
 }

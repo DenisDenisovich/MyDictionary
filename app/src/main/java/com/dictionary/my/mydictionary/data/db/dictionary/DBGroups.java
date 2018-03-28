@@ -10,7 +10,7 @@ import io.reactivex.Single;
  * Created by luxso on 30.10.2017.
  */
 
-public interface DBAllGroups {
+public interface DBGroups {
     ArrayList<Group> getListOfGroups() throws Exception;
     void setNewGroup(Group group) throws Exception;
     void deleteGroups(ArrayList<Long> delList) throws Exception;

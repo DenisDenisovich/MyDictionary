@@ -1,7 +1,7 @@
 package com.dictionary.my.mydictionary.presenter.dictionary;
 
 
-public interface PresenterAllWords<V> {
+public interface PresenterWords<V> {
     void attach(V view);
     void detach();
     void destroy();

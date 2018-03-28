@@ -13,7 +13,7 @@ import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.WordFullInformation;
 import com.dictionary.my.mydictionary.data.cloud.pojo.meaning.Example;
-import com.dictionary.my.mydictionary.data.db.dictionary.DBAllWords;
+import com.dictionary.my.mydictionary.data.db.dictionary.DBWords;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,19 +23,21 @@ import java.util.List;
  * This class working only with All_Words table of dataBase
  */
 
-public class DBAllWordsImpl implements DBAllWords {
+public class DBWordsImpl implements DBWords {
     private final static String LOG_TAG = "Log_DBAllWords";
     private DBHelper dbHelper;
     private SQLiteDatabase db;
     private Long groupId = null;
 
-    public DBAllWordsImpl(Context context){
+    public DBWordsImpl(Context context){
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
     }
 
-    public DBAllWordsImpl(Context context, Long groupId){
+    public DBWordsImpl(Context context, Long groupId){
         this.groupId = groupId;
+        dbHelper = new DBHelper(context);
+        db = dbHelper.getWritableDatabase();
     }
 
 
@@ -47,7 +49,7 @@ public class DBAllWordsImpl implements DBAllWords {
             String[] columns = {Content.COLUMN_ROWID, Content.COLUMN_ENG, Content.COLUMN_RUS, Content.COLUMN_SOUND};
             Cursor cursor;
             if(groupId != null){
-                String whereClause = "id = ";
+                String whereClause = Content.COLUMN_GROUP_ID + " = ?";
                 String[] whereArg = {String.valueOf(groupId)};
                 cursor = db.query(Content.TABLE_ALL_WORD,columns,whereClause,whereArg,null,null,null);
             }else {

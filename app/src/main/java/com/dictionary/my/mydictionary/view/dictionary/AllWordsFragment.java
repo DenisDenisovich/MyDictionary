@@ -9,7 +9,7 @@ import java.util.ArrayList;
  * Created by luxso on 04.03.2018.
  */
 
-public interface ViewAllWords {
+public interface AllWordsFragment {
     void showProgress();
     void hideProgress();
     void showERROR(String message);

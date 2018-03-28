@@ -26,55 +26,53 @@ import android.widget.Toast;
 import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
-import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
-import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAllWords;
-import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterAllWordsImpl;
-import com.dictionary.my.mydictionary.view.dictionary.ViewAllWords;
-import com.dictionary.my.mydictionary.view.dictionary.adapters.WordAdapter;
-import com.dictionary.my.mydictionary.view.dictionary.dialogs.DeleteWordDialog;
-import com.dictionary.my.mydictionary.view.dictionary.dialogs.MoveToGroupDialog;
+import com.dictionary.my.mydictionary.presenter.dictionary.PresenterGroups;
+import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterGroupsImpl;
+import com.dictionary.my.mydictionary.view.dictionary.AllGroupsFragment;
+import com.dictionary.my.mydictionary.view.dictionary.adapters.GroupAdapter;
+import com.dictionary.my.mydictionary.view.dictionary.dialogs.DeleteGroupDialog;
+import com.dictionary.my.mydictionary.view.dictionary.dialogs.EditGroupDialog;
+import com.dictionary.my.mydictionary.view.dictionary.dialogs.NewGroupDialog;
 
 import java.util.ArrayList;
 
 import io.reactivex.observers.DisposableObserver;
 
 /**
- * Created by luxso on 04.03.2018.
+ * Created by luxso on 07.03.2018.
  */
 
-public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
-    private final static String LOG_TAG = "Log_ViewAllWords";
+public class AllGroupsFragmentImpl extends Fragment implements AllGroupsFragment {
+    private final static String LOG_TAG = "Log_ViewAllGroups";
     private AppCompatActivity activity;
     private View myView;
-
-    private WordAdapter wordAdapter;
+    private GroupAdapter groupAdapter;
 
     private Integer countOfSelectedItems;
     private Boolean toolbarSelectedMode = false;
     private final static String KEY_TOOLBAR_SELECTED_MODE = "toolbarSelectedMode";
-    private DisposableObserver<Integer> selectedItemsObserver;
+    private DisposableObserver<Integer> countOfSelectObserver;
+    private DisposableObserver<Group> choiceGroupObservable;
 
-    private PresenterAllWords presenter;
+    private PresenterGroups presenter;
 
-    private final static int REQUEST_CODE_MOVE_TO_GROUP = 1;
-    private ArrayList<Long> movedWords;
-    private final static int REQUEST_CODE_MOVE_TO_TRAINING = 2;
-    private final static int REQUEST_CODE_DELETE = 3;
-    private boolean onNewWordClicked = false;
-    private final static String KEY_ON_NEW_WORD_CLICKED = "onNewWordClicked";
+    private final static int REQUEST_CODE_DELETE_GROUP = 1;
+    private final static int REQUEST_CODE_EDIT_GROUP = 2;
+    private final static int REQUEST_CODE_NEW_GROUP = 3;
+    Group newGroup;
+    Group editGroup;
 
-    public interface onAllWordsSelectedListener{
-        void allGroupsScreenSelected();
-        void showAddWordDialog();
+    public interface onAllGroupsSelectedListener{
+        void allWordsScreenSelected();
+        void groupOfWordsSelected(long groupId, String title);
     }
-    private onAllWordsSelectedListener mListener;
-
+    private onAllGroupsSelectedListener mListener;
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         Log.d(LOG_TAG, "onAttach()      " + this.hashCode());
-        try{
-            mListener = (onAllWordsSelectedListener)context;
+        try {
+            mListener = (onAllGroupsSelectedListener)context;
         }catch (ClassCastException e){
             e.printStackTrace();
         }
@@ -86,26 +84,16 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         Log.d(LOG_TAG, "onCreate()      " + this.hashCode());
         setRetainInstance(true);
         setHasOptionsMenu(true);
-        presenter = new PresenterAllWordsImpl(getActivity().getApplicationContext());
+        presenter = new PresenterGroupsImpl(getActivity().getApplicationContext());
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // use this method, because fragment don't call onCreateView after closing AddWordActivity
-        Log.d(LOG_TAG, "onStart()  " + this.hashCode());
-        if(onNewWordClicked){
-            presenter.init();
-            onNewWordClicked = false;
-        }
-    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.d(LOG_TAG, "onCreateView()  " + this.hashCode());
         presenter.attach(this);
-        myView = inflater.inflate(R.layout.fragment_all_words,null);
+        myView = inflater.inflate(R.layout.fragment_all_groups,null);
         Toolbar toolbar = (Toolbar)myView.findViewById(R.id.toolbar);
         activity = (AppCompatActivity)getActivity();
         activity.setSupportActionBar(toolbar);
@@ -114,11 +102,11 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         if(savedInstanceState == null){
             presenter.init();
         }else {
-            onNewWordClicked = savedInstanceState.getBoolean(KEY_ON_NEW_WORD_CLICKED);
             toolbarSelectedMode = savedInstanceState.getBoolean(KEY_TOOLBAR_SELECTED_MODE);
             presenter.update();
 
         }
+
         return myView;
     }
 
@@ -130,15 +118,15 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
             adapter.setDropDownViewResource(R.layout.spinner_drop_down_item);
             Spinner spinner = new Spinner(activity.getSupportActionBar().getThemedContext());
             spinner.setAdapter(adapter);
-            spinner.setSelection(0);
+            spinner.setSelection(1);
             activity.getSupportActionBar().setCustomView(spinner);
             activity.getSupportActionBar().setDisplayShowCustomEnabled(true);
             spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                     switch (i) {
-                        case 1:
-                            mListener.allGroupsScreenSelected();
+                        case 0:
+                            mListener.allWordsScreenSelected();
                             break;
                     }
                 }
@@ -150,17 +138,17 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
     }
 
     @Override
-    public void createList(ArrayList<Word> words) {
-        RecyclerView rv = myView.findViewById(R.id.rvAllWords);
+    public void createList(ArrayList<Group> words) {
+        RecyclerView rv = myView.findViewById(R.id.rvAllGroups);
         LinearLayoutManager llm = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(llm);
-        wordAdapter = new WordAdapter(getActivity(),words);
-        rv.setAdapter(wordAdapter);
+        groupAdapter = new GroupAdapter(getActivity(),words);
+        rv.setAdapter(groupAdapter);
         subscribeOnRecyclerView();
     }
 
     private void subscribeOnRecyclerView(){
-        selectedItemsObserver = wordAdapter.getSelectedItemsObservable()
+        countOfSelectObserver = groupAdapter.getcountOfSelectObservable()
                 .subscribeWith(new DisposableObserver<Integer>() {
                     @Override
                     public void onNext(Integer integer) {
@@ -180,11 +168,27 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
 
                     }
                 });
+        choiceGroupObservable = groupAdapter.getChoiceGroupObservable()
+                .subscribeWith(new DisposableObserver<Group>() {
+                    @Override
+                    public void onNext(Group group) {
+                        mListener.groupOfWordsSelected(group.getId(), group.getTitle());
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Toast.makeText(getActivity(), "Something was wrong", Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putBoolean(KEY_ON_NEW_WORD_CLICKED, onNewWordClicked);
         outState.putBoolean(KEY_TOOLBAR_SELECTED_MODE, toolbarSelectedMode);
         super.onSaveInstanceState(outState);
     }
@@ -192,7 +196,7 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         Log.d(LOG_TAG, "onCreateOptionasMenu()");
-        inflater.inflate(R.menu.word_menu, menu);
+        inflater.inflate(R.menu.grop_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
@@ -200,8 +204,8 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
     public void onPrepareOptionsMenu(Menu menu) {
         Log.d(LOG_TAG, "onPrepareOptionsMenu()");
         if(toolbarSelectedMode){
-            menu.setGroupVisible(R.id.word_menu_group_context,true);
-            menu.setGroupVisible(R.id.word_menu_group_base,false);
+            menu.setGroupVisible(R.id.group_menu_group_context,true);
+            menu.setGroupVisible(R.id.group_menu_group_base,false);
             if(activity.getSupportActionBar() != null){
                 activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 activity.getSupportActionBar().setDisplayShowTitleEnabled(true);
@@ -209,17 +213,18 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
                 activity.setTitle(String.valueOf(countOfSelectedItems));
             }
             if(countOfSelectedItems == 0){
-                menu.findItem(R.id.word_menu_move_to_group).setEnabled(false);
-                menu.findItem(R.id.word_menu_move_to_training).setEnabled(false);
-                menu.findItem(R.id.word_menu_delete).setEnabled(false);
+                menu.findItem(R.id.group_menu_edit).setEnabled(false);
+                menu.findItem(R.id.group_menu_delete).setEnabled(false);
+            }else if(countOfSelectedItems == 1){
+                menu.findItem(R.id.group_menu_edit).setEnabled(true);
+                menu.findItem(R.id.group_menu_delete).setEnabled(true);
             }else{
-                menu.findItem(R.id.word_menu_move_to_group).setEnabled(true);
-                menu.findItem(R.id.word_menu_move_to_training).setEnabled(true);
-                menu.findItem(R.id.word_menu_delete).setEnabled(true);
+                menu.findItem(R.id.group_menu_edit).setEnabled(false);
+                menu.findItem(R.id.group_menu_delete).setEnabled(true);
             }
         }else{
-            menu.setGroupVisible(R.id.word_menu_group_context,false);
-            menu.setGroupVisible(R.id.word_menu_group_base,true);
+            menu.setGroupVisible(R.id.group_menu_group_context,false);
+            menu.setGroupVisible(R.id.group_menu_group_base,true);
             if(activity.getSupportActionBar() != null){
                 activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -236,108 +241,27 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
             int id = item.getItemId();
             switch (id){
                 case android.R.id.home:
-                    wordAdapter.selectModeOff();
+                    groupAdapter.selectModeOff();
                     toolbarSelectedMode = false;
                     getActivity().invalidateOptionsMenu();
                     return true;
-                case R.id.word_menu_delete:
+                case R.id.group_menu_delete:
                     presenter.deleteSelected();
                     return true;
-                case R.id.word_menu_move_to_group:
-                    presenter.moveToGroupSelected();
-                    return true;
-                case R.id.word_menu_move_to_training:
+                case R.id.group_menu_edit:
+                    presenter.editSelected();
                     return true;
             }
         }else{
             int id = item.getItemId();
             switch (id){
-                case R.id.word_menu_search:
-                    return true;
-                case R.id.word_menu_add:
-                    onNewWordClicked = true;
-                    mListener.showAddWordDialog();
+                case R.id.group_menu_add:
+                    presenter.newSelected();
                     return true;
             }
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void createDeleteDialog(){
-        Log.d(LOG_TAG, "createDeleteDialog()");
-        DialogFragment dialog = DeleteWordDialog.newInstance(wordAdapter.getSelectedItemsSize());
-        dialog.setTargetFragment(this, REQUEST_CODE_DELETE);
-        dialog.show(getFragmentManager(),null);
-    }
-
-    @Override
-    public ArrayList<Long> getDeletedWords() {
-        return wordAdapter.getSelectedItemIds();
-    }
-
-    @Override
-    public void deleteWordsFromList() {
-        wordAdapter.deleteSelectedWords();
-        toolbarSelectedMode = false;
-        getActivity().invalidateOptionsMenu();
-    }
-
-    @Override
-    public void createMoveToGroupDialog(ArrayList<Group> groups){
-        Log.d(LOG_TAG, "createMoveToGroupDialog()");
-        DialogFragment dialog = MoveToGroupDialog.newInstance(groups);
-        dialog.setTargetFragment(this, REQUEST_CODE_MOVE_TO_GROUP);
-        dialog.show(getFragmentManager(),null);
-    }
-
-    @Override
-    public void createMoveToTrainingDialog(){
-
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(LOG_TAG, "onActivityResult()");
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK){
-            switch (requestCode){
-                case REQUEST_CODE_DELETE:
-                    presenter.deleteWordsIsReady();
-                    break;
-                case REQUEST_CODE_MOVE_TO_GROUP:
-                    movedWords = (ArrayList<Long>) wordAdapter.getSelectedItemIds().clone();
-                    Long groupId = data.getLongExtra(Content.COLUMN_ROWID,0);
-                    movedWords.add(0, groupId);
-                    presenter.moveToGroupWordsIsReady();
-                    break;
-                case REQUEST_CODE_MOVE_TO_TRAINING:
-                    break;
-            }
-        }else if(resultCode == Activity.RESULT_CANCELED){
-            switch (requestCode){
-                case REQUEST_CODE_DELETE:
-                    break;
-                case REQUEST_CODE_MOVE_TO_GROUP:
-                    break;
-                case REQUEST_CODE_MOVE_TO_TRAINING:
-                    break;
-            }
-        }
-    }
-
-
-
-
-
-    @Override
-    public ArrayList<Long> getMovedToGroupWords() {
-        wordAdapter.selectModeOff();
-        toolbarSelectedMode = false;
-        getActivity().invalidateOptionsMenu();
-        return movedWords;
-    }
-
 
     @Override
     public void showProgress() {
@@ -354,13 +278,104 @@ public class ViewAllWordsImpl extends Fragment implements ViewAllWords {
         Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void createNewGroupDialog() {
+        Log.d(LOG_TAG, "createNewGroupDialog()");
+        DialogFragment dialog = new NewGroupDialog();
+        dialog.setTargetFragment(this, REQUEST_CODE_NEW_GROUP);
+        dialog.show(getFragmentManager(),null);
+    }
+
+    @Override
+    public Group getNewGroup() {
+        return newGroup;
+    }
+
+    @Override
+    public void createDeleteDialog() {
+        Log.d(LOG_TAG, "createDeleteDialog()");
+        DialogFragment dialog = DeleteGroupDialog.newInstance(groupAdapter.getSelectedItemsSize());
+        dialog.setTargetFragment(this, REQUEST_CODE_DELETE_GROUP);
+        dialog.show(getFragmentManager(),null);
+    }
+
+    @Override
+    public ArrayList<Long> getDeletedGroups() {
+        return groupAdapter.getSelectedItemIds();
+    }
+
+    @Override
+    public void deleteGroupFromList() {
+        groupAdapter.deleteSelectedGroups();
+        toolbarSelectedMode = false;
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void createEditDialog() {
+        Log.d(LOG_TAG, "createEditDialog()");
+        editGroup = groupAdapter.getSelectedGroup();
+        String title = editGroup.getTitle();
+        DialogFragment dialog = EditGroupDialog.newInstance(title);
+        dialog.setTargetFragment(this, REQUEST_CODE_EDIT_GROUP);
+        dialog.show(getFragmentManager(),null);
+
+    }
+
+    @Override
+    public Group getEditedGroup() {
+        return editGroup;
+    }
+
+    @Override
+    public void editGroupInList() {
+        groupAdapter.editSelectedGroup(editGroup);
+        toolbarSelectedMode = false;
+        getActivity().invalidateOptionsMenu();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(LOG_TAG, "onActivityResult()");
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK){
+            switch (requestCode){
+                case REQUEST_CODE_DELETE_GROUP:
+                    presenter.deleteGroupsIsReady();
+                    break;
+                case REQUEST_CODE_EDIT_GROUP:
+                    String newTitle = data.getStringExtra(Content.COLUMN_TITLE);
+                    editGroup.setTitle(newTitle);
+                    presenter.editGroupIsReady();
+                    break;
+                case REQUEST_CODE_NEW_GROUP:
+                    newGroup = new Group();
+                    String title = data.getStringExtra(Content.COLUMN_TITLE);
+                    newGroup.setTitle(title);
+                    presenter.newGroupIsReady();
+                    break;
+            }
+        }else if(resultCode == Activity.RESULT_CANCELED){
+            switch (requestCode){
+                case REQUEST_CODE_DELETE_GROUP:
+                    break;
+                case REQUEST_CODE_EDIT_GROUP:
+                    break;
+                case REQUEST_CODE_NEW_GROUP:
+                    break;
+            }
+        }
+    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         Log.d(LOG_TAG, "onDestroyView() " + this.hashCode());
-        if(selectedItemsObserver != null) {
-            selectedItemsObserver.dispose();
+        if(countOfSelectObserver != null) {
+            countOfSelectObserver.dispose();
+        }
+        if(choiceGroupObservable != null){
+            choiceGroupObservable.dispose();
         }
         presenter.detach();
     }

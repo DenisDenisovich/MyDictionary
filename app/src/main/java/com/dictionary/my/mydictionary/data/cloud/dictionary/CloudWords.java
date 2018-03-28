@@ -10,7 +10,7 @@ import java.util.ArrayList;
  * Created by luxso on 17.03.2018.
  */
 
-public interface CloudAllWords {
+public interface CloudWords {
     Double MIN_FREQUENCY_PERCENT = 10.0;
     ArrayList<Translation> getTranslation(String word) throws Exception;
     WordFullInformation getMeaning(Translation translation) throws Exception;

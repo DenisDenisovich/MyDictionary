@@ -3,11 +3,11 @@ package com.dictionary.my.mydictionary.presenter.dictionary.impl;
 import android.content.Context;
 import android.util.Log;
 
-import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryAllWords;
-import com.dictionary.my.mydictionary.data.repository.dictionary.impl.RepositoryAllWordsImpl;
+import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryWords;
+import com.dictionary.my.mydictionary.data.repository.dictionary.impl.RepositoryWordsImpl;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
-import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAddWordActivity;
+import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAddWord;
 import com.dictionary.my.mydictionary.view.dictionary.AddWordActivity;
 
 import java.util.ArrayList;
@@ -21,10 +21,10 @@ import io.reactivex.schedulers.Schedulers;
  * Created by luxso on 19.03.2018.
  */
 
-public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements PresenterAddWordActivity<V> {
+public class PresenterAddWordImpl<V extends AddWordActivity> implements PresenterAddWord<V> {
     private final static String LOG_TAG = "Log_PresenterAddWord";
     private V view;
-    private RepositoryAllWords repository;
+    private RepositoryWords repository;
     private ArrayList<Translation> words;
     private DisposableSingleObserver<ArrayList<Translation>> wordDisposable;
     private ArrayList<Group> groups;
@@ -32,8 +32,8 @@ public class PresenterAddWordActivityImpl<V extends AddWordActivity> implements 
     private boolean alternativeTranslationMode = false;
     private boolean defaultTranslationModeERROR = false;
     private boolean searchForTranslation = false;
-    public PresenterAddWordActivityImpl(Context context){
-        repository = new RepositoryAllWordsImpl(context);
+    public PresenterAddWordImpl(Context context){
+        repository = new RepositoryWordsImpl(context);
     }
     @Override
     public void attach(V view) {

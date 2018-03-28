@@ -8,7 +8,7 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 
 
-public interface RepositoryAllGroups {
+public interface RepositoryGroups {
     Single<ArrayList<Group>> getListOfGroups();
     Completable setNewGroup(Group group);
     Completable deleteGroups(ArrayList<Long> delList);

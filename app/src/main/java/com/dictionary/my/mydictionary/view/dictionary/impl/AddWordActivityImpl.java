@@ -25,8 +25,8 @@ import android.widget.Toast;
 import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
-import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAddWordActivity;
-import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterAddWordActivityImpl;
+import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAddWord;
+import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterAddWordImpl;
 import com.dictionary.my.mydictionary.view.dictionary.AddWordActivity;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerGroupAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.TranslationAdapter;
@@ -43,7 +43,7 @@ import java.util.Date;
 
 public class AddWordActivityImpl extends AppCompatActivity implements AddWordActivity{
     private final static String LOG_TAG = "Log_AddWordActivity";
-    private PresenterAddWordActivity presenter;
+    private PresenterAddWord presenter;
     private EditText wordEditText;
     private EditText alternativeTranslation;
     private Spinner spinner;
@@ -78,12 +78,12 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
         spinner = findViewById(R.id.spinnerAddWord);
 
         if(savedInstanceState != null){
-            presenter = (PresenterAddWordActivity) getLastCustomNonConfigurationInstance();
+            presenter = (PresenterAddWord) getLastCustomNonConfigurationInstance();
             presenter.attach(this);
             presenter.update();
             alternativeTranslationMode = savedInstanceState.getBoolean(KEY_ALT_TRANS_MODE);
         }else{
-            presenter = new PresenterAddWordActivityImpl(getApplicationContext());
+            presenter = new PresenterAddWordImpl(getApplicationContext());
             presenter.attach(this);
             presenter.initGroupList();
         }
@@ -290,8 +290,8 @@ public class AddWordActivityImpl extends AppCompatActivity implements AddWordAct
 
     @Override
     protected void onDestroy() {
-        Log.d(LOG_TAG, "onDestroy() " + this.hashCode());
         super.onDestroy();
+        Log.d(LOG_TAG, "onDestroy() " + this.hashCode());
         presenter.detach();
     }
 }

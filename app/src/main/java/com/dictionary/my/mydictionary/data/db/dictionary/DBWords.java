@@ -12,7 +12,7 @@ import io.reactivex.Single;
  * Created by luxso on 30.09.2017.
  */
 
-public interface DBAllWords {
+public interface DBWords {
     ArrayList<Word> getListOfWord() throws Exception;
     void setNewWord(WordFullInformation word) throws Exception;
     void setNewWordWithoutInternet(Translation translation) throws Exception;

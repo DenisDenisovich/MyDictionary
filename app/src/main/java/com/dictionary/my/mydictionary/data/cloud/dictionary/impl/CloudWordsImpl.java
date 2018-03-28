@@ -1,10 +1,8 @@
 package com.dictionary.my.mydictionary.data.cloud.dictionary.impl;
 
 import android.util.Log;
-import android.widget.ArrayAdapter;
 
-import com.dictionary.my.mydictionary.data.Content;
-import com.dictionary.my.mydictionary.data.cloud.dictionary.CloudAllWords;
+import com.dictionary.my.mydictionary.data.cloud.dictionary.CloudWords;
 import com.dictionary.my.mydictionary.data.cloud.pojo.meaning.MeaningSkyEng;
 import com.dictionary.my.mydictionary.data.cloud.pojo.meaning.MeaningsWithSimilarTranslation;
 import com.dictionary.my.mydictionary.data.cloud.pojo.word.Meaning;
@@ -14,7 +12,6 @@ import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.WordFullInformation;
 import com.dictionary.my.mydictionary.view.App;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +21,7 @@ import retrofit2.Response;
  * Created by luxso on 17.03.2018.
  */
 
-public class CloudAllWordsImpl implements CloudAllWords{
+public class CloudWordsImpl implements CloudWords {
     private final static String LOG_TAG = "Log_CloudAllWords";
     @Override
     public ArrayList<Translation> getTranslation(String word) throws Exception{

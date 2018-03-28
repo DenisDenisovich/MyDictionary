@@ -10,7 +10,7 @@ import io.reactivex.Completable;
 import io.reactivex.Single;
 
 
-public interface RepositoryAllWords {
+public interface RepositoryWords {
     Single<ArrayList<Word>> getListOfWords();
     Single<ArrayList<Group>> getListOfGroups();
     Single<ArrayList<Translation>> getTranslation(String word);

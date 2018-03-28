@@ -3,11 +3,12 @@ package com.dictionary.my.mydictionary.presenter.dictionary.impl;
 import android.content.Context;
 import android.util.Log;
 
-import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryAllGroups;
-import com.dictionary.my.mydictionary.data.repository.dictionary.impl.RepositoryAllGroupsImpl;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
-import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAllGroups;
-import com.dictionary.my.mydictionary.view.dictionary.ViewAllGroups;
+import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
+import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryWords;
+import com.dictionary.my.mydictionary.data.repository.dictionary.impl.RepositoryWordsImpl;
+import com.dictionary.my.mydictionary.presenter.dictionary.PresenterWords;
+import com.dictionary.my.mydictionary.view.dictionary.AllWordsFragment;
 
 import java.util.ArrayList;
 
@@ -17,20 +18,25 @@ import io.reactivex.observers.DisposableSingleObserver;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by luxso on 27.03.2018.
+ * Created by luxso on 11.03.2018.
  */
 
-public class PresenterAllGroupsImpl<V extends ViewAllGroups> implements PresenterAllGroups<V> {
-    private final static String LOG_TAG = "Log_PresenterAllGroup";
+public class PresenterWordsImpl<V extends AllWordsFragment> implements PresenterWords<V> {
+    private final static String LOG_TAG = "Log_PresenterAllWord";
     private V view;
-    private RepositoryAllGroups repository;
-    private ArrayList<Group> groups;
-    private DisposableCompletableObserver newDisposable;
+    private RepositoryWords repository;
+    private ArrayList<Word> words;
     private DisposableCompletableObserver delDisposable;
-    private DisposableCompletableObserver editDisposable;
-    public PresenterAllGroupsImpl(Context context){
-        repository = new RepositoryAllGroupsImpl(context);
+    private DisposableCompletableObserver moveDisposable;
+
+    public PresenterWordsImpl(Context context){
+        repository = new RepositoryWordsImpl(context);
     }
+
+    public PresenterWordsImpl(Context context, Long groupId){
+        repository = new RepositoryWordsImpl(context, groupId);
+    }
+
     @Override
     public void attach(V view) {
         Log.d(LOG_TAG, "attach()");
@@ -46,14 +52,11 @@ public class PresenterAllGroupsImpl<V extends ViewAllGroups> implements Presente
     @Override
     public void destroy() {
         Log.d(LOG_TAG, "destroy()");
-        if(newDisposable != null){
-            newDisposable.dispose();
-        }
         if(delDisposable != null){
             delDisposable.dispose();
         }
-        if(editDisposable != null){
-            editDisposable.dispose();
+        if(moveDisposable != null){
+            moveDisposable.dispose();
         }
         repository.destroy();
     }
@@ -61,19 +64,20 @@ public class PresenterAllGroupsImpl<V extends ViewAllGroups> implements Presente
     @Override
     public void init() {
         Log.d(LOG_TAG, "init()");
-        repository.getListOfGroups()
+        repository.getListOfWords()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableSingleObserver<ArrayList<Group>>() {
+                .subscribeWith(new DisposableSingleObserver<ArrayList<Word>>() {
                     @Override
-                    public void onSuccess(ArrayList<Group> items) {
-                        groups = items;
-                        view.createList(groups);
+                    public void onSuccess(ArrayList<Word> items) {
+                        words = items;
+                        view.createList(words);
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        view.showERROR("Get list of groups ERROR");
+                        e.printStackTrace();
+                        view.showERROR("Get list of words ERROR");
                     }
                 });
     }
@@ -81,87 +85,79 @@ public class PresenterAllGroupsImpl<V extends ViewAllGroups> implements Presente
     @Override
     public void update() {
         Log.d(LOG_TAG, "update()");
-        view.createList(groups);
+        view.createList(words);
     }
 
-    @Override
-    public void newSelected() {
-        Log.d(LOG_TAG, "newSelected()");
-        view.createNewGroupDialog();
-    }
-
-    @Override
-    public void newGroupIsReady() {
-        Log.d(LOG_TAG, "newGroupIsReady()");
-        Group group = view.getNewGroup();
-        newDisposable = repository.setNewGroup(group)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new DisposableCompletableObserver() {
-                    @Override
-                    public void onComplete() {
-                        init();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                        view.showERROR("Set new group ERROR");
-                    }
-                });
-    }
 
     @Override
     public void deleteSelected() {
-        Log.d(LOG_TAG, "deleteSelected()");
         view.createDeleteDialog();
     }
 
     @Override
-    public void deleteGroupsIsReady() {
-        Log.d(LOG_TAG, "deleteGroupsIsReady()");
-        ArrayList<Long> delList = view.getDeletedGroups();
-        delDisposable = repository.deleteGroups(delList)
+    public void deleteWordsIsReady() {
+        ArrayList<Long> deleteWords = view.getDeletedWords();
+        delDisposable = repository.deleteWords(deleteWords)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        view.deleteGroupFromList();
+                        view.deleteWordsFromList();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        view.showERROR("Delete group ERROR");
+                        view.showERROR("Delete word ERROR");
                     }
                 });
     }
 
     @Override
-    public void editSelected() {
-        Log.d(LOG_TAG, "editSelected()");
-        view.createEditDialog();
+    public void moveToGroupSelected() {
+        repository.getListOfGroups()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<ArrayList<Group>>() {
+                    @Override
+                    public void onSuccess(ArrayList<Group> groups) {
+                        view.createMoveToGroupDialog(groups);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        view.showERROR("Group ERROR");
+                    }
+                });
+
     }
 
     @Override
-    public void editGroupIsReady() {
-        Log.d(LOG_TAG, "editGroupIsReady()");
-        Group group = view.getEditedGroup();
-        editDisposable = repository.editGroup(group)
+    public void moveToTrainingSelected() {
+
+    }
+
+    @Override
+    public void moveToGroupWordsIsReady() {
+        ArrayList<Long> moveWords = view.getMovedToGroupWords();
+        moveDisposable = repository.moveWords(moveWords)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableCompletableObserver() {
                     @Override
                     public void onComplete() {
-                        view.editGroupInList();
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         e.printStackTrace();
-                        view.showERROR("Edit group ERROR");
+                        view.showERROR("Move ERROR");
                     }
                 });
     }
+
+
 }

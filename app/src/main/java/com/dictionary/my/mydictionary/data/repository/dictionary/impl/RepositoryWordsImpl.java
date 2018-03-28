@@ -3,19 +3,19 @@ package com.dictionary.my.mydictionary.data.repository.dictionary.impl;
 import android.content.Context;
 import android.util.Log;
 
-import com.dictionary.my.mydictionary.data.cloud.dictionary.CloudAllWords;
-import com.dictionary.my.mydictionary.data.cloud.dictionary.impl.CloudAllWordsImpl;
+import com.dictionary.my.mydictionary.data.cloud.dictionary.CloudWords;
+import com.dictionary.my.mydictionary.data.cloud.dictionary.impl.CloudWordsImpl;
 import com.dictionary.my.mydictionary.data.exception.DBException;
 import com.dictionary.my.mydictionary.data.exception.SkyEngWordException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.WordFullInformation;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
-import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryAllWords;
-import com.dictionary.my.mydictionary.data.db.dictionary.DBAllGroups;
-import com.dictionary.my.mydictionary.data.db.dictionary.DBAllWords;
-import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBAllGroupsImpl;
-import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBAllWordsImpl;
+import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryWords;
+import com.dictionary.my.mydictionary.data.db.dictionary.DBGroups;
+import com.dictionary.my.mydictionary.data.db.dictionary.DBWords;
+import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBGroupsImpl;
+import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBWordsImpl;
 
 import java.util.ArrayList;
 
@@ -30,21 +30,21 @@ import io.reactivex.SingleOnSubscribe;
  * This class manages all necessary data for AllWords
  */
 
-public class RepositoryAllWordsImpl implements RepositoryAllWords {
+public class RepositoryWordsImpl implements RepositoryWords {
     private final static String LOG_TAG = "Log_RepositoryAllWords";
-    private DBAllWords dbAllWords;
-    private DBAllGroups dbAllGroups;
-    private CloudAllWords cloudAllWords;
+    private DBWords dbWords;
+    private DBGroups dbGroups;
+    private CloudWords cloudWords;
 
-    public RepositoryAllWordsImpl(Context context){
-        dbAllWords = new DBAllWordsImpl(context);
-        dbAllGroups = new DBAllGroupsImpl(context);
-        cloudAllWords = new CloudAllWordsImpl();
+    public RepositoryWordsImpl(Context context){
+        dbWords = new DBWordsImpl(context);
+        dbGroups = new DBGroupsImpl(context);
+        cloudWords = new CloudWordsImpl();
     }
-    public RepositoryAllWordsImpl(Context context, Long groupId){
-        dbAllWords = new DBAllWordsImpl(context, groupId);
-        dbAllGroups = new DBAllGroupsImpl(context);
-        cloudAllWords = new CloudAllWordsImpl();
+    public RepositoryWordsImpl(Context context, Long groupId){
+        dbWords = new DBWordsImpl(context, groupId);
+        dbGroups = new DBGroupsImpl(context);
+        cloudWords = new CloudWordsImpl();
     }
     @Override
     public Single<ArrayList<Word>> getListOfWords() {
@@ -53,7 +53,7 @@ public class RepositoryAllWordsImpl implements RepositoryAllWords {
             @Override
             public void subscribe(SingleEmitter<ArrayList<Word>> e) throws Exception {
                 try {
-                    ArrayList<Word> words = dbAllWords.getListOfWord();
+                    ArrayList<Word> words = dbWords.getListOfWord();
                     if(!e.isDisposed()){
                         e.onSuccess(words);
                     }
@@ -73,7 +73,7 @@ public class RepositoryAllWordsImpl implements RepositoryAllWords {
             @Override
             public void subscribe(SingleEmitter<ArrayList<Group>> e) throws Exception {
                 try {
-                    ArrayList<Group> groups = dbAllGroups.getListOfGroups();
+                    ArrayList<Group> groups = dbGroups.getListOfGroups();
                     if(!e.isDisposed()){
                         e.onSuccess(groups);
                     }
@@ -93,7 +93,7 @@ public class RepositoryAllWordsImpl implements RepositoryAllWords {
             @Override
             public void subscribe(SingleEmitter<ArrayList<Translation>> e) throws Exception {
                 try {
-                    ArrayList<Translation> translations = cloudAllWords.getTranslation(word);
+                    ArrayList<Translation> translations = cloudWords.getTranslation(word);
                     if(!e.isDisposed()){
                         e.onSuccess(translations);
                     }
@@ -113,8 +113,8 @@ public class RepositoryAllWordsImpl implements RepositoryAllWords {
             @Override
             public void subscribe(CompletableEmitter e) throws Exception {
                 try {
-                    WordFullInformation wordFullInformation = cloudAllWords.getMeaning(translation);
-                    dbAllWords.setNewWord(wordFullInformation);
+                    WordFullInformation wordFullInformation = cloudWords.getMeaning(translation);
+                    dbWords.setNewWord(wordFullInformation);
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
@@ -122,7 +122,7 @@ public class RepositoryAllWordsImpl implements RepositoryAllWords {
                     // if we are cant getting full information about word by Internet
                     skyEngExc.printStackTrace();
                     try {
-                        dbAllWords.setNewWordWithoutInternet(translation);
+                        dbWords.setNewWordWithoutInternet(translation);
                     }catch (DBException dbExc){
                         dbExc.printStackTrace();
                         if(!e.isDisposed()) {
@@ -147,7 +147,7 @@ public class RepositoryAllWordsImpl implements RepositoryAllWords {
             @Override
             public void subscribe(CompletableEmitter e) throws Exception {
                 try{
-                    dbAllWords.setNewWordWithoutInternet(translation);
+                    dbWords.setNewWordWithoutInternet(translation);
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
@@ -168,7 +168,7 @@ public class RepositoryAllWordsImpl implements RepositoryAllWords {
             @Override
             public void subscribe(CompletableEmitter e) throws Exception {
                 try{
-                    dbAllWords.deleteWords(delList);
+                    dbWords.deleteWords(delList);
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
@@ -188,7 +188,7 @@ public class RepositoryAllWordsImpl implements RepositoryAllWords {
             @Override
             public void subscribe(CompletableEmitter e) throws Exception {
                 try {
-                    dbAllWords.moveWords(moveList);
+                    dbWords.moveWords(moveList);
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
@@ -208,7 +208,7 @@ public class RepositoryAllWordsImpl implements RepositoryAllWords {
             @Override
             public void subscribe(CompletableEmitter e) throws Exception {
                 try {
-                    dbAllWords.editWord(word);
+                    dbWords.editWord(word);
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
@@ -224,7 +224,7 @@ public class RepositoryAllWordsImpl implements RepositoryAllWords {
     @Override
     public void destroy() {
         Log.d(LOG_TAG, "destroy()");
-        dbAllWords.destroy();
-        dbAllGroups.destroy();
+        dbWords.destroy();
+        dbGroups.destroy();
     }
 }
