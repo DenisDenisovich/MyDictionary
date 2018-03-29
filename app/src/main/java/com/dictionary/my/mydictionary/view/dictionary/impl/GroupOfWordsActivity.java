@@ -2,9 +2,11 @@ package com.dictionary.my.mydictionary.view.dictionary.impl;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dictionary.my.mydictionary.R;
@@ -43,6 +47,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
     private String groupTitle;
     private Integer countOfSelectedItems;
     private Boolean toolbarSelectedMode = false;
+    private TextView toolbarTitle;
     private final static String KEY_TOOLBAR_SELECTED_MODE = "toolbarSelectedMode";
     private DisposableObserver<Integer> selectedItemsObserver;
 
@@ -72,10 +77,13 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
             toolbarSelectedMode = savedInstanceState.getBoolean(KEY_TOOLBAR_SELECTED_MODE);
         }
         Toolbar toolbar = findViewById(R.id.toolbar);
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_light);
+        toolbarTitle = findViewById(R.id.toolbarTitle);
+        toolbarTitle.setTypeface(typeface);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null){
-            getSupportActionBar().setTitle(groupTitle);
-            getSupportActionBar().setDisplayShowTitleEnabled(true);
+            toolbarTitle.setText(groupTitle);
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
@@ -108,9 +116,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
         if(toolbarSelectedMode){
             menu.setGroupVisible(R.id.word_menu_group_context,true);
             menu.setGroupVisible(R.id.word_menu_group_base,false);
-            if(getSupportActionBar() != null){
-                getSupportActionBar().setTitle(String.valueOf(countOfSelectedItems));
-            }
+            toolbarTitle.setText(String.valueOf(countOfSelectedItems));
             if(countOfSelectedItems == 0){
                 menu.findItem(R.id.word_menu_move_to_group).setEnabled(false);
                 menu.findItem(R.id.word_menu_move_to_training).setEnabled(false);
@@ -123,9 +129,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
         }else{
             menu.setGroupVisible(R.id.word_menu_group_context,false);
             menu.setGroupVisible(R.id.word_menu_group_base,true);
-            if(getSupportActionBar() != null){
-                getSupportActionBar().setTitle(groupTitle);
-            }
+            toolbarTitle.setText(groupTitle);
         }
         return super.onPrepareOptionsMenu(menu);
     }

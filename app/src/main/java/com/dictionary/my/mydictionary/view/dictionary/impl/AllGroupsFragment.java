@@ -3,10 +3,12 @@ package com.dictionary.my.mydictionary.view.dictionary.impl;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dictionary.my.mydictionary.R;
@@ -51,6 +54,7 @@ public class AllGroupsFragment extends Fragment implements ViewAllGroups {
 
     private Integer countOfSelectedItems;
     private Boolean toolbarSelectedMode = false;
+    private TextView toolbarTitle;
     private final static String KEY_TOOLBAR_SELECTED_MODE = "toolbarSelectedMode";
     private DisposableObserver<Integer> countOfSelectObserver;
     private DisposableObserver<Group> choiceGroupObservable;
@@ -96,8 +100,14 @@ public class AllGroupsFragment extends Fragment implements ViewAllGroups {
         presenter.attach(this);
         myView = inflater.inflate(R.layout.fragment_all_groups,null);
         Toolbar toolbar = (Toolbar)myView.findViewById(R.id.toolbar);
+        Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.roboto_light);
+        toolbarTitle = myView.findViewById(R.id.toolbarTitle);
+        toolbarTitle.setTypeface(typeface);
         activity = (AppCompatActivity)getActivity();
         activity.setSupportActionBar(toolbar);
+        if(activity.getSupportActionBar() != null) {
+            activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+        }
         setSpinnerView();
 
         if(savedInstanceState == null){
@@ -207,9 +217,9 @@ public class AllGroupsFragment extends Fragment implements ViewAllGroups {
             menu.setGroupVisible(R.id.group_menu_group_base,false);
             if(activity.getSupportActionBar() != null){
                 activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                activity.getSupportActionBar().setDisplayShowTitleEnabled(true);
                 activity.getSupportActionBar().setDisplayShowCustomEnabled(false);
-                activity.setTitle(String.valueOf(countOfSelectedItems));
+                toolbarTitle.setVisibility(View.VISIBLE);
+                toolbarTitle.setText(String.valueOf(countOfSelectedItems));
             }
             if(countOfSelectedItems == 0){
                 menu.findItem(R.id.group_menu_edit).setEnabled(false);
@@ -226,7 +236,8 @@ public class AllGroupsFragment extends Fragment implements ViewAllGroups {
             menu.setGroupVisible(R.id.group_menu_group_base,true);
             if(activity.getSupportActionBar() != null){
                 activity.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
+                activity.getSupportActionBar().setDisplayShowCustomEnabled(true);
+                toolbarTitle.setVisibility(View.GONE);
                 activity.getSupportActionBar().setDisplayShowCustomEnabled(true);
             }
         }
