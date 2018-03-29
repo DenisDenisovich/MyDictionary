@@ -14,6 +14,10 @@ public interface ViewAllWords {
     void hideProgress();
     void showERROR(String message);
     void createList(ArrayList<Word> words);
+    ArrayList<Long> getSelectedItemIds();
+    Boolean getSelectMode();
+    void setSelectedItemIds(ArrayList<Long> selectedItemIds);
+    void setSelectMode(Boolean selectMode);
     void createDeleteDialog();
     ArrayList<Long> getDeletedWords();
     void deleteWordsFromList();

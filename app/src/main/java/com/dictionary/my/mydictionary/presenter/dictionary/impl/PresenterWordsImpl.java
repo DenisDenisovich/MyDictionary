@@ -26,6 +26,8 @@ public class PresenterWordsImpl<V extends ViewAllWords> implements PresenterWord
     private V view;
     private RepositoryWords repository;
     private ArrayList<Word> words;
+    private ArrayList<Long> selectedItemIds;
+    private Boolean selectMode;
     private DisposableCompletableObserver delDisposable;
     private DisposableCompletableObserver moveDisposable;
 
@@ -86,6 +88,15 @@ public class PresenterWordsImpl<V extends ViewAllWords> implements PresenterWord
     public void update() {
         Log.d(LOG_TAG, "update()");
         view.createList(words);
+        view.setSelectedItemIds(selectedItemIds);
+        view.setSelectMode(selectMode);
+
+    }
+
+    @Override
+    public void saveListState() {
+        selectedItemIds = view.getSelectedItemIds();
+        selectMode = view.getSelectMode();
     }
 
 

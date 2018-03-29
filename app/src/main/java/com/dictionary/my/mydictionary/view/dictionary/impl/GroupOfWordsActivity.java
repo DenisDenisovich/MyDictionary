@@ -201,6 +201,26 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
         subscribeOnRecyclerView();
     }
 
+    @Override
+    public ArrayList<Long> getSelectedItemIds() {
+        return wordAdapter.getSelectedItemIds();
+    }
+
+    @Override
+    public Boolean getSelectMode() {
+        return wordAdapter.getSelectMode();
+    }
+
+    @Override
+    public void setSelectedItemIds(ArrayList<Long> selectedItemIds) {
+        wordAdapter.setSelectedItemIds(selectedItemIds);
+    }
+
+    @Override
+    public void setSelectMode(Boolean selectMode) {
+        wordAdapter.setSelectMode(selectMode);
+    }
+
     private void subscribeOnRecyclerView(){
         selectedItemsObserver = wordAdapter.getSelectedItemsObservable()
                 .subscribeWith(new DisposableObserver<Integer>() {
@@ -309,6 +329,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
         if(selectedItemsObserver != null) {
             selectedItemsObserver.dispose();
         }
+        presenter.saveListState();
         presenter.detach();
     }
 }

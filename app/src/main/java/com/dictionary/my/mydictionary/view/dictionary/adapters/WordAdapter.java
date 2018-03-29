@@ -145,7 +145,16 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
     public ArrayList<Long> getSelectedItemIds(){
         return selectedItemIds;
     }
+    public Boolean getSelectMode(){
+        return selectMode;
+    }
 
+    public void setSelectedItemIds(ArrayList<Long> selectedItemIds){
+        this.selectedItemIds = selectedItemIds;
+    }
+    public void setSelectMode(Boolean selectMode){
+        this.selectMode = selectMode;
+    }
     public void selectModeOff(){
         selectMode = false;
         selectedItemIds.clear();
