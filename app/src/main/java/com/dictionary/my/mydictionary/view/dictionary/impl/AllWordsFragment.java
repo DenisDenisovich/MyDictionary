@@ -30,6 +30,7 @@ import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterWords;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterWordsImpl;
 import com.dictionary.my.mydictionary.view.dictionary.ViewAllWords;
+import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerGroupAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.WordAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.DeleteWordDialog;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.MoveToGroupDialog;
@@ -129,9 +130,7 @@ public class AllWordsFragment extends Fragment implements ViewAllWords {
     private void setSpinnerView(){
         if (activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
-            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
-                    R.array.dictionary_spinner_array, android.R.layout.simple_spinner_item);
-            adapter.setDropDownViewResource(R.layout.spinner_drop_down_item);
+            SpinnerGroupAdapter adapter = new SpinnerGroupAdapter(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.dictionary_spinner_array));
             Spinner spinner = new Spinner(activity.getSupportActionBar().getThemedContext());
             spinner.setAdapter(adapter);
             spinner.setSelection(0);
@@ -206,6 +205,7 @@ public class AllWordsFragment extends Fragment implements ViewAllWords {
         if(toolbarSelectedMode){
             menu.setGroupVisible(R.id.word_menu_group_context,true);
             menu.setGroupVisible(R.id.word_menu_group_base,false);
+
             if(activity.getSupportActionBar() != null){
                 activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 activity.getSupportActionBar().setDisplayShowTitleEnabled(true);

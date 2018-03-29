@@ -87,6 +87,7 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
         spinner = findViewById(R.id.spinnerAddWord);
         ((TextView)findViewById(R.id.tvForSpinner)).setTypeface(typeface);
         ((TextView)findViewById(R.id.tvSelectedTranslation)).setTypeface(typeface);
+        ((TextView)findViewById(R.id.tvOtherTranslate)).setTypeface(typeface);
         if(savedInstanceState != null){
             presenter = (PresenterAddWord) getLastCustomNonConfigurationInstance();
             presenter.attach(this);
