@@ -70,18 +70,40 @@ public class CloudWordsImpl implements CloudWords {
             MeaningSkyEng meaning = response.body().get(0);
             word.setEng(translation.getEng());
             word.setRus(translation.getRus());
-            String urlImage = "http:";
-            urlImage = urlImage.concat(translation.getPreview_image());
-            word.setPreviewImage(urlImage);
-            word.setSound(translation.getSound());
+
+            if(translation.getPreview_image() != null) {
+                String urlPreviewImage = "http:";
+                urlPreviewImage = urlPreviewImage.concat(translation.getPreview_image());
+                word.setPreviewImage(urlPreviewImage);
+            }else {
+                word.setPreviewImage("");
+            }
+
             word.setDate(translation.getDate());
             word.setGroupId(translation.getGroupId());
             word.setNote((String) meaning.getTranslation().getNote());
-            word.setSound(meaning.getSoundUrl());
+
+            if(translation.getSound() != null) {
+                String urlSound = "http:";
+                urlSound = urlSound.concat(translation.getSound());
+                word.setSound(urlSound);
+            }else {
+                word.setSound("");
+            }
+
             word.setTranscription(meaning.getTranscription());
             word.setPartOfSpeech(meaning.getPartOfSpeechCode());
-            word.setImage(meaning.getImages().get(0).getUrl());
+
+            if(meaning.getImages().get(0).getUrl() != null) {
+                String urlImage = "http:";
+                urlImage = urlImage.concat(meaning.getImages().get(0).getUrl());
+                word.setImage(urlImage);
+            }else {
+                word.setImage("");
+            }
+
             word.setDefinition(meaning.getDefinition().getText());
+
             ArrayList<String> alternativeTranslations = new ArrayList<>();
             List<MeaningsWithSimilarTranslation> mwst = meaning.getMeaningsWithSimilarTranslation();
             for (int i = 0; i < mwst.size(); i++) {
@@ -91,6 +113,7 @@ public class CloudWordsImpl implements CloudWords {
                 alternativeTranslations.add(mwst.get(i).getTranslation().getText());
             }
             word.setAlternative(alternativeTranslations);
+
             word.setExamples(meaning.getExamples());
         }catch (Exception exc){
             throw new SkyEngWordException(exc);

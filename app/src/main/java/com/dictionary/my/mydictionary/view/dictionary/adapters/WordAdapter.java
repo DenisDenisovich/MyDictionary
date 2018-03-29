@@ -2,6 +2,8 @@ package com.dictionary.my.mydictionary.view.dictionary.adapters;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
@@ -18,6 +20,7 @@ import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 
 import io.reactivex.subjects.PublishSubject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 /**
@@ -100,6 +103,18 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
             @Override
             public void onClick(View view) {
                 // тут сделать вызыв воспроизведения слова
+                try {
+                    String urlSound = "http:";
+                    urlSound = urlSound.concat(mdata.get(position).getSound());
+                    Log.d(LOG_TAG, "sound url: " + urlSound);
+                    MediaPlayer mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mediaPlayer.setDataSource(urlSound);
+                    mediaPlayer.prepare(); // might take long! (for buffering, etc)
+                    mediaPlayer.start();
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
             }
         });
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
