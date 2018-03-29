@@ -5,14 +5,17 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.data.Content;
@@ -28,7 +31,10 @@ public class NewGroupDialog extends DialogFragment{
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_new_group,null);
-        final EditText etTitle = view.findViewById(R.id.etGroupNewTitle);
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.roboto_light);
+        ((TextView)view.findViewById(R.id.etNewGroupNewTitle)).setTypeface(typeface);
+        ((TextView)view.findViewById(R.id.newGroupHeader)).setTypeface(typeface);
+        final EditText etTitle = view.findViewById(R.id.etNewGroupNewTitle);
         etTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
