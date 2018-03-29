@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
 import java.io.IOException;
@@ -36,7 +38,6 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
         public ImageButton buttonSound;
         public ViewHolder(View itemView) {
             super(itemView);
-            //Log.d(LOG_TAG, "ViewHolder()");
             checkBox = (ImageButton) itemView.findViewById(R.id.check_box);
             tvWordEng = itemView.findViewById(R.id.tvWordEng);
             tvWordRus = itemView.findViewById(R.id.tvWordRus);
@@ -47,13 +48,19 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
     private ArrayList<Word> mdata;
     private ArrayList<Long> selectedItemIds;
     private PublishSubject<Integer> selectObservable;
+    private PublishSubject<String> soundObservable;
+    private DisposableObserver<String> soundDisposable;
+    MediaPlayer mediaPlayer;
     private boolean selectMode = false;
     private Context context;
+    private boolean soundIsWorking = false;
     public WordAdapter(Context context, ArrayList<Word> data){
         mdata = data;
         selectedItemIds = new ArrayList<>();
         this.context = context;
         selectObservable = PublishSubject.create();
+        soundObservable = PublishSubject.create();
+        setSoundObserver();
     }
 
     @Override
@@ -99,24 +106,23 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
         holder.tvWordRus.setText(mdata.get(position).getTranslate());
         holder.tvWordEng.setTypeface(typeface);
         holder.tvWordRus.setTypeface(typeface);
-        holder.buttonSound.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // тут сделать вызыв воспроизведения слова
-                try {
-                    String urlSound = "http:";
-                    urlSound = urlSound.concat(mdata.get(position).getSound());
-                    Log.d(LOG_TAG, "sound url: " + urlSound);
-                    MediaPlayer mediaPlayer = new MediaPlayer();
-                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    mediaPlayer.setDataSource(urlSound);
-                    mediaPlayer.prepare(); // might take long! (for buffering, etc)
-                    mediaPlayer.start();
-                }catch (IOException e){
-                    e.printStackTrace();
+        holder.buttonSound.setImageResource(R.drawable.ic_word_item_sound);
+        // if current word have sound
+        if(mdata.get(position).getSound() != null) {
+            holder.buttonSound.setVisibility(View.VISIBLE);
+            holder.buttonSound.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // if sound is't used now
+                    if(!soundIsWorking) {
+                        holder.buttonSound.setImageResource(R.drawable.ic_word_item_sound_activity);
+                        soundObservable.onNext(mdata.get(position).getSound());
+                    }
                 }
-            }
-        });
+            });
+        }else {
+            holder.buttonSound.setVisibility(View.GONE);
+        }
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -187,5 +193,61 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
         mdata.removeAll(deleteList);
         selectModeOff();
 
+    }
+
+    public void setSoundObserver(){
+        soundDisposable = soundObservable.subscribeOn(Schedulers.io())
+                .subscribeWith(new DisposableObserver<String>() {
+                    @Override
+                    public void onNext(String s) {
+                        try {
+                            soundIsWorking = true;
+                            mediaPlayer = new MediaPlayer();
+                            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                            mediaPlayer.setDataSource(s);
+                            mediaPlayer.prepare(); // might take long! (for buffering, etc)
+                            mediaPlayer.start();
+                            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mediaPlayer) {
+                                    mediaPlayer.release();
+                                    soundIsWorking = false;
+                                    notifyDataSetChanged();
+                                }
+                            });
+                            mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                                @Override
+                                public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+
+                                    soundIsWorking = false;
+                                    notifyDataSetChanged();
+                                    return true;
+                                }
+                            });
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    public void destroy(){
+        if(soundDisposable != null){
+            soundDisposable.dispose();
+            if(mediaPlayer != null) {
+                mediaPlayer.release();
+            }
+        }
     }
 }

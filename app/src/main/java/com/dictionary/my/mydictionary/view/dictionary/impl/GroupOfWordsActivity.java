@@ -320,6 +320,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
     public void onBackPressed() {
         super.onBackPressed();
         presenter.destroy();
+        wordAdapter.destroy();
     }
 
     @Override

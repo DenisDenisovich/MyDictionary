@@ -406,5 +406,6 @@ public class AllWordsFragment extends Fragment implements ViewAllWords {
         super.onDestroy();
         Log.d(LOG_TAG, "onDestroy()     " + this.hashCode());
         presenter.destroy();
+        wordAdapter.destroy();
     }
 }

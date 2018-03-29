@@ -49,6 +49,6 @@
     <dimen name="dropdown_top_padding">16dp</dimen>
     <dimen name="dropdown_bottom_padding">16dp</dimen>
     <dimen name="dropdown_left_padding">5dp</dimen>
-    <dimen name="dropdown_right_padding">5dp</dimen>
+    <dimen name="dropdown_right_padding">45dp</dimen>
 
 </resources>
