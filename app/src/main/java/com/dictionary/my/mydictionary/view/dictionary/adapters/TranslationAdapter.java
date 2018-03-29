@@ -1,6 +1,8 @@
 package com.dictionary.my.mydictionary.view.dictionary.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,8 +58,9 @@ public class TranslationAdapter extends BaseAdapter {
                 .load(data.get(i).getPreview_image())
                 .into(imageView);
 
-
+        Typeface typeface = ResourcesCompat.getFont(context, R.font.roboto_light);
         ((TextView) view.findViewById(R.id.tvListTranslation)).setText(data.get(i).getRus());
+        ((TextView) view.findViewById(R.id.tvListTranslation)).setTypeface(typeface);
         return view;
     }
 

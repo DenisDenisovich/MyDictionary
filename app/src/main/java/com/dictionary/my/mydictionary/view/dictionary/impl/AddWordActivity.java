@@ -1,8 +1,10 @@
 package com.dictionary.my.mydictionary.view.dictionary.impl;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -58,13 +60,18 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_word);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarAddWord);
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_regular);
+        TextView tvTitle = findViewById(R.id.toolbarAddWordTitle);
+        tvTitle.setTypeface(typeface);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null){
-            getSupportActionBar().setTitle("Add new word");
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        typeface = ResourcesCompat.getFont(this, R.font.roboto_light);
         wordEditText = findViewById(R.id.etNewWord);
+        wordEditText.setTypeface(typeface);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         wordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -78,7 +85,8 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
             }
         });
         spinner = findViewById(R.id.spinnerAddWord);
-
+        ((TextView)findViewById(R.id.tvForSpinner)).setTypeface(typeface);
+        ((TextView)findViewById(R.id.tvSelectedTranslation)).setTypeface(typeface);
         if(savedInstanceState != null){
             presenter = (PresenterAddWord) getLastCustomNonConfigurationInstance();
             presenter.attach(this);
@@ -93,7 +101,9 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
     }
 
     private void initAlternativeTranslationObjects(){
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.roboto_light);
         alternativeTranslation = findViewById(R.id.etAlternativeTranslation);
+        alternativeTranslation.setTypeface(typeface);
         Button btn = findViewById(R.id.btnAddAlternativeTranslation);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override

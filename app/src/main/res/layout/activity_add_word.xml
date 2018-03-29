@@ -15,6 +15,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:background="@color/colorPrimary">
 
+        <TextView
+            android:id="@+id/toolbarAddWordTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:text="Add new word"/>
 
     </android.support.v7.widget.Toolbar>
 
@@ -39,6 +46,7 @@
             android:imeOptions="actionDone"
             android:allowUndo="true"
             android:background="@drawable/edit_word_background"
+            android:textColor="#000000"
             android:hint="Inter your word"
             android:maxLines="1"
             android:inputType="text"
@@ -157,6 +165,7 @@
         android:layout_marginRight="16dp"
         android:paddingLeft="8dp"
         android:paddingRight="8dp"
+        android:textColor="#000000"
         android:hint="Inter your translation"
         android:maxLines="1"
         android:inputType="text"

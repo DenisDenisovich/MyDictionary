@@ -1,7 +1,9 @@
 package com.dictionary.my.mydictionary.view.dictionary.adapters;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -89,8 +91,11 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
             lp.setMargins(marginStart,marginTop,0,marginBottom);
             holder.itemView.findViewById(R.id.llWords).setLayoutParams(lp);
         }
+        Typeface typeface = ResourcesCompat.getFont(context, R.font.roboto_light);
         holder.tvWordEng.setText(mdata.get(position).getWord());
         holder.tvWordRus.setText(mdata.get(position).getTranslate());
+        holder.tvWordEng.setTypeface(typeface);
+        holder.tvWordRus.setTypeface(typeface);
         holder.buttonSound.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
