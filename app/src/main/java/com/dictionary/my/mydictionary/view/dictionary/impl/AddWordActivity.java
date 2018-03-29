@@ -105,6 +105,8 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
         alternativeTranslation = findViewById(R.id.etAlternativeTranslation);
         alternativeTranslation.setTypeface(typeface);
         Button btn = findViewById(R.id.btnAddAlternativeTranslation);
+        typeface = ResourcesCompat.getFont(this, R.font.roboto_regular);
+        btn.setTypeface(typeface);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
