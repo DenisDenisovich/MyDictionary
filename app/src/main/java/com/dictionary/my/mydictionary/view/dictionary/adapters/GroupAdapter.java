@@ -142,6 +142,16 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder>{
         return selectedItemIds;
     }
 
+    public Boolean getSelectMode(){
+        return selectMode;
+    }
+    public void setSelectedItemIds(ArrayList<Long> selectedItemIds){
+        this.selectedItemIds = selectedItemIds;
+    }
+    public void setSelectMode(Boolean selectMode){
+        this.selectMode = selectMode;
+    }
+
     public Group getSelectedGroup(){
         for(int i = 0; i < mdata.size(); i++){
             if(mdata.get(i).getId() == selectedItemIds.get(0)){

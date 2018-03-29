@@ -156,6 +156,26 @@ public class AllGroupsFragment extends Fragment implements ViewAllGroups {
         subscribeOnRecyclerView();
     }
 
+    @Override
+    public ArrayList<Long> getSelectedItemIds() {
+        return groupAdapter.getSelectedItemIds();
+    }
+
+    @Override
+    public Boolean getSelectMode() {
+        return groupAdapter.getSelectMode();
+    }
+
+    @Override
+    public void setSelectedItemIds(ArrayList<Long> selectedItemIds) {
+        groupAdapter.setSelectedItemIds(selectedItemIds);
+    }
+
+    @Override
+    public void setSelectMode(Boolean selectMode) {
+        groupAdapter.setSelectMode(selectMode);
+    }
+
     private void subscribeOnRecyclerView(){
         countOfSelectObserver = groupAdapter.getcountOfSelectObservable()
                 .subscribeWith(new DisposableObserver<Integer>() {
@@ -387,6 +407,7 @@ public class AllGroupsFragment extends Fragment implements ViewAllGroups {
         if(choiceGroupObservable != null){
             choiceGroupObservable.dispose();
         }
+        presenter.saveListState();
         presenter.detach();
     }
 

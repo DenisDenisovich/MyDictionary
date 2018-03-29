@@ -10,6 +10,7 @@ public interface PresenterGroups<V> {
     void destroy();
     void init();
     void update();
+    void saveListState();
     void newSelected();
     void newGroupIsReady();
     void deleteSelected();

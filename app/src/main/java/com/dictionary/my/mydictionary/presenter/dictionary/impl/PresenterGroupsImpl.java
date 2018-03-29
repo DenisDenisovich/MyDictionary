@@ -25,6 +25,8 @@ public class PresenterGroupsImpl<V extends ViewAllGroups> implements PresenterGr
     private V view;
     private RepositoryGroups repository;
     private ArrayList<Group> groups;
+    private ArrayList<Long> selectedItemIds;
+    private Boolean selectMode;
     private DisposableCompletableObserver newDisposable;
     private DisposableCompletableObserver delDisposable;
     private DisposableCompletableObserver editDisposable;
@@ -82,6 +84,14 @@ public class PresenterGroupsImpl<V extends ViewAllGroups> implements PresenterGr
     public void update() {
         Log.d(LOG_TAG, "update()");
         view.createList(groups);
+        view.setSelectedItemIds(selectedItemIds);
+        view.setSelectMode(selectMode);
+    }
+
+    @Override
+    public void saveListState() {
+        selectedItemIds = view.getSelectedItemIds();
+        selectMode = view.getSelectMode();
     }
 
     @Override
