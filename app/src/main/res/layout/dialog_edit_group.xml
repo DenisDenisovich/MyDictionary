@@ -3,6 +3,7 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
+        android:id="@+id/tvEditWordDialogHeader"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:textSize="24dp"
@@ -11,6 +12,7 @@
         android:background="@color/colorPrimary"
         android:text="@string/edit_dialog_header"/>
     <TextView
+        android:id="@+id/tvEditWordDialogText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"

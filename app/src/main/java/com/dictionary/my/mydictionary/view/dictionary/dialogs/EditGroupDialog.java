@@ -5,9 +5,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -40,9 +42,14 @@ public class EditGroupDialog extends DialogFragment{
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_edit_group,null);
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.roboto_light);
         TextView tvWordOldTranslate = view.findViewById(R.id.tvEditWordDialogOldTitle);
+        tvWordOldTranslate.setTypeface(typeface);
+        ((TextView)view.findViewById(R.id.tvEditWordDialogHeader)).setTypeface(typeface);
+        ((TextView)view.findViewById(R.id.tvEditWordDialogText)).setTypeface(typeface);
         tvWordOldTranslate.setText(getArguments().getString(KEY_OLD_TITLE));
         final EditText etWordNewTitle = view.findViewById(R.id.etEditWordDialogNewTitle);
+        etWordNewTitle.setTypeface(typeface);
         etWordNewTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

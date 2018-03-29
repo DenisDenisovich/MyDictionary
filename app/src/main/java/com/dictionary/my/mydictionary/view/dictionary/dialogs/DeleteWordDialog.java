@@ -5,9 +5,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TextView;
@@ -53,6 +55,9 @@ public class DeleteWordDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.dialog_delete,null);
+        Typeface typeface = ResourcesCompat.getFont(getContext(), R.font.roboto_light);
+        ((TextView)view.findViewById(R.id.tvDialogDeleteMessage)).setTypeface(typeface);
+        ((TextView)view.findViewById(R.id.tvDialogDeleteHead)).setTypeface(typeface);
         if(countWords == 1){
             ((TextView)view.findViewById(R.id.tvDialogDeleteMessage)).setText(getResources().getString(R.string.delete_dialog_message_one_word));
         }else{
