@@ -82,7 +82,7 @@ public class PresenterGroupsImpl<V extends ViewAllGroups> implements PresenterGr
 
     @Override
     public void update() {
-        Log.d(LOG_TAG, "update()");
+        Log.d(LOG_TAG, "updateView()");
         view.createList(groups);
         view.setSelectedItemIds(selectedItemIds);
         view.setSelectMode(selectMode);

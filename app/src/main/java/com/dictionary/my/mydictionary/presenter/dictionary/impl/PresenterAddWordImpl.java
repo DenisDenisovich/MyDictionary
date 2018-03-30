@@ -59,7 +59,7 @@ public class PresenterAddWordImpl<V extends ViewAddWord> implements PresenterAdd
 
     @Override
     public void update() {
-        Log.d(LOG_TAG, "update()");
+        Log.d(LOG_TAG, "updateView()");
         view.hideProgress();
         view.setGroups(groups);
         if(words != null) {

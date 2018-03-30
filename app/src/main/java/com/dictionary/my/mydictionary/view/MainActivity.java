@@ -2,6 +2,7 @@ package com.dictionary.my.mydictionary.view;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -27,6 +28,9 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
     private final static String KEY_ALL_GROUPS = "allGroupsFragment";
     private final static String KEY_TRAININGS = "trainingsFragment";
     private final static String KEY_NOTEPAD = "notepadFragment";
+    private AllWordsFragment allWordsFragment;
+    private AllGroupsFragment allGroupsFragment;
+    private OnBottomNavigationClick updateFragment;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -36,18 +40,24 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             switch (item.getItemId()) {
                 case R.id.navigation_dictionary:
-                    ft.replace(R.id.mainActivityContainer,new AllWordsFragment(),KEY_ALL_WORDS);
-                    ft.commit();
+                    if(getSupportFragmentManager().findFragmentByTag(KEY_ALL_WORDS) != null && getSupportFragmentManager().findFragmentByTag(KEY_ALL_WORDS).isVisible()){
+                        updateFragment.updateView();
+                    }else if(getSupportFragmentManager().findFragmentByTag(KEY_ALL_GROUPS) != null && getSupportFragmentManager().findFragmentByTag(KEY_ALL_GROUPS).isVisible()){
+                        updateFragment.updateView();
+                    }else {
+                        allWordsScreenSelected();
+                    }
+
                     return true;
                 case R.id.navigation_trainings:
                     return true;
                 case R.id.navigation_notepad:
-                   // mTextMessage.setText(R.string.title_notifications);
                     return true;
             }
             return false;
         }
     };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,17 +68,17 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         if(savedInstanceState == null){
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.mainActivityContainer,new AllWordsFragment(),KEY_ALL_WORDS);
-            ft.commit();
+            allWordsScreenSelected();
         }
     }
 
 
     @Override
     public void allWordsScreenSelected() {
+        allWordsFragment = new AllWordsFragment();
+        updateFragment = allWordsFragment;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.mainActivityContainer,new AllWordsFragment(),KEY_ALL_WORDS);
+        ft.replace(R.id.mainActivityContainer,allWordsFragment,KEY_ALL_WORDS);
         ft.commit();
     }
 
@@ -82,8 +92,10 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
 
     @Override
     public void allGroupsScreenSelected() {
+        allGroupsFragment = new AllGroupsFragment();
+        updateFragment = allGroupsFragment;
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.mainActivityContainer,new AllGroupsFragment(),KEY_ALL_GROUPS);
+        ft.replace(R.id.mainActivityContainer,allGroupsFragment,KEY_ALL_GROUPS);
         ft.commit();
     }
 

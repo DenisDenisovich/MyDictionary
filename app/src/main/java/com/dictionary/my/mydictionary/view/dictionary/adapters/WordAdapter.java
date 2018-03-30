@@ -55,6 +55,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
     private PublishSubject<Integer> selectObservable;
     private SoundPlayer soundPlayer;
     private DisposableObserver<Boolean> soundDisposable;
+    private Integer soundPosition;
     private boolean selectMode = false;
     private Context context;
     private boolean soundIsWorking = false;
@@ -80,6 +81,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
                 RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT
         );
+        // drawing item
         if(selectMode){
             int marginTop = (int)context.getResources().getDimension(R.dimen.llWord_top_margin);
             int marginBottom = (int)context.getResources().getDimension(R.dimen.llWord_bottom_margin);
@@ -103,12 +105,16 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
             lp.setMargins(marginStart,marginTop,0,marginBottom);
             holder.itemView.findViewById(R.id.llWords).setLayoutParams(lp);
         }
+
+        // set content
         Typeface typeface = ResourcesCompat.getFont(context, R.font.roboto_light);
         holder.tvWordEng.setText(mdata.get(position).getWord());
         holder.tvWordRus.setText(mdata.get(position).getTranslate());
         holder.tvWordEng.setTypeface(typeface);
         holder.tvWordRus.setTypeface(typeface);
         holder.buttonSound.setImageResource(R.drawable.ic_word_item_sound);
+
+
         // if current word have sound
         if(mdata.get(position).getSound() != null) {
             holder.buttonSound.setVisibility(View.VISIBLE);
@@ -119,6 +125,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
                         try {
                             // if sound is't working now
                             if (!soundIsWorking) {
+                                soundPosition = position;
                                 holder.buttonSound.setImageResource(R.drawable.ic_word_item_sound_activity);
                                 soundPlayer = new SoundPlayer(mdata.get(position).getSound());
                                 subscribeToSound(soundPlayer.getStateObservable());
@@ -135,6 +142,8 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
         }else {
             holder.buttonSound.setVisibility(View.GONE);
         }
+
+        // open select mode
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -143,6 +152,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
                 return true;
             }
         });
+        // select item
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -219,7 +229,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
             public void onNext(Boolean aBoolean) {
                 soundIsWorking = aBoolean;
                 if(!soundIsWorking)
-                    notifyDataSetChanged();
+                    notifyItemChanged(soundPosition);
             }
 
             @Override

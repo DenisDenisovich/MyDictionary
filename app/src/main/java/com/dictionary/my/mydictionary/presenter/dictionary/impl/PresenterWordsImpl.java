@@ -86,7 +86,7 @@ public class PresenterWordsImpl<V extends ViewAllWords> implements PresenterWord
 
     @Override
     public void update() {
-        Log.d(LOG_TAG, "update()");
+        Log.d(LOG_TAG, "updateView()");
         view.createList(words);
         view.setSelectedItemIds(selectedItemIds);
         view.setSelectMode(selectMode);

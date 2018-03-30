@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +31,7 @@ import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterWords;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterWordsImpl;
+import com.dictionary.my.mydictionary.view.OnBottomNavigationClick;
 import com.dictionary.my.mydictionary.view.dictionary.ViewAllWords;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerGroupAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.WordAdapter;
@@ -46,7 +46,7 @@ import io.reactivex.observers.DisposableObserver;
  * Created by luxso on 04.03.2018.
  */
 
-public class AllWordsFragment extends Fragment implements ViewAllWords {
+public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottomNavigationClick {
     private final static String LOG_TAG = "Log_ViewAllWords";
     private AppCompatActivity activity;
     private View myView;
@@ -68,6 +68,7 @@ public class AllWordsFragment extends Fragment implements ViewAllWords {
     private final static int REQUEST_CODE_DELETE = 3;
     private boolean onNewWordClicked = false;
     private final static String KEY_ON_NEW_WORD_CLICKED = "onNewWordClicked";
+
 
     public interface onAllWordsSelectedListener{
         void allGroupsScreenSelected();
@@ -389,6 +390,10 @@ public class AllWordsFragment extends Fragment implements ViewAllWords {
         Toast.makeText(getActivity().getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void updateView() {
+        presenter.init();
+    }
 
     @Override
     public void onDestroyView() {

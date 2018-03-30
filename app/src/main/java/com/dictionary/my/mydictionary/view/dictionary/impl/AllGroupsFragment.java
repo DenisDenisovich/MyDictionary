@@ -31,6 +31,7 @@ import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterGroups;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterGroupsImpl;
+import com.dictionary.my.mydictionary.view.OnBottomNavigationClick;
 import com.dictionary.my.mydictionary.view.dictionary.ViewAllGroups;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.GroupAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerGroupAdapter;
@@ -46,7 +47,7 @@ import io.reactivex.observers.DisposableObserver;
  * Created by luxso on 07.03.2018.
  */
 
-public class AllGroupsFragment extends Fragment implements ViewAllGroups {
+public class AllGroupsFragment extends Fragment implements ViewAllGroups, OnBottomNavigationClick {
     private final static String LOG_TAG = "Log_ViewAllGroups";
     private AppCompatActivity activity;
     private View myView;
@@ -395,6 +396,11 @@ public class AllGroupsFragment extends Fragment implements ViewAllGroups {
                     break;
             }
         }
+    }
+
+    @Override
+    public void updateView() {
+        presenter.init();
     }
 
     @Override
