@@ -4,6 +4,8 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
@@ -112,10 +115,14 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> im
             holder.buttonSound.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // if sound is't used now
-                    if(!soundIsWorking) {
-                        holder.buttonSound.setImageResource(R.drawable.ic_word_item_sound_activity);
-                        playSoundOfWord(mdata.get(position).getSound());
+                    if(isNetworkAvailable()) {
+                        // if sound is't used now
+                        if (!soundIsWorking) {
+                            holder.buttonSound.setImageResource(R.drawable.ic_word_item_sound_activity);
+                            playSoundOfWord(mdata.get(position).getSound());
+                        }
+                    }else {
+                        Toast.makeText(context, "Internet connection is not available", Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -208,9 +215,19 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> im
             mediaPlayer.setOnCompletionListener(this);
             mediaPlayer.setOnErrorListener(this);
             mediaPlayer.prepareAsync();
-        }catch (IOException e){
+        }catch(IOException e){
             e.printStackTrace();
         }
+    }
+
+    private boolean isNetworkAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override

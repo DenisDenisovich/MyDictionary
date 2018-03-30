@@ -1,7 +1,10 @@
 package com.dictionary.my.mydictionary.view.dictionary.impl;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.res.ResourcesCompat;
@@ -78,7 +81,11 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if(i == EditorInfo.IME_ACTION_DONE){
                     if(!alternativeTranslationMode) {
-                        presenter.wordHasPrinted();
+                        if(isNetworkAvailable()) {
+                            presenter.wordHasPrinted();
+                        }else {
+                            showERROR("Internet connection is not available");
+                        }
                     }
                 }
                 return false;
@@ -319,6 +326,16 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
         Log.d(LOG_TAG, formattedDate);
         translation.setGroupId(spinner.getSelectedItemId());
         return translation;
+    }
+
+    private boolean isNetworkAvailable(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override

@@ -94,7 +94,8 @@ public class PresenterAddWordImpl<V extends ViewAddWord> implements PresenterAdd
 
                     @Override
                     public void onError(Throwable e) {
-                        view.showERROR("GROUP_ERROR");
+                        e.printStackTrace();
+                        view.showERROR("Oops! Something was wrong");
                         Log.d(LOG_TAG, e.getMessage());
                     }
                 });
@@ -128,7 +129,8 @@ public class PresenterAddWordImpl<V extends ViewAddWord> implements PresenterAdd
 
                     @Override
                     public void onError(Throwable e) {
-                        view.showERROR("TRANSLATION_ERROR");
+                        e.printStackTrace();
+                        view.showERROR("Oops! Something was wrong");
                         defaultTranslationModeERROR = true;
                         searchForTranslation = false;
                         view.hideProgress();
@@ -175,7 +177,8 @@ public class PresenterAddWordImpl<V extends ViewAddWord> implements PresenterAdd
 
                     @Override
                     public void onError(Throwable e) {
-                        view.showERROR("Set word ERROR");
+                        e.printStackTrace();
+                        view.showERROR("Oops! Something was wrong");
                     }
                 });
     }
@@ -195,7 +198,8 @@ public class PresenterAddWordImpl<V extends ViewAddWord> implements PresenterAdd
 
                     @Override
                     public void onError(Throwable e) {
-                        view.showERROR("Set word ERROR");
+                        e.printStackTrace();
+                        view.showERROR("Oops! Something was wrong");
                     }
                 });
     }
