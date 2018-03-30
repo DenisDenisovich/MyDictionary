@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dictionary.my.mydictionary.R;
+import com.dictionary.my.mydictionary.domain.entites.SoundPlayer;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 
 import io.reactivex.observers.DisposableObserver;
@@ -32,9 +33,7 @@ import java.util.ArrayList;
  * Created by luxso on 08.03.2018.
  */
 
-public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> implements MediaPlayer.OnPreparedListener,
-                                                                                         MediaPlayer.OnCompletionListener,
-                                                                                         MediaPlayer.OnErrorListener{
+public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
     private final static String LOG_TAG = "Log_WordAdapter";
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
@@ -54,7 +53,8 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> im
     private ArrayList<Word> mdata;
     private ArrayList<Long> selectedItemIds;
     private PublishSubject<Integer> selectObservable;
-    MediaPlayer mediaPlayer;
+    private SoundPlayer soundPlayer;
+    private DisposableObserver<Boolean> soundDisposable;
     private boolean selectMode = false;
     private Context context;
     private boolean soundIsWorking = false;
@@ -115,11 +115,17 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> im
             holder.buttonSound.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(isNetworkAvailable()) {
-                        // if sound is't used now
-                        if (!soundIsWorking) {
-                            holder.buttonSound.setImageResource(R.drawable.ic_word_item_sound_activity);
-                            playSoundOfWord(mdata.get(position).getSound());
+                    if(SoundPlayer.isNetworkAvailable(context)){
+                        try {
+                            // if sound is't working now
+                            if (!soundIsWorking) {
+                                holder.buttonSound.setImageResource(R.drawable.ic_word_item_sound_activity);
+                                soundPlayer = new SoundPlayer(mdata.get(position).getSound());
+                                subscribeToSound(soundPlayer.getStateObservable());
+                                soundPlayer.start();
+                            }
+                        }catch (IOException e){
+                            e.printStackTrace();
                         }
                     }else {
                         Toast.makeText(context, "Internet connection is not available", Toast.LENGTH_SHORT).show();
@@ -194,7 +200,6 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> im
 
     public void deleteSelectedWords(){
         ArrayList<Word> deleteList = new ArrayList<>();
-        int dataSize = mdata.size();
         for(int i = 0; i < mdata.size(); i++){
             if(selectedItemIds.contains(mdata.get(i).getId())){
                 deleteList.add(mdata.get(i));
@@ -205,56 +210,36 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> im
 
     }
 
-    private void playSoundOfWord(String s){
-        try {
-            soundIsWorking = true;
-            mediaPlayer = new MediaPlayer();
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-            mediaPlayer.setDataSource(s);
-            mediaPlayer.setOnPreparedListener(this);
-            mediaPlayer.setOnCompletionListener(this);
-            mediaPlayer.setOnErrorListener(this);
-            mediaPlayer.prepareAsync();
-        }catch(IOException e){
-            e.printStackTrace();
+    public void subscribeToSound(PublishSubject<Boolean> observable){
+        if(soundDisposable != null){
+            soundDisposable.dispose();
         }
-    }
+        soundDisposable = observable.subscribeWith(new DisposableObserver<Boolean>() {
+            @Override
+            public void onNext(Boolean aBoolean) {
+                soundIsWorking = aBoolean;
+                if(!soundIsWorking)
+                    notifyDataSetChanged();
+            }
 
-    private boolean isNetworkAvailable(){
-        ConnectivityManager connectivityManager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
-                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
-            return true;
-        }
-        else
-            return false;
-    }
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
 
-    @Override
-    public void onPrepared(MediaPlayer mediaPlayer) {
-        Log.d(LOG_TAG, "onPrepared()");
-        mediaPlayer.start();
-    }
+            @Override
+            public void onComplete() {
 
-    @Override
-    public void onCompletion(MediaPlayer mediaPlayer) {
-        Log.d(LOG_TAG, "onCompletion()");
-        mediaPlayer.release();
-        soundIsWorking = false;
-        notifyDataSetChanged();
-    }
-
-    @Override
-    public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
-        Log.d(LOG_TAG, "onError()");
-        soundIsWorking = false;
-        notifyDataSetChanged();
-        return true;
+            }
+        });
     }
 
     public void destroy(){
-        if(mediaPlayer != null) {
-            mediaPlayer.release();
+        if(soundPlayer != null){
+            soundPlayer.destroy();
+        }
+        if(soundDisposable != null){
+            soundDisposable.dispose();
         }
     }
 }
