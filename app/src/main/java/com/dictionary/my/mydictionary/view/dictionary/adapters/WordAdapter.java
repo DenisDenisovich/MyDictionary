@@ -29,8 +29,11 @@ import java.util.ArrayList;
  * Created by luxso on 08.03.2018.
  */
 
-public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
+public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> implements MediaPlayer.OnPreparedListener,
+                                                                                         MediaPlayer.OnCompletionListener,
+                                                                                         MediaPlayer.OnErrorListener{
     private final static String LOG_TAG = "Log_WordAdapter";
+
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public ImageButton checkBox;
         public TextView tvWordEng;
@@ -48,8 +51,6 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
     private ArrayList<Word> mdata;
     private ArrayList<Long> selectedItemIds;
     private PublishSubject<Integer> selectObservable;
-    private PublishSubject<String> soundObservable;
-    private DisposableObserver<String> soundDisposable;
     MediaPlayer mediaPlayer;
     private boolean selectMode = false;
     private Context context;
@@ -59,8 +60,6 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
         selectedItemIds = new ArrayList<>();
         this.context = context;
         selectObservable = PublishSubject.create();
-        soundObservable = PublishSubject.create();
-        setSoundObserver();
     }
 
     @Override
@@ -116,7 +115,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
                     // if sound is't used now
                     if(!soundIsWorking) {
                         holder.buttonSound.setImageResource(R.drawable.ic_word_item_sound_activity);
-                        soundObservable.onNext(mdata.get(position).getSound());
+                        playSoundOfWord(mdata.get(position).getSound());
                     }
                 }
             });
@@ -155,6 +154,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
         selectObservable.onNext(selectedItemIds.size());
         notifyDataSetChanged();
     }
+
     public int getSelectedItemsSize(){
         return selectedItemIds.size();
     }
@@ -166,6 +166,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
     public ArrayList<Long> getSelectedItemIds(){
         return selectedItemIds;
     }
+
     public Boolean getSelectMode(){
         return selectMode;
     }
@@ -173,9 +174,11 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
     public void setSelectedItemIds(ArrayList<Long> selectedItemIds){
         this.selectedItemIds = selectedItemIds;
     }
+
     public void setSelectMode(Boolean selectMode){
         this.selectMode = selectMode;
     }
+
     public void selectModeOff(){
         selectMode = false;
         selectedItemIds.clear();
@@ -195,59 +198,46 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder>{
 
     }
 
-    public void setSoundObserver(){
-        soundDisposable = soundObservable.subscribeOn(Schedulers.io())
-                .subscribeWith(new DisposableObserver<String>() {
-                    @Override
-                    public void onNext(String s) {
-                        try {
-                            soundIsWorking = true;
-                            mediaPlayer = new MediaPlayer();
-                            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                            mediaPlayer.setDataSource(s);
-                            mediaPlayer.prepare(); // might take long! (for buffering, etc)
-                            mediaPlayer.start();
-                            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                                @Override
-                                public void onCompletion(MediaPlayer mediaPlayer) {
-                                    mediaPlayer.release();
-                                    soundIsWorking = false;
-                                    notifyDataSetChanged();
-                                }
-                            });
-                            mediaPlayer.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                                @Override
-                                public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+    private void playSoundOfWord(String s){
+        try {
+            soundIsWorking = true;
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mediaPlayer.setDataSource(s);
+            mediaPlayer.setOnPreparedListener(this);
+            mediaPlayer.setOnCompletionListener(this);
+            mediaPlayer.setOnErrorListener(this);
+            mediaPlayer.prepareAsync();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
 
-                                    soundIsWorking = false;
-                                    notifyDataSetChanged();
-                                    return true;
-                                }
-                            });
+    @Override
+    public void onPrepared(MediaPlayer mediaPlayer) {
+        Log.d(LOG_TAG, "onPrepared()");
+        mediaPlayer.start();
+    }
 
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
+    @Override
+    public void onCompletion(MediaPlayer mediaPlayer) {
+        Log.d(LOG_TAG, "onCompletion()");
+        mediaPlayer.release();
+        soundIsWorking = false;
+        notifyDataSetChanged();
+    }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
+    @Override
+    public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
+        Log.d(LOG_TAG, "onError()");
+        soundIsWorking = false;
+        notifyDataSetChanged();
+        return true;
     }
 
     public void destroy(){
-        if(soundDisposable != null){
-            soundDisposable.dispose();
-            if(mediaPlayer != null) {
-                mediaPlayer.release();
-            }
+        if(mediaPlayer != null) {
+            mediaPlayer.release();
         }
     }
 }
