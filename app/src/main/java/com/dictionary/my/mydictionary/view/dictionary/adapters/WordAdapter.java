@@ -122,7 +122,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> im
                             playSoundOfWord(mdata.get(position).getSound());
                         }
                     }else {
-                        Toast.makeText(context, "Internet connection is not available", Toast.LENGTH_LONG).show();
+                        Toast.makeText(context, "Internet connection is not available", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
