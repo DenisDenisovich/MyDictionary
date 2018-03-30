@@ -22,6 +22,8 @@ import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.domain.entites.SoundPlayer;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 
+import io.reactivex.Completable;
+import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
@@ -54,7 +56,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
     private ArrayList<Long> selectedItemIds;
     private PublishSubject<Integer> selectObservable;
     private SoundPlayer soundPlayer;
-    private DisposableObserver<Boolean> soundDisposable;
+    private DisposableObserver soundDisposable;
     private Integer soundPosition;
     private boolean selectMode = false;
     private Context context;
@@ -125,6 +127,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
                         try {
                             // if sound is't working now
                             if (!soundIsWorking) {
+                                soundIsWorking = true;
                                 soundPosition = position;
                                 holder.buttonSound.setImageResource(R.drawable.ic_word_item_sound_activity);
                                 soundPlayer = new SoundPlayer(mdata.get(position).getSound());
@@ -220,16 +223,13 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
 
     }
 
-    public void subscribeToSound(PublishSubject<Boolean> observable){
+    private void subscribeToSound(PublishSubject<Boolean> observable){
         if(soundDisposable != null){
             soundDisposable.dispose();
         }
         soundDisposable = observable.subscribeWith(new DisposableObserver<Boolean>() {
             @Override
             public void onNext(Boolean aBoolean) {
-                soundIsWorking = aBoolean;
-                if(!soundIsWorking)
-                    notifyItemChanged(soundPosition);
             }
 
             @Override
@@ -239,7 +239,8 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
 
             @Override
             public void onComplete() {
-
+                soundIsWorking = false;
+                notifyItemChanged(soundPosition);
             }
         });
     }

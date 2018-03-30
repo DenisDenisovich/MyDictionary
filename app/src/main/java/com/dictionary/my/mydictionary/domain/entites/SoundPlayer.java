@@ -8,6 +8,8 @@ import android.net.NetworkInfo;
 
 import java.io.IOException;
 
+import io.reactivex.Completable;
+import io.reactivex.functions.Action;
 import io.reactivex.subjects.PublishSubject;
 
 /**
@@ -20,7 +22,6 @@ public class SoundPlayer implements MediaPlayer.OnPreparedListener,
 
 
     private MediaPlayer mediaPlayer;
-    private boolean soundIsWorking = false;
     private PublishSubject<Boolean> stateObservable;
     public SoundPlayer(String url) throws IOException{
         mediaPlayer = new MediaPlayer();
@@ -43,26 +44,23 @@ public class SoundPlayer implements MediaPlayer.OnPreparedListener,
 
     public void start(){
         mediaPlayer.prepareAsync();
-        soundIsWorking = true;
-        stateObservable.onNext(soundIsWorking);
     }
 
     public PublishSubject<Boolean> getStateObservable(){
         return stateObservable;
     }
 
+
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         mediaPlayer.release();
-        soundIsWorking = false;
-        stateObservable.onNext(soundIsWorking);
+        stateObservable.onComplete();
     }
 
     @Override
     public boolean onError(MediaPlayer mediaPlayer, int i, int i1) {
         mediaPlayer.release();
-        soundIsWorking = false;
-        stateObservable.onNext(soundIsWorking);
+        stateObservable.onComplete();
         return true;
     }
 
@@ -70,6 +68,7 @@ public class SoundPlayer implements MediaPlayer.OnPreparedListener,
     public void onPrepared(MediaPlayer mediaPlayer) {
         mediaPlayer.start();
     }
+
 
     public void destroy(){
         mediaPlayer.release();
