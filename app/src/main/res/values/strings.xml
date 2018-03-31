@@ -1,57 +1,45 @@
 <resources>
     <string name="app_name">"MyDictionary "</string>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_all_dictionaries">All Dictionaries</string>
-    <string name="title_training">@string/item_navigation_drawer_training</string>
 
-    <string name="dialog_add_dictionary_positive_button">Add</string>
-    <string name="dialog_add_dictionary_negative_button">Cancel</string>
-    <string name="dialog_add_dictionary_EditText">dictionary title</string>
-    <string name="dialog_add_dictionary_TextView_head">Add new dictionary</string>
+    <string name="title_activity_main">Dictionary</string>
+    <string name="title_dictionary">Dictionary</string>
+    <string name="title_trainings">Trainings</string>
+    <string name="title_notepad">Notepad</string>
 
-    <string name="dialog_edit_dictionary_positive_button">Edit</string>
-    <string name="dialog_edit_dictionary_negative_button">Cancel</string>
-    <string name="dialog_edit_dictionary_EditText">new dictionary title</string>
-    <string name="dialog_edit_dictionary_TextView_head">Edit dictionary</string>
-    <string name="dialog_edit_dictionary_TextView_old_title">Old title</string>
+    <string-array name="dictionary_spinner_array">
+        <item>All words</item>
+        <item>Groups</item>
+    </string-array>
 
-    <string name="dialog_add_word_positive_button">Add</string>
-    <string name="dialog_add_word_negative_button">Cancel</string>
-    <string name="dialog_add_word_EditText1">word</string>
-    <string name="dialog_add_word_EditText2">currentTranslate</string>
-    <string name="dialog_add_word_TextView_head">Add new word</string>
+    <string name="word_menu_edit">Edit</string>
+    <string name="word_menu_delete">Delete</string>
+    <string name="word_menu_move_to_group">Move to group</string>
+    <string name="word_menu_move_to_training">Move to training</string>
 
-    <string name="dialog_edit_word_positive_button">Edit</string>
-    <string name="dialog_edit_word_negative_button">Cancel</string>
-    <string name="dialog_edit_word_EditText">new currentTranslate</string>
-    <string name="dialog_edit_word_TextView_head">Edit currentTranslate</string>
-    <string name="dialog_edit_word_TextView_old_translate">Old currentTranslate</string>
+    <string name="group_menu_edit">Edit</string>
+    <string name="group_menu_delete">Delete</string>
 
-    <string name="dialog_delete_word_TextView_head">Delete word</string>
-    <string name="dialog_delete_dictionary_TextView_head">Delete dictionary</string>
-    <string name="dialog_delete_positive_button">Delete</string>
-    <string name="dialog_delete_negative_button">Cancel</string>
-    <string name="dialog_delete_words_message">Do you really want to delete the words?</string>
-    <string name="dialog_delete_one_word_message">Do you really want to delete the word?</string>
-    <string name="dialog_delete_dictionaries_message">Do you really want to delete the dictionaries?</string>
-    <string name="dialog_delete_one_dictionary_message">Do you really want to delete the dictionary?</string>
+    <string name="delete_dialog_header">Delete</string>
+    <string name="delete_dialog_message_one_word">Do you really want to delete this word?</string>
+    <string name="delete_dialog_message_couple_words">Do you really want to delete this words?</string>
+    <string name="delete_dialog_message_one_group">Do you really want to delete this group?</string>
+    <string name="delete_dialog_message_couple_groups">Do you really want to delete this groups?</string>
+    <string name="delete_dialog_positive_button">Delete</string>
+    <string name="delete_dialog_negative_button">Cancel</string>
 
-    <string name="dialog_move_word_positive_button">Move</string>
-    <string name="dialog_move_word_negative_button">Cancel</string>
-    <string name="dialog_move_word_TextView_head">Choice place to move</string>
+    <string name="edit_dialog_header">Edit</string>
+    <string name="edit_dialog_message">Old title</string>
+    <string name="edit_dialog_hint">Inter new title there</string>
+    <string name="edit_dialog_positive_button">Edit</string>
+    <string name="edit_dialog_negative_button">Cancel</string>
 
+    <string name="move_to_group_dialog_header">Move to group</string>
+    <string name="move_to_group_positive_button">Move</string>
+    <string name="move_to_group_negative_button">Cancel</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="item_navigation_drawer_dictionary">Dictionary</string>
-    <string name="item_navigation_drawer_training">Training</string>
-    <string name="item_navigation_drawer_training_russian_to_english">Rus - Eng</string>
-    <string name="item_navigation_drawer_training_english_to_russian">Eng - Rus</string>
-    <string name="action_settings">Settings</string>
+    <string name="new_group_dialog_header">Add new group</string>
+    <string name="new_group_dialog_hint">Inter title there</string>
+    <string name="new_group_dialog_positive_button">Add</string>
+    <string name="new_group_dialog_negative_button">Cancel</string>
 
-
-    <string name="dictionary_new_word">Inter new word</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
 </resources>

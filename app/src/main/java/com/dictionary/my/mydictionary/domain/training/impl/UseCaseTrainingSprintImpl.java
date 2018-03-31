@@ -2,10 +2,10 @@ package com.dictionary.my.mydictionary.domain.training.impl;
 
 import android.content.Context;
 
-import com.dictionary.my.mydictionary.data.repository.storage.TrainingRepository;
-import com.dictionary.my.mydictionary.data.repository.storage.TrainingRepositoryImpl;
-import com.dictionary.my.mydictionary.data.entites.skyengapi.WordSkyEng;
-import com.dictionary.my.mydictionary.data.entites.WordSprint;
+import com.dictionary.my.mydictionary.data.db.training.DBTraining;
+import com.dictionary.my.mydictionary.data.db.training.impl.DBTrainingImpl;
+import com.dictionary.my.mydictionary.data.cloud.pojo.word.WordSkyEng;
+import com.dictionary.my.mydictionary.domain.entites.training.WordSprint;
 import com.dictionary.my.mydictionary.domain.training.UseCaseTrainingSprint;
 import com.dictionary.my.mydictionary.view.App;
 
@@ -24,7 +24,7 @@ import retrofit2.Response;
  */
 
 public class UseCaseTrainingSprintImpl implements UseCaseTrainingSprint {
-    private TrainingRepository repository;
+    private DBTraining repository;
     Response<ArrayList<WordSkyEng>> response;
     ArrayList<String> alternativeTranslate;
     private final int minCountOfWords = 10;
@@ -32,7 +32,7 @@ public class UseCaseTrainingSprintImpl implements UseCaseTrainingSprint {
     private int maxCountOfTryingFindWord = minCountOfWords;
     private int countOfTryingFindWord;
     public UseCaseTrainingSprintImpl(Context context){
-        repository = new TrainingRepositoryImpl(context);
+        repository = new DBTrainingImpl(context);
     }
     @Override
     public Observable<WordSprint> getTraining() {
@@ -99,7 +99,7 @@ public class UseCaseTrainingSprintImpl implements UseCaseTrainingSprint {
     private ArrayList<String> getAlternativeTranslates(String word) throws IOException {
         alternativeTranslate = new ArrayList<String>();
         ArrayList<WordSkyEng> data;
-        response = App.getSkyEngApi().getAlterTranslations(word).execute();
+        response = App.getSkyEngApi().getWord(word).execute();
         data = response.body();
         for(WordSkyEng w: data){
             alternativeTranslate.add(w.getText().toLowerCase());

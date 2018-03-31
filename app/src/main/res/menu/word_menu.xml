@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group
+        android:id="@+id/word_menu_group_base"
+        android:visible="false">
+        <item
+            android:id="@+id/word_menu_search"
+            android:title="search"
+            android:icon="@drawable/ic_word_search"
+            app:showAsAction="always"
+            />
+        <item
+            android:id="@+id/word_menu_add"
+            android:title="add"
+            android:icon="@drawable/ic_word_add"
+            app:showAsAction="always"/>
+
+    </group>
+
+    <group
+        android:id="@+id/word_menu_group_context"
+        android:visible="true">
+        <item
+            android:id="@+id/word_menu_delete"
+            android:title="@string/word_menu_delete"
+            android:icon="@drawable/ic_delete_black_24dp"
+            app:showAsAction="always"/>
+
+        <item
+            android:id="@+id/word_menu_move_to_group"
+            android:title="@string/word_menu_move_to_group"
+            app:showAsAction="never"/>
+
+        <item
+            android:id="@+id/word_menu_move_to_training"
+            android:title="@string/word_menu_move_to_training"
+            app:showAsAction="never"/>
+    </group>
+
+</menu>

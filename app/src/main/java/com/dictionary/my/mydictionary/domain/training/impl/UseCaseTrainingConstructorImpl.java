@@ -2,9 +2,9 @@ package com.dictionary.my.mydictionary.domain.training.impl;
 
 import android.content.Context;
 
-import com.dictionary.my.mydictionary.data.repository.storage.TrainingRepository;
-import com.dictionary.my.mydictionary.data.repository.storage.TrainingRepositoryImpl;
-import com.dictionary.my.mydictionary.data.entites.WordConstructor;
+import com.dictionary.my.mydictionary.data.db.training.DBTraining;
+import com.dictionary.my.mydictionary.data.db.training.impl.DBTrainingImpl;
+import com.dictionary.my.mydictionary.domain.entites.training.WordConstructor;
 import com.dictionary.my.mydictionary.domain.training.UseCaseTrainingConstructor;
 
 import java.util.ArrayList;
@@ -20,13 +20,13 @@ import io.reactivex.annotations.NonNull;
  */
 
 public class UseCaseTrainingConstructorImpl implements UseCaseTrainingConstructor {
-    TrainingRepository repository;
+    DBTraining repository;
     private final int minCountOfWords = 10;
     private final int countOfBlock = 5;
     private int maxCountOfTryingFindWord = minCountOfWords;
     private int countOfTryingFindWord;
     public UseCaseTrainingConstructorImpl(Context context){
-        repository = new TrainingRepositoryImpl(context);
+        repository = new DBTrainingImpl(context);
     }
     @Override
     public Observable<WordConstructor> getTraining() {

@@ -1,125 +1,256 @@
 package com.dictionary.my.mydictionary.view.dictionary.adapters;
 
-
 import android.content.Context;
+import android.graphics.Typeface;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dictionary.my.mydictionary.R;
+import com.dictionary.my.mydictionary.domain.entites.SoundPlayer;
+import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 
+import io.reactivex.Completable;
+import io.reactivex.observers.DisposableCompletableObserver;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+import io.reactivex.subjects.PublishSubject;
+
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Map;
 
 /**
- * Created by luxso on 31.10.2017.
+ * Created by luxso on 08.03.2018.
  */
 
-public class WordAdapter extends BaseAdapter {
-    private LayoutInflater layoutInflater;
+public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
+    private final static String LOG_TAG = "Log_WordAdapter";
+
+    public static class ViewHolder extends RecyclerView.ViewHolder{
+        public ImageButton checkBox;
+        public TextView tvWordEng;
+        public TextView tvWordRus;
+        public ImageButton buttonSound;
+        public ViewHolder(View itemView) {
+            super(itemView);
+            checkBox = (ImageButton) itemView.findViewById(R.id.check_box);
+            tvWordEng = itemView.findViewById(R.id.tvWordEng);
+            tvWordRus = itemView.findViewById(R.id.tvWordRus);
+            buttonSound = (ImageButton) itemView.findViewById(R.id.btnSound);
+        }
+    }
+
+    private ArrayList<Word> mdata;
+    private ArrayList<Long> selectedItemIds;
+    private PublishSubject<Integer> selectObservable;
+    private SoundPlayer soundPlayer;
+    private DisposableObserver soundDisposable;
+    private Integer soundPosition;
+    private boolean selectMode = false;
     private Context context;
-    private ArrayList<Map<String,Object>> data;
-    private ArrayList<Long> deleteList;
-    private int resource;
-    private String[] from;
-    private int[] to;
-
-    public WordAdapter(Context context, ArrayList<Map<String,Object>> data, int resource, String[] from, int[] to){
+    private boolean soundIsWorking = false;
+    public WordAdapter(Context context, ArrayList<Word> data){
+        mdata = data;
+        selectedItemIds = new ArrayList<>();
         this.context = context;
-        this.data = data;
-        this.resource = resource;
-        this.from = from;
-        this.to = to;
-        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        deleteList = new ArrayList<>();
-    }
-    @Override
-    public int getCount() {
-        return data.size();
+        selectObservable = PublishSubject.create();
     }
 
     @Override
-    public Object getItem(int i) {
-        return data.get(i);
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_word, parent, false);
+        ViewHolder vh = new ViewHolder(v);
+
+
+        return vh;
     }
 
     @Override
-    public long getItemId(int i) {
-        return (Long)data.get(i).get(from[0]);
-    }
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT
+        );
+        // drawing item
+        if(selectMode){
+            int marginTop = (int)context.getResources().getDimension(R.dimen.llWord_top_margin);
+            int marginBottom = (int)context.getResources().getDimension(R.dimen.llWord_bottom_margin);
+            int marginStart = (int)context.getResources().getDimension(R.dimen.llWord_start_margin_selected);
+            lp.setMargins(marginStart,marginTop,0,marginBottom);
+            holder.itemView.findViewById(R.id.llWords).setLayoutParams(lp);
 
+            holder.checkBox.setVisibility(View.VISIBLE);
+            if(selectedItemIds.contains(mdata.get(position).getId())){
 
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if(view == null){
-            view = layoutInflater.inflate(resource,null);
-        }
-        if(deleteList.contains(getItemId(i))){
-            (view.findViewById(R.id.wordItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorPrimaryLight));
+                holder.checkBox.setBackground(ContextCompat.getDrawable(context,R.drawable.ic_check_box_selected));
+            }else{
+                holder.checkBox.setBackground(ContextCompat.getDrawable(context,R.drawable.ic_check_box));
+            }
+
         }else{
-            (view.findViewById(R.id.wordItem)).setBackgroundColor(ContextCompat.getColor(context,R.color.colorDictionaryItem));
+            holder.checkBox.setVisibility(View.GONE);
+            int marginTop = (int)context.getResources().getDimension(R.dimen.llWord_top_margin);
+            int marginBottom = (int)context.getResources().getDimension(R.dimen.llWord_bottom_margin);
+            int marginStart = (int)context.getResources().getDimension(R.dimen.llWord_start_margin);
+            lp.setMargins(marginStart,marginTop,0,marginBottom);
+            holder.itemView.findViewById(R.id.llWords).setLayoutParams(lp);
         }
-        ((TextView) view.findViewById(to[0])).setText(getWordText(i));
-        ((TextView) view.findViewById(to[1])).setText(getTranslateText(i));
-        return view;
-    }
 
-    private String getWordText(int i){
-        return (String)data.get(i).get(from[1]);
-    }
-    private String getTranslateText(int i){
-        return (String)data.get(i).get(from[2]);
-    }
-    public int addViewToDeleteList(long l){
-        deleteList.add(l);
-        this.notifyDataSetChanged();
-        return deleteList.size();
-    }
+        // set content
+        Typeface typeface = ResourcesCompat.getFont(context, R.font.roboto_light);
+        holder.tvWordEng.setText(mdata.get(position).getWord());
+        holder.tvWordRus.setText(mdata.get(position).getTranslate());
+        holder.tvWordEng.setTypeface(typeface);
+        holder.tvWordRus.setTypeface(typeface);
+        holder.buttonSound.setImageResource(R.drawable.ic_word_item_sound);
 
-    public boolean viewIsDelete(long l){
-        if(deleteList.contains(l)){
-            return true;
+
+        // if current word have sound
+        if(mdata.get(position).getSound() != null) {
+            holder.buttonSound.setVisibility(View.VISIBLE);
+            holder.buttonSound.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(SoundPlayer.isNetworkAvailable(context)){
+                        try {
+                            // if sound is't working now
+                            if (!soundIsWorking) {
+                                soundIsWorking = true;
+                                soundPosition = position;
+                                holder.buttonSound.setImageResource(R.drawable.ic_word_item_sound_activity);
+                                soundPlayer = new SoundPlayer(mdata.get(position).getSound());
+                                subscribeToSound(soundPlayer.getStateObservable());
+                                soundPlayer.start();
+                            }
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
+                    }else {
+                        Toast.makeText(context, "Internet connection is not available", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }else {
+            holder.buttonSound.setVisibility(View.GONE);
         }
-        return false;
-    }
 
-    public int removeViewFromDeleteList(long l){
-        deleteList.remove(l);
-        this.notifyDataSetChanged();
-        return deleteList.size();
-    }
-
-    public ArrayList<Long> getDeleteList(){
-        return deleteList;
-    }
-
-    public Integer getSizeOfDeleteList(){
-        this.notifyDataSetChanged();
-        return deleteList.size();
-    }
-
-    public int clearDeleteList(){
-        deleteList.clear();
-        this.notifyDataSetChanged();
-        return deleteList.size();
-    }
-
-    public Map<String,Object> getEditItem(){
-        Map<String, Object> item = null;
-        if(deleteList.size() == 1) {
-            long l = deleteList.get(0);
-            for(int i = 0; i < data.size(); i++){
-                item = data.get(i);
-                if((Long)item.get(from[0]) == l){
-                    break;
+        // open select mode
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                selectMode = true;
+                selectItem(mdata.get(position).getId());
+                return true;
+            }
+        });
+        // select item
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(selectMode) {
+                    selectItem(mdata.get(position).getId());
                 }
             }
+        });
+    }
+
+    @Override
+    public int getItemCount() {
+        return mdata.size();
+    }
+
+    private void selectItem(Long id){
+        if(selectedItemIds.contains(id)){
+            selectedItemIds.remove(id);
+        } else{
+            selectedItemIds.add(id);
         }
-        Log.d("LOG_TAG", item.toString());
-        return item;
+        selectObservable.onNext(selectedItemIds.size());
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedItemsSize(){
+        return selectedItemIds.size();
+    }
+
+    public PublishSubject<Integer> getSelectedItemsObservable(){
+        return selectObservable;
+    }
+    
+    public ArrayList<Long> getSelectedItemIds(){
+        return selectedItemIds;
+    }
+
+    public Boolean getSelectMode(){
+        return selectMode;
+    }
+
+    public void setSelectedItemIds(ArrayList<Long> selectedItemIds){
+        this.selectedItemIds = selectedItemIds;
+    }
+
+    public void setSelectMode(Boolean selectMode){
+        this.selectMode = selectMode;
+    }
+
+    public void selectModeOff(){
+        selectMode = false;
+        selectedItemIds.clear();
+        notifyDataSetChanged();
+    }
+
+    public void deleteSelectedWords(){
+        ArrayList<Word> deleteList = new ArrayList<>();
+        for(int i = 0; i < mdata.size(); i++){
+            if(selectedItemIds.contains(mdata.get(i).getId())){
+                deleteList.add(mdata.get(i));
+            }
+        }
+        mdata.removeAll(deleteList);
+        selectModeOff();
+
+    }
+
+    private void subscribeToSound(PublishSubject<Boolean> observable){
+        if(soundDisposable != null){
+            soundDisposable.dispose();
+        }
+        soundDisposable = observable.subscribeWith(new DisposableObserver<Boolean>() {
+            @Override
+            public void onNext(Boolean aBoolean) {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onComplete() {
+                soundIsWorking = false;
+                notifyItemChanged(soundPosition);
+            }
+        });
+    }
+
+    public void destroy(){
+        if(soundPlayer != null){
+            soundPlayer.destroy();
+        }
+        if(soundDisposable != null){
+            soundDisposable.dispose();
+        }
     }
 }

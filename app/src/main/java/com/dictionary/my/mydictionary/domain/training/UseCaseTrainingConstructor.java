@@ -1,6 +1,6 @@
 package com.dictionary.my.mydictionary.domain.training;
 
-import com.dictionary.my.mydictionary.data.entites.WordConstructor;
+import com.dictionary.my.mydictionary.domain.entites.training.WordConstructor;
 
 import io.reactivex.Observable;
 

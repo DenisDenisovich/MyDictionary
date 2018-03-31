@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+<ImageButton
+    android:id="@+id/check_box"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_centerVertical="true"
+    android:background="@drawable/ic_check_box" />
+    <LinearLayout
+        android:id="@+id/llWords"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="72dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/tvWordEng"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#000000"
+            android:text="Word"/>
+        <TextView
+            android:id="@+id/tvWordRus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:text="Слово"/>
+    </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/btnSound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="fitCenter"
+        android:paddingTop="25dp"
+        android:paddingBottom="25dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="16dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_word_item_sound" />
+
+</RelativeLayout>
