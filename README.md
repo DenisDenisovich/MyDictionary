@@ -13,3 +13,7 @@ This application for comfortable management your english words. You can add new 
 
 ![](https://sun9-3.userapi.com/c840434/v840434063/701ce/vY5SqWhkccI.jpg)
 
+* Add new word screens
+
+![](https://sun9-8.userapi.com/c840434/v840434063/701ea/STui3XEnL0I.jpg)
+
