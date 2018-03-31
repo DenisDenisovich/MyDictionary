@@ -29,7 +29,17 @@ public class CloudWordsImpl implements CloudWords {
         ArrayList<Translation> translations = new ArrayList<>();
         try {
             Response<ArrayList<WordSkyEng>> response = App.getSkyEngApi().getWord(word).execute();
-            WordSkyEng wordSkyEng = response.body().get(0);
+            ArrayList<WordSkyEng> allPossibleWords = response.body();
+            WordSkyEng wordSkyEng = null;
+            for(WordSkyEng item: allPossibleWords){
+                if(item.getText().equals(word)) {
+                    wordSkyEng = item;
+                    break;
+                }
+            }
+            if(wordSkyEng == null){
+                throw new Exception();
+            }
             List<Meaning> meanings = wordSkyEng.getMeanings();
             for (int i = 0; i < meanings.size(); i++) {
                 if (i > 4) {
