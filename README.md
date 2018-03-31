@@ -19,7 +19,7 @@ This application for comfortable management your english words. You can add new 
 
 
 This Application don't have two planned section:
-1. Treining section
+1. Training section
 2. Writing section
 
 This sections will added in the near future 
