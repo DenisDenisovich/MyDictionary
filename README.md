@@ -18,6 +18,8 @@ This application for comfortable management your english words. You can add new 
 ![](https://sun9-8.userapi.com/c840434/v840434063/701ea/STui3XEnL0I.jpg)
 
 
+
+
 This Application don't have two planned section:
 1. Training section
 2. Writing section
