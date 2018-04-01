@@ -38,7 +38,8 @@ public class DBHelper extends SQLiteOpenHelper{
                                 Content.COLUMN_EXAMPLES + " text, " +
                                 Content.COLUMN_ALTERNATIVE + " text, " +
                                 Content.COLUMN_DATE + " text, " +
-                                Content.COLUMN_GROUP_ID + " integer " +");");
+                                Content.COLUMN_GROUP_ID + " integer, " +
+                                Content.COLUMN_COUNT_OF_RIGHT_ANSWER + " text " + ");");
 
         sqLiteDatabase.execSQL("Create table " + Content.TABLE_TRAININGS + " ( " +
                 Content.COLUMN_TRAININGS + " text, " +
