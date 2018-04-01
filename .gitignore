@@ -1,9 +1,17 @@
+# Idea files
 *.iml
 *.ipr
-.gradle
-local.properties
 .idea/
-.DS_Store
+
+# Gradle files
+gradle/
+.gradle
+
+# Class files
 build/
+
+# Others
+local.properties
+.DS_Store
 captures
 .externalNativeBuild
