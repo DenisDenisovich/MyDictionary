@@ -17,6 +17,7 @@ import com.dictionary.my.mydictionary.data.db.dictionary.DBWords;
 import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBGroupsImpl;
 import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBWordsImpl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import io.reactivex.Completable;
