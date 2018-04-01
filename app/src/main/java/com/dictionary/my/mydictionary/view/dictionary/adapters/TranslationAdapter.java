@@ -1,8 +1,6 @@
 package com.dictionary.my.mydictionary.view.dictionary.adapters;
 
 import android.content.Context;
-import android.graphics.Typeface;
-import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +22,6 @@ import java.util.ArrayList;
 public class TranslationAdapter extends BaseAdapter {
     private final static String LOG_TAG = "Log_TranslationAdapter";
     private ArrayList<Translation> data;
-    private int selectedItem;
     private LayoutInflater layoutInflater;
     private Context context;
     public TranslationAdapter(Context context, ArrayList<Translation> data){
@@ -57,10 +54,7 @@ public class TranslationAdapter extends BaseAdapter {
         Picasso.with(context)
                 .load(data.get(i).getPreview_image())
                 .into(imageView);
-
-        Typeface typeface = ResourcesCompat.getFont(context, R.font.roboto_light);
         ((TextView) view.findViewById(R.id.tvListTranslation)).setText(data.get(i).getRus());
-        ((TextView) view.findViewById(R.id.tvListTranslation)).setTypeface(typeface);
         return view;
     }
 

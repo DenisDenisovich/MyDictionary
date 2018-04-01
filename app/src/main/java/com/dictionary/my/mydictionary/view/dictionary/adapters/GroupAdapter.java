@@ -1,9 +1,7 @@
 package com.dictionary.my.mydictionary.view.dictionary.adapters;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -89,9 +87,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder>{
             lp.addRule(RelativeLayout.CENTER_VERTICAL,RelativeLayout.TRUE);
             holder.itemView.findViewById(R.id.llGroups).setLayoutParams(lp);
         }
-        Typeface typeface = ResourcesCompat.getFont(context, R.font.roboto_light);
         holder.tvGroup.setText(mdata.get(position).getTitle());
-        holder.tvGroup.setTypeface(typeface);
 
         holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

@@ -1,13 +1,7 @@
 package com.dictionary.my.mydictionary.view.dictionary.adapters;
 
 import android.content.Context;
-import android.graphics.Typeface;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,10 +16,7 @@ import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.domain.entites.SoundPlayer;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 
-import io.reactivex.Completable;
-import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.observers.DisposableObserver;
-import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 
 import java.io.IOException;
@@ -109,11 +100,8 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
         }
 
         // set content
-        Typeface typeface = ResourcesCompat.getFont(context, R.font.roboto_light);
         holder.tvWordEng.setText(mdata.get(position).getWord());
         holder.tvWordRus.setText(mdata.get(position).getTranslate());
-        holder.tvWordEng.setTypeface(typeface);
-        holder.tvWordRus.setTypeface(typeface);
         holder.buttonSound.setImageResource(R.drawable.ic_word_item_sound);
 
 

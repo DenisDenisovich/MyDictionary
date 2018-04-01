@@ -3,12 +3,10 @@ package com.dictionary.my.mydictionary.view.dictionary.impl;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -117,11 +115,9 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
         presenter.attach(this);
         myView = inflater.inflate(R.layout.fragment_all_words,null);
         Toolbar toolbar = (Toolbar)myView.findViewById(R.id.toolbar);
-        Typeface typeface = ResourcesCompat.getFont(getActivity(), R.font.roboto_light);
-        toolbarTitle = myView.findViewById(R.id.toolbarTitle);
-        toolbarTitle.setTypeface(typeface);
         activity = (AppCompatActivity)getActivity();
         activity.setSupportActionBar(toolbar);
+        toolbarTitle = myView.findViewById(R.id.toolbarTitle);
         if(activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
         }

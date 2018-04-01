@@ -61,22 +61,21 @@ public class SpinnerAdapter extends ArrayAdapter{
 
     @Override
     public View getDropDownView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        Typeface typeface = ResourcesCompat.getFont(context, R.font.roboto_light);
         if(convertView == null){
             convertView = View.inflate(context, android.R.layout.simple_spinner_dropdown_item, null);
         }
-
+        Typeface typeface = ResourcesCompat.getFont(context, R.font.roboto_light);
         if(isGroupList) {
             ((TextView) convertView).setText(data.get(position).getTitle());
         }else {
             ((TextView) convertView).setText(lines[position]);
         }
-        ((TextView)convertView).setTypeface(typeface);
         int paddingTop = (int)context.getResources().getDimension(R.dimen.dropdown_top_padding);
         int paddingBottom = (int)context.getResources().getDimension(R.dimen.dropdown_bottom_padding);
         int paddingLeft = (int)context.getResources().getDimension(R.dimen.dropdown_left_padding);
         int paddingRight = (int)context.getResources().getDimension(R.dimen.dropdown_right_padding);
         convertView.setPadding(paddingLeft,paddingTop,paddingRight,paddingBottom);
+        ((TextView) convertView).setTypeface(typeface);
         return convertView;
     }
 
