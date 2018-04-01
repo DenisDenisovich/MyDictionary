@@ -42,8 +42,9 @@ public class DBHelper extends SQLiteOpenHelper{
                                 Content.COLUMN_COUNT_OF_RIGHT_ANSWER + " text " + ");");
 
         sqLiteDatabase.execSQL("create table " + Content.TABLE_TRAININGS + " ( " +
-        Content.COLUMN_TRAININGS + " text, " +
-        Content.COLUMN_TRAINING_WORDS_ID + " text " + ");");
+                Content.COLUMN_TRAININGS + " text, " +
+                Content.COLUMN_TRAINING_WORDS_ID + " text, " +
+                Content.COLUMN_TRAINING_COUNT_OF_WORDS + " integer " + ");");
         cv.clear();
         cv.put(Content.COLUMN_TRAININGS, Content.COLUMN_TRAININGS_ITEM_ENG_RUS);
         sqLiteDatabase.insert(Content.TABLE_TRAININGS, null, cv);
@@ -66,5 +67,8 @@ public class DBHelper extends SQLiteOpenHelper{
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         Log.d(LOG_TAG, "onUpgrade()");
+        if(i == 7 && i1 == 8){
+            sqLiteDatabase.execSQL("alter table " + Content.TABLE_TRAININGS + " add column " + Content.COLUMN_TRAINING_COUNT_OF_WORDS + " integer;");
+        }
     }
 }

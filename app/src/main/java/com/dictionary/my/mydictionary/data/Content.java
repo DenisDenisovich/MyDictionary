@@ -6,7 +6,7 @@ package com.dictionary.my.mydictionary.data;
 
 public interface Content {
     String DB_NAME = "MyDictionaryDataBase";
-    int DB_VERSION = 7;
+    int DB_VERSION = 8;
 
     String TABLE_GROUPS = "all_groups";
     String COLUMN_ROWID = "rowid";
@@ -38,7 +38,8 @@ public interface Content {
 
     String TABLE_TRAININGS = "training_words";
     String COLUMN_TRAININGS = "training";
-    String COLUMN_TRAINING_WORDS_ID = "wordsId";
+    String COLUMN_TRAINING_WORDS_ID = "words_Id";
+    String COLUMN_TRAINING_COUNT_OF_WORDS = "count_of_words";
 
     String COLUMN_TRAININGS_ITEM_ENG_RUS = "eng_rus";
     String COLUMN_TRAININGS_ITEM_RUS_ENG = "rus_eng";

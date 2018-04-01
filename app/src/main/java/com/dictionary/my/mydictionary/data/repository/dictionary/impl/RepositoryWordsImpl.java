@@ -123,6 +123,9 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     skyEngExc.printStackTrace();
                     try {
                         dbWords.setNewWordWithoutInternet(translation);
+                        if(!e.isDisposed()){
+                            e.onComplete();
+                        }
                     }catch (DBException dbExc){
                         dbExc.printStackTrace();
                         if(!e.isDisposed()) {
