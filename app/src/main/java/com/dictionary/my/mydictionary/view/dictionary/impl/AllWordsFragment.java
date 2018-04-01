@@ -33,7 +33,7 @@ import com.dictionary.my.mydictionary.presenter.dictionary.PresenterWords;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterWordsImpl;
 import com.dictionary.my.mydictionary.view.OnBottomNavigationClick;
 import com.dictionary.my.mydictionary.view.dictionary.ViewAllWords;
-import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerGroupAdapter;
+import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.WordAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.DeleteWordDialog;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.MoveToGroupDialog;
@@ -141,7 +141,7 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
     private void setSpinnerView(){
         if (activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
-            SpinnerGroupAdapter adapter = new SpinnerGroupAdapter(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.dictionary_spinner_array));
+            SpinnerAdapter adapter = new SpinnerAdapter(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.dictionary_spinner_array));
             Spinner spinner = new Spinner(activity.getSupportActionBar().getThemedContext());
             spinner.setAdapter(adapter);
             spinner.setSelection(0);

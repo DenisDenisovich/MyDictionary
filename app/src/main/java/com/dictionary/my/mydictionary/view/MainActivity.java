@@ -10,7 +10,6 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.TextView;
 
 import com.dictionary.my.mydictionary.R;
 import com.dictionary.my.mydictionary.data.Content;

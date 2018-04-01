@@ -6,7 +6,7 @@ package com.dictionary.my.mydictionary.data;
 
 public interface Content {
     String DB_NAME = "MyDictionaryDataBase";
-    int DB_VERSION = 1;
+    int DB_VERSION = 7;
 
     String TABLE_GROUPS = "dictionaries";
     String COLUMN_ROWID = "rowid";
@@ -26,22 +26,17 @@ public interface Content {
     String COLUMN_ALTERNATIVE = "alternative";
     String COLUMN_DATE = "date";
     String COLUMN_GROUP_ID = "group_id";
+    String COLUMN_COUNT_OF_RIGHT_ANSWER = "count_of_right_answer";
 
     String ARRAY_SEPARATOR = "___,___";
 
+    String TABLE_TRAININGS = "training_words";
+    String COLUMN_TRAININGS = "training";
+    String COLUMN_TRAINING_WORDS_ID = "wordsId";
+    String COLUMN_TRAININGS_ITEM_ENG_RUS = "eng_rus";
+    String COLUMN_TRAININGS_ITEM_RUS_ENG = "rus_eng";
+    String COLUMN_TRAININGS_ITEM_CONSTRUCTOR = "constructor";
+    String COLUMN_TRAININGS_ITEM_SPRINT = "sprint";
+    String COLUMN_TRAININGS_ITEM_FOR_ALL = "for_all";
 
-//    final String[] fromAllDictionaries = {COLUMN_ROWID, COLUMN_TITLE};
-    //final String[] fromDictionary = {COLUMN_ROWID,COLUMN_WORD,COLUMN_TRANSLATE};
-
-//    final String selectDbAllDictionaries = "select " + COLUMN_ROWID + ", " + COLUMN_TITLE + " " +
-  //                                          "from " + TABLE_DICTIONARIES;
-   // final String deleteDbAllDictionaries = COLUMN_ROWID + " = ";
-   // final String deleteDbAllDictionariesWithWords = COLUMN_DICTIONARY + " = ";
-   // final String editDbAllDictionaries = COLUMN_ROWID + " = ";
-
-    //final String selectDbDictionary = "select " + COLUMN_ROWID + ", " + COLUMN_WORD + ", " + COLUMN_TRANSLATE + " " +
-      //                                 "from " + TABLE_ALL_WORD + " where " + COLUMN_DICTIONARY + " = ? ";
-
-   // final String deleteDbDictionary = COLUMN_ROWID + " = ";
-   // final String editDbDictionary = COLUMN_ROWID + " = ";
 }

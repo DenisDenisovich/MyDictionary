@@ -34,7 +34,7 @@ import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterAddWord;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterAddWordImpl;
 import com.dictionary.my.mydictionary.view.dictionary.ViewAddWord;
-import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerGroupAdapter;
+import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.TranslationAdapter;
 import com.squareup.picasso.Picasso;
 
@@ -236,7 +236,7 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
                 }
             }
         }
-        SpinnerGroupAdapter groupAdapter = new SpinnerGroupAdapter(this, android.R.layout.simple_spinner_item, stringGroups, groups);
+        SpinnerAdapter groupAdapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, stringGroups, groups);
         groupAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(groupAdapter);
         spinner.setSelection(currentTitlePosition);

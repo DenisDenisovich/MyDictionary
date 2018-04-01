@@ -19,7 +19,7 @@ import java.util.ArrayList;
  * Created by luxso on 24.03.2018.
  */
 
-public class SpinnerGroupAdapter extends ArrayAdapter{
+public class SpinnerAdapter extends ArrayAdapter{
 
     private ArrayList<Group> data;
     private String[] lines;
@@ -27,7 +27,7 @@ public class SpinnerGroupAdapter extends ArrayAdapter{
     private int resource;
     private boolean isGroupList;
 
-    public SpinnerGroupAdapter(@NonNull Context context, int resource, @NonNull String[] objects, ArrayList<Group> data) {
+    public SpinnerAdapter(@NonNull Context context, int resource, @NonNull String[] objects, ArrayList<Group> data) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;
@@ -35,7 +35,7 @@ public class SpinnerGroupAdapter extends ArrayAdapter{
         isGroupList = true;
     }
 
-    public SpinnerGroupAdapter(@NonNull Context context, int resource, @NonNull String[] objects) {
+    public SpinnerAdapter(@NonNull Context context, int resource, @NonNull String[] objects) {
         super(context, resource, objects);
         this.context = context;
         this.resource = resource;

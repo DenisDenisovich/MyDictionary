@@ -21,7 +21,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +33,7 @@ import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterGroupsI
 import com.dictionary.my.mydictionary.view.OnBottomNavigationClick;
 import com.dictionary.my.mydictionary.view.dictionary.ViewAllGroups;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.GroupAdapter;
-import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerGroupAdapter;
+import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.DeleteGroupDialog;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.EditGroupDialog;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.NewGroupDialog;
@@ -125,7 +124,7 @@ public class AllGroupsFragment extends Fragment implements ViewAllGroups, OnBott
     private void setSpinnerView(){
         if (activity.getSupportActionBar() != null) {
             activity.getSupportActionBar().setDisplayShowTitleEnabled(false);
-            SpinnerGroupAdapter adapter = new SpinnerGroupAdapter(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.dictionary_spinner_array));
+            SpinnerAdapter adapter = new SpinnerAdapter(getActivity(), android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.dictionary_spinner_array));
             Spinner spinner = new Spinner(activity.getSupportActionBar().getThemedContext());
             spinner.setAdapter(adapter);
             spinner.setSelection(1);
