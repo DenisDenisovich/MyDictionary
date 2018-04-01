@@ -22,7 +22,7 @@ public class DBHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL("Create table " + Content.TABLE_GROUPS + " ( " +
                 Content.COLUMN_TITLE + " text " + ");");
         ContentValues cv = new ContentValues();
-        cv.put(Content.COLUMN_TITLE,"Without group");
+        cv.put(Content.COLUMN_TITLE,Content.COLUMN_TITLE_WITHOUT_GROUP_ITEM);
         sqLiteDatabase.insert(Content.TABLE_GROUPS,null,cv);
 
         sqLiteDatabase.execSQL("Create table " + Content.TABLE_ALL_WORD + " ( " +
@@ -41,9 +41,9 @@ public class DBHelper extends SQLiteOpenHelper{
                                 Content.COLUMN_GROUP_ID + " integer, " +
                                 Content.COLUMN_COUNT_OF_RIGHT_ANSWER + " text " + ");");
 
-        sqLiteDatabase.execSQL("Create table " + Content.TABLE_TRAININGS + " ( " +
-                Content.COLUMN_TRAININGS + " text, " +
-                Content.COLUMN_TRAINING_WORDS_ID + " test " + ");");
+        sqLiteDatabase.execSQL("create table " + Content.TABLE_TRAININGS + " ( " +
+        Content.COLUMN_TRAININGS + " text, " +
+        Content.COLUMN_TRAINING_WORDS_ID + " text " + ");");
         cv.clear();
         cv.put(Content.COLUMN_TRAININGS, Content.COLUMN_TRAININGS_ITEM_ENG_RUS);
         sqLiteDatabase.insert(Content.TABLE_TRAININGS, null, cv);
@@ -61,45 +61,10 @@ public class DBHelper extends SQLiteOpenHelper{
         sqLiteDatabase.insert(Content.TABLE_TRAININGS, null, cv);
         cv.clear();
 
-
-        sqLiteDatabase.execSQL("alter table " + Content.TABLE_ALL_WORD + " add column " + Content.COLUMN_COUNT_OF_RIGHT_ANSWER);
-
-
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         Log.d(LOG_TAG, "onUpgrade()");
-        if(i == 6 && i1 == 7) {
-            sqLiteDatabase.beginTransaction();
-            try {
-
-                sqLiteDatabase.execSQL("Drop table " + Content.TABLE_TRAININGS);
-                sqLiteDatabase.execSQL("Create table " + Content.TABLE_TRAININGS + " ( " +
-                        Content.COLUMN_TRAININGS + " text, " +
-                        Content.COLUMN_TRAINING_WORDS_ID + " test " + ");");
-                ContentValues cv = new ContentValues();
-                cv.put(Content.COLUMN_TRAININGS, Content.COLUMN_TRAININGS_ITEM_ENG_RUS);
-                sqLiteDatabase.insert(Content.TABLE_TRAININGS, null, cv);
-                cv.clear();
-                cv.put(Content.COLUMN_TRAININGS, Content.COLUMN_TRAININGS_ITEM_RUS_ENG);
-                sqLiteDatabase.insert(Content.TABLE_TRAININGS, null, cv);
-                cv.clear();
-                cv.put(Content.COLUMN_TRAININGS, Content.COLUMN_TRAININGS_ITEM_CONSTRUCTOR);
-                sqLiteDatabase.insert(Content.TABLE_TRAININGS, null, cv);
-                cv.clear();
-                cv.put(Content.COLUMN_TRAININGS, Content.COLUMN_TRAININGS_ITEM_SPRINT);
-                sqLiteDatabase.insert(Content.TABLE_TRAININGS, null, cv);
-                cv.clear();
-                cv.put(Content.COLUMN_TRAININGS, Content.COLUMN_TRAININGS_ITEM_FOR_ALL);
-                sqLiteDatabase.insert(Content.TABLE_TRAININGS, null, cv);
-                cv.clear();
-
-                sqLiteDatabase.setTransactionSuccessful();
-            }finally {
-                sqLiteDatabase.endTransaction();
-            }
-
-        }
     }
 }
