@@ -1,4 +1,5 @@
-*.iml *.ipr 
+*.iml
+*.ipr
 .gradle
 local.properties
 .idea/
