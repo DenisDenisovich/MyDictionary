@@ -22,7 +22,7 @@ import io.reactivex.subjects.PublishSubject;
  */
 
 public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder>{
-    private final static String LOG_TAG = "Log_WordAdapter";
+    private final static String LOG_TAG = "Log_GroupAdapter";
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
