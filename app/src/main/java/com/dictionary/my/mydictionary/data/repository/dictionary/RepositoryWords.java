@@ -18,6 +18,5 @@ public interface RepositoryWords {
     Completable setNewWordWithoutInternet(Translation translation);
     Completable deleteWords(ArrayList<Long> delList);
     Completable moveWords(ArrayList<Long> moveList);
-    Completable editWord(Word word);
     void destroy();
 }

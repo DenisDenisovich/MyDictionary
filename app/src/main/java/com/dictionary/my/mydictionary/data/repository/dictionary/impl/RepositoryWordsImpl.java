@@ -1,6 +1,7 @@
 package com.dictionary.my.mydictionary.data.repository.dictionary.impl;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.cloud.dictionary.CloudWords;
@@ -18,6 +19,7 @@ import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBGroupsImpl;
 import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBWordsImpl;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import io.reactivex.Completable;
@@ -58,7 +60,9 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     if(!e.isDisposed()){
                         e.onSuccess(words);
                     }
-                }catch (DBException exc){
+                }catch (SQLiteException exc){
+                    Log.d(LOG_TAG, "Exception in getListOfWords()");
+                    exc.printStackTrace();
                     if(!e.isDisposed()) {
                         e.onError(exc);
                     }
@@ -127,16 +131,18 @@ public class RepositoryWordsImpl implements RepositoryWords {
                         if(!e.isDisposed()){
                             e.onComplete();
                         }
-                    }catch (DBException dbExc){
-                        dbExc.printStackTrace();
+                    }catch (SQLException sqlExc){
+                        Log.d(LOG_TAG, "Exception of db.setNewWordWithoutInternet()");
+                        sqlExc.printStackTrace();
                         if(!e.isDisposed()) {
-                            e.onError(dbExc);
+                            e.onError(sqlExc);
                         }
                     }
-                }catch (DBException dbExc){
-                    dbExc.printStackTrace();
+                }catch (SQLException sqlExc){
+                    Log.d(LOG_TAG, "Exception of db.setNewWord()");
+                    sqlExc.printStackTrace();
                     if(!e.isDisposed()) {
-                        e.onError(dbExc);
+                        e.onError(sqlExc);
                     }
                 }
 
@@ -155,8 +161,8 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
-                }catch (DBException exc){
-                    Log.d(LOG_TAG,"DBException" + exc.getMessage());
+                }catch (SQLException exc){
+                    Log.d(LOG_TAG, "Exception of db.setNewWordWithoutInternet()");
                     if(!e.isDisposed()) {
                         e.onError(exc);
                     }
@@ -176,11 +182,23 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
-                }catch (DBException exc){
+                }catch (SQLiteException exc){
+                    Log.d(LOG_TAG, "Exception of db.deleteWords()");
+                    if(!e.isDisposed()) {
+                        e.onError(exc);
+                    }
+                } catch (NullPointerException exc){
+                    Log.d(LOG_TAG, "Exception of db.deleteWords()");
+                    if(!e.isDisposed()) {
+                        e.onError(exc);
+                    }
+                } catch (IndexOutOfBoundsException exc){
+                    Log.d(LOG_TAG, "Exception of db.deleteWords()");
                     if(!e.isDisposed()) {
                         e.onError(exc);
                     }
                 }
+
             }
         });
     }
@@ -196,27 +214,23 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
-                }catch (DBException exc){
+                }catch (SQLiteException exc){
+                    Log.d(LOG_TAG, "Exception of db.moveWords()");
                     if(!e.isDisposed()) {
                         e.onError(exc);
                     }
-                }
-            }
-        });
-    }
-
-    @Override
-    public Completable editWord(final Word word) {
-        Log.d(LOG_TAG, "editWord()");
-        return Completable.create(new CompletableOnSubscribe() {
-            @Override
-            public void subscribe(CompletableEmitter e) throws Exception {
-                try {
-                    dbWords.editWord(word);
-                    if(!e.isDisposed()){
-                        e.onComplete();
+                }catch (NullPointerException exc){
+                    Log.d(LOG_TAG, "Exception of db.moveWords()");
+                    if(!e.isDisposed()) {
+                        e.onError(exc);
                     }
-                }catch (DBException exc){
+                } catch (IndexOutOfBoundsException exc){
+                    Log.d(LOG_TAG, "Exception of db.moveWords()");
+                    if(!e.isDisposed()) {
+                        e.onError(exc);
+                    }
+                } catch (NegativeArraySizeException exc){
+                    Log.d(LOG_TAG, "Exception of db.moveWords()");
                     if(!e.isDisposed()) {
                         e.onError(exc);
                     }
