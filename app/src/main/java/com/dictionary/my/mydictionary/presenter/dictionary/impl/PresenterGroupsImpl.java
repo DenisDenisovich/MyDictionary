@@ -75,6 +75,7 @@ public class PresenterGroupsImpl<V extends ViewAllGroups> implements PresenterGr
 
                     @Override
                     public void onError(Throwable e) {
+                        e.printStackTrace();
                         view.showERROR("Get list of groups ERROR");
                     }
                 });

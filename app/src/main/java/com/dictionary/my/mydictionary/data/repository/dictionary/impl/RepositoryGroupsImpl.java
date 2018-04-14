@@ -1,10 +1,10 @@
 package com.dictionary.my.mydictionary.data.repository.dictionary.impl;
 
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
-import com.dictionary.my.mydictionary.data.exception.DBException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryGroups;
 import com.dictionary.my.mydictionary.data.db.dictionary.DBGroups;
@@ -40,10 +40,10 @@ public class RepositoryGroupsImpl implements RepositoryGroups {
                         e.onSuccess(groups);
                     }
                 }catch (SQLiteException exc){
-                Log.d(LOG_TAG, "Exception in getListOfGroups()");
-                if(!e.isDisposed()) {
-                    e.onError(exc);
-                }
+                    Log.d(LOG_TAG, "Exception in getListOfGroups()");
+                    if(!e.isDisposed()) {
+                        e.onError(exc);
+                    }
                 }catch (IllegalStateException exc){
                     Log.d(LOG_TAG, "Exception in getListOfGroups()");
                     if(!e.isDisposed()) {
@@ -64,8 +64,9 @@ public class RepositoryGroupsImpl implements RepositoryGroups {
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
-                }catch (DBException exc){
-                    if(!e.isDisposed()){
+                }catch (SQLException exc){
+                    Log.d(LOG_TAG, "Exception of db.setNewGroup()");
+                    if(!e.isDisposed()) {
                         e.onError(exc);
                     }
                 }
@@ -83,8 +84,19 @@ public class RepositoryGroupsImpl implements RepositoryGroups {
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
-                }catch (DBException exc){
-                    if(!e.isDisposed()){
+                }catch (SQLiteException exc){
+                    Log.d(LOG_TAG, "Exception of db.deleteGroups()");
+                    if(!e.isDisposed()) {
+                        e.onError(exc);
+                    }
+                } catch (NullPointerException exc){
+                    Log.d(LOG_TAG, "Exception of db.deleteGroups()");
+                    if(!e.isDisposed()) {
+                        e.onError(exc);
+                    }
+                } catch (IndexOutOfBoundsException exc){
+                    Log.d(LOG_TAG, "Exception of db.deleteGroups()");
+                    if(!e.isDisposed()) {
                         e.onError(exc);
                     }
                 }
@@ -102,8 +114,14 @@ public class RepositoryGroupsImpl implements RepositoryGroups {
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
-                }catch (DBException exc){
-                    if(!e.isDisposed()){
+                }catch (SQLiteException exc){
+                    Log.d(LOG_TAG, "Exception of db.editGroup()");
+                    if(!e.isDisposed()) {
+                        e.onError(exc);
+                    }
+                } catch (NullPointerException exc){
+                    Log.d(LOG_TAG, "Exception of db.editGroup()");
+                    if(!e.isDisposed()) {
                         e.onError(exc);
                     }
                 }

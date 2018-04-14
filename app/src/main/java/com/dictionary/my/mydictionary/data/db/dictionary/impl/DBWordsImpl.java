@@ -4,19 +4,16 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.data.DBHelper;
-import com.dictionary.my.mydictionary.data.exception.DBException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.WordFullInformation;
 import com.dictionary.my.mydictionary.data.cloud.pojo.meaning.Example;
 import com.dictionary.my.mydictionary.data.db.dictionary.DBWords;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 

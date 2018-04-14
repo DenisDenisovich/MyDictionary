@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteException;
 
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.data.DBHelper;
-import com.dictionary.my.mydictionary.data.exception.DBException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.data.db.dictionary.DBGroups;
 
