@@ -44,7 +44,7 @@ public class DBWordsImpl implements DBWords {
 
 
     @Override
-    public ArrayList<Word> getListOfWord() throws SQLiteException, IllegalStateException{
+    public ArrayList<Word> getListOfWord(){
         Log.d(LOG_TAG, "getListOfWords()");
         ArrayList<Word> list = new ArrayList<>();
         String[] columns = {Content.COLUMN_ROWID, Content.COLUMN_ENG, Content.COLUMN_RUS, Content.COLUMN_SOUND};
@@ -75,7 +75,7 @@ public class DBWordsImpl implements DBWords {
     }
 
     @Override
-    public void setNewWord(final WordFullInformation word) throws SQLException {
+    public void setNewWord(final WordFullInformation word){
         Log.d(LOG_TAG, "setNewWord()");
         ContentValues cv = new ContentValues();
         cv.put(Content.COLUMN_ENG, word.getEng());
@@ -152,7 +152,7 @@ public class DBWordsImpl implements DBWords {
     }
 
     @Override
-    public void setNewWordWithoutInternet(final Translation translation) throws SQLException{
+    public void setNewWordWithoutInternet(final Translation translation){
         Log.d(LOG_TAG, "setNewWordWithoutInternet()");
         ContentValues cv = new ContentValues();
         cv.put(Content.COLUMN_ENG, translation.getEng());
@@ -169,7 +169,7 @@ public class DBWordsImpl implements DBWords {
     }
 
     @Override
-    public void deleteWords(final ArrayList<Long> delList) throws SQLiteException, NullPointerException, IndexOutOfBoundsException{
+    public void deleteWords(final ArrayList<Long> delList){
         Log.d(LOG_TAG, "deleteWords()");
         String strPlaceholder = "(";
         String[] whereArg = new String[delList.size()];
@@ -183,7 +183,7 @@ public class DBWordsImpl implements DBWords {
     }
 
     @Override
-    public void moveWords(final ArrayList<Long> moveList) throws SQLiteException, NullPointerException, IndexOutOfBoundsException, NegativeArraySizeException{
+    public void moveWords(final ArrayList<Long> moveList){
         Log.d(LOG_TAG, "moveWords()");
         Long moveToDictionaryId;
         String strPlaceholder = "(";

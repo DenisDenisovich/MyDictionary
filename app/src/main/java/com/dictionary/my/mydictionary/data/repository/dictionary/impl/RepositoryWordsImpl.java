@@ -1,12 +1,12 @@
 package com.dictionary.my.mydictionary.data.repository.dictionary.impl;
 
 import android.content.Context;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.cloud.dictionary.CloudWords;
 import com.dictionary.my.mydictionary.data.cloud.dictionary.impl.CloudWordsImpl;
-import com.dictionary.my.mydictionary.data.exception.DBException;
 import com.dictionary.my.mydictionary.data.exception.SkyEngWordException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.WordFullInformation;
@@ -18,8 +18,6 @@ import com.dictionary.my.mydictionary.data.db.dictionary.DBWords;
 import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBGroupsImpl;
 import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBWordsImpl;
 
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import io.reactivex.Completable;
@@ -62,7 +60,11 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     }
                 }catch (SQLiteException exc){
                     Log.d(LOG_TAG, "Exception in getListOfWords()");
-                    exc.printStackTrace();
+                    if(!e.isDisposed()) {
+                        e.onError(exc);
+                    }
+                }catch (IllegalStateException exc){
+                    Log.d(LOG_TAG, "Exception in getListOfWords()");
                     if(!e.isDisposed()) {
                         e.onError(exc);
                     }
@@ -82,7 +84,8 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     if(!e.isDisposed()){
                         e.onSuccess(groups);
                     }
-                }catch (DBException exc){
+                }catch (SQLiteException exc){
+                    Log.d(LOG_TAG, "Exception in getListOfGroups()");
                     if(!e.isDisposed()){
                         e.onError(exc);
                     }
@@ -103,6 +106,7 @@ public class RepositoryWordsImpl implements RepositoryWords {
                         e.onSuccess(translations);
                     }
                 }catch (SkyEngWordException exc){
+                    Log.d(LOG_TAG, "Exception in getTranslation()");
                     if(!e.isDisposed()){
                         e.onError(exc);
                     }
@@ -133,14 +137,12 @@ public class RepositoryWordsImpl implements RepositoryWords {
                         }
                     }catch (SQLException sqlExc){
                         Log.d(LOG_TAG, "Exception of db.setNewWordWithoutInternet()");
-                        sqlExc.printStackTrace();
                         if(!e.isDisposed()) {
                             e.onError(sqlExc);
                         }
                     }
                 }catch (SQLException sqlExc){
                     Log.d(LOG_TAG, "Exception of db.setNewWord()");
-                    sqlExc.printStackTrace();
                     if(!e.isDisposed()) {
                         e.onError(sqlExc);
                     }

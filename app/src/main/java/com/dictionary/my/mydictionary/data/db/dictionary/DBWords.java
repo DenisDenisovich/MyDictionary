@@ -6,7 +6,6 @@ import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.WordFullInformation;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import io.reactivex.Single;
@@ -16,10 +15,10 @@ import io.reactivex.Single;
  */
 
 public interface DBWords {
-    ArrayList<Word> getListOfWord() throws SQLiteException, IllegalStateException;
-    void setNewWord(WordFullInformation word) throws SQLException;
-    void setNewWordWithoutInternet(Translation translation) throws SQLException;
-    void deleteWords(ArrayList<Long> delList) throws SQLiteException, NullPointerException, IndexOutOfBoundsException;
-    void moveWords(ArrayList<Long> moveList) throws SQLiteException, NullPointerException, IndexOutOfBoundsException, NegativeArraySizeException;
+    ArrayList<Word> getListOfWord();
+    void setNewWord(WordFullInformation word);
+    void setNewWordWithoutInternet(Translation translation);
+    void deleteWords(ArrayList<Long> delList);
+    void moveWords(ArrayList<Long> moveList);
     void destroy();
 }

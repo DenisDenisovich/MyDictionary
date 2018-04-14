@@ -1,6 +1,8 @@
 package com.dictionary.my.mydictionary.data.repository.dictionary.impl;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteException;
+import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.exception.DBException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
@@ -22,6 +24,7 @@ import io.reactivex.SingleOnSubscribe;
  */
 
 public class RepositoryGroupsImpl implements RepositoryGroups {
+    private final static String LOG_TAG = "Log_RepositoryAllGroups";
     private DBGroups dbGroups;
     public RepositoryGroupsImpl(Context context){
         dbGroups = new DBGroupsImpl(context);
@@ -36,10 +39,16 @@ public class RepositoryGroupsImpl implements RepositoryGroups {
                     if(!e.isDisposed()){
                         e.onSuccess(groups);
                     }
-                }catch (DBException exc){
-                    if(!e.isDisposed()){
-                        e.onError(exc);
-                    }
+                }catch (SQLiteException exc){
+                Log.d(LOG_TAG, "Exception in getListOfGroups()");
+                if(!e.isDisposed()) {
+                    e.onError(exc);
+                }
+                }catch (IllegalStateException exc){
+                    Log.d(LOG_TAG, "Exception in getListOfGroups()");
+                    if(!e.isDisposed()) {
+                       e.onError(exc);
+                     }
                 }
             }
         });
