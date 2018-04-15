@@ -74,8 +74,7 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if(i == EditorInfo.IME_ACTION_DONE){
                     if(!alternativeTranslationMode) {
-                        //if(isNetworkAvailable()) {
-                        if(true) {
+                        if(isNetworkAvailable()) {
                             presenter.wordHasPrinted();
                         }else {
                             showERROR("Internet connection is not available");

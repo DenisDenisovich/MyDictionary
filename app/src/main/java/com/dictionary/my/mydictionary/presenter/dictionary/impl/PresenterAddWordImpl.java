@@ -3,6 +3,7 @@ package com.dictionary.my.mydictionary.presenter.dictionary.impl;
 import android.content.Context;
 import android.util.Log;
 
+import com.dictionary.my.mydictionary.data.exception.TranslationIsNotFoundException;
 import com.dictionary.my.mydictionary.data.repository.dictionary.RepositoryWords;
 import com.dictionary.my.mydictionary.data.repository.dictionary.impl.RepositoryWordsImpl;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
@@ -129,13 +130,17 @@ public class PresenterAddWordImpl<V extends ViewAddWord> implements PresenterAdd
 
                     @Override
                     public void onError(Throwable e) {
-                        //e.printStackTrace();
-                        view.showERROR("Oops! Something was wrong");
-                        defaultTranslationModeERROR = true;
-                        searchForTranslation = false;
+                        e.printStackTrace();
+                        if(e instanceof TranslationIsNotFoundException){
+                            view.showERROR("Word is not found");
+                        }else {
+                            view.showERROR("Oops! Something was wrong");
+                        }
+                        //defaultTranslationModeERROR = true;
+                        //searchForTranslation = false;
                         view.hideProgress();
-                        view.hideDefaultTranslationMode();
-                        view.showAlternativeTranslationMode();
+                        //view.hideDefaultTranslationMode();
+                        //view.showAlternativeTranslationMode();
                     }
                 });
     }

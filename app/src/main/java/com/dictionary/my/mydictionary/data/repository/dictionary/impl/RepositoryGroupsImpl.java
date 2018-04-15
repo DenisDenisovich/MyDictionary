@@ -39,16 +39,11 @@ public class RepositoryGroupsImpl implements RepositoryGroups {
                     if(!e.isDisposed()){
                         e.onSuccess(groups);
                     }
-                }catch (SQLiteException exc){
+                }catch (SQLiteException | IllegalStateException exc){
                     Log.d(LOG_TAG, "Exception in getListOfGroups()");
                     if(!e.isDisposed()) {
                         e.onError(exc);
                     }
-                }catch (IllegalStateException exc){
-                    Log.d(LOG_TAG, "Exception in getListOfGroups()");
-                    if(!e.isDisposed()) {
-                       e.onError(exc);
-                     }
                 }
             }
         });
@@ -84,17 +79,7 @@ public class RepositoryGroupsImpl implements RepositoryGroups {
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
-                }catch (SQLiteException exc){
-                    Log.d(LOG_TAG, "Exception of db.deleteGroups()");
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
-                } catch (NullPointerException exc){
-                    Log.d(LOG_TAG, "Exception of db.deleteGroups()");
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
-                } catch (IndexOutOfBoundsException exc){
+                }catch (SQLiteException | NullPointerException | IndexOutOfBoundsException exc){
                     Log.d(LOG_TAG, "Exception of db.deleteGroups()");
                     if(!e.isDisposed()) {
                         e.onError(exc);
@@ -114,12 +99,7 @@ public class RepositoryGroupsImpl implements RepositoryGroups {
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
-                }catch (SQLiteException exc){
-                    Log.d(LOG_TAG, "Exception of db.editGroup()");
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
-                } catch (NullPointerException exc){
+                }catch (SQLiteException | NullPointerException exc){
                     Log.d(LOG_TAG, "Exception of db.editGroup()");
                     if(!e.isDisposed()) {
                         e.onError(exc);

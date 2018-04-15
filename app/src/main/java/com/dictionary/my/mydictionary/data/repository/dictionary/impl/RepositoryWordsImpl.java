@@ -19,6 +19,7 @@ import com.dictionary.my.mydictionary.data.db.dictionary.DBWords;
 import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBGroupsImpl;
 import com.dictionary.my.mydictionary.data.db.dictionary.impl.DBWordsImpl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import io.reactivex.Completable;
@@ -59,12 +60,7 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     if(!e.isDisposed()){
                         e.onSuccess(words);
                     }
-                }catch (SQLiteException exc){
-                    Log.d(LOG_TAG, "Exception in getListOfWords()");
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
-                }catch (IllegalStateException exc){
+                }catch (SQLiteException | IllegalStateException exc){
                     Log.d(LOG_TAG, "Exception in getListOfWords()");
                     if(!e.isDisposed()) {
                         e.onError(exc);
@@ -106,7 +102,7 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     if(!e.isDisposed()){
                         e.onSuccess(translations);
                     }
-                }catch (TranslationIsNotFoundException exc){
+                }catch (TranslationIsNotFoundException | IOException exc){
                     Log.d(LOG_TAG, "Exception in getTranslation()");
                     if(!e.isDisposed()){
                         e.onError(exc);
@@ -128,7 +124,7 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
-                }catch (MeaningIsNotFoundException skyEngExc){
+                }catch (MeaningIsNotFoundException | IOException skyEngExc){
                     // if we are cant getting full information about word by Internet
                     Log.d(LOG_TAG, "MeaningIsNotFound");
                     try {
@@ -185,17 +181,7 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
-                }catch (SQLiteException exc){
-                    Log.d(LOG_TAG, "Exception of db.deleteWords()");
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
-                } catch (NullPointerException exc){
-                    Log.d(LOG_TAG, "Exception of db.deleteWords()");
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
-                } catch (IndexOutOfBoundsException exc){
+                }catch (SQLiteException | NullPointerException | IndexOutOfBoundsException exc){
                     Log.d(LOG_TAG, "Exception of db.deleteWords()");
                     if(!e.isDisposed()) {
                         e.onError(exc);
@@ -217,22 +203,7 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
-                }catch (SQLiteException exc){
-                    Log.d(LOG_TAG, "Exception of db.moveWords()");
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
-                }catch (NullPointerException exc){
-                    Log.d(LOG_TAG, "Exception of db.moveWords()");
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
-                } catch (IndexOutOfBoundsException exc){
-                    Log.d(LOG_TAG, "Exception of db.moveWords()");
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
-                } catch (NegativeArraySizeException exc){
+                }catch (SQLiteException | NullPointerException | NegativeArraySizeException | IndexOutOfBoundsException exc){
                     Log.d(LOG_TAG, "Exception of db.moveWords()");
                     if(!e.isDisposed()) {
                         e.onError(exc);

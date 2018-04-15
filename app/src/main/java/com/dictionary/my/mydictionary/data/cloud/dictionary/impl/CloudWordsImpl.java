@@ -72,14 +72,9 @@ public class CloudWordsImpl implements CloudWords {
                 item.setPreview_image("");
             }
 
-            //item.setSound(meaning.getSoundUrl());
-            //String urlImage = "http:";
-            //urlImage = urlImage.concat(meaning.getPreviewUrl());
-            //item.setPreview_image(urlImage);
             item.setMeaningId(String.valueOf(meaning.getId()));
             translations.add(item);
         }
-
         return translations;
     }
 
@@ -97,7 +92,6 @@ public class CloudWordsImpl implements CloudWords {
 
         WordFullInformation word = new WordFullInformation();
         Response<ArrayList<MeaningSkyEng>> response = App.getSkyEngApi().getMeaning(translation.getMeaningId()).execute();
-        //Response<ArrayList<MeaningSkyEng>> response = App.getSkyEngApi().getMeaning("11").execute();
         ArrayList<MeaningSkyEng> meaningList = response.body();
         // if response have empty body
         if(meaningList.size() == 0){
@@ -108,52 +102,39 @@ public class CloudWordsImpl implements CloudWords {
 
         word.setEng(translation.getEng());
         word.setRus(translation.getRus());
-
-        /*if(translation.getPreview_image() != null) {
-            String urlPreviewImage = "http:";
-            urlPreviewImage = urlPreviewImage.concat(translation.getPreview_image());
-            word.setPreviewImage(urlPreviewImage);
-        }else {
-            word.setPreviewImage("");
-        }*/
         word.setPreviewImage(translation.getPreview_image());
         word.setDate(translation.getDate());
         word.setGroupId(translation.getGroupId());
         word.setNote((String) meaning.getTranslation().getNote());
-
-        /*if(translation.getSound() != null) {
-            String urlSound = "http:";
-            urlSound = urlSound.concat(translation.getSound());
-            word.setSound(urlSound);
-        }else {
-            word.setSound("");
-        }*/
         word.setSound(translation.getSound());
         word.setTranscription(meaning.getTranscription());
         word.setPartOfSpeech(meaning.getPartOfSpeechCode());
 
-        if(meaning.getImages().get(0).getUrl() != null) {
+        try{
             String urlImage = "http:";
             urlImage = urlImage.concat(meaning.getImages().get(0).getUrl());
             word.setImage(urlImage);
-        }else {
+        }catch(NullPointerException e) {
             word.setImage("");
         }
 
         word.setDefinition(meaning.getDefinition().getText());
 
-        ArrayList<String> alternativeTranslations = new ArrayList<>();
-        List<MeaningsWithSimilarTranslation> mwst = meaning.getMeaningsWithSimilarTranslation();
-        for (int i = 0; i < mwst.size(); i++) {
-            if (i > 4) {
-                break;
+        try {
+            ArrayList<String> alternativeTranslations = new ArrayList<>();
+            List<MeaningsWithSimilarTranslation> mwst = meaning.getMeaningsWithSimilarTranslation();
+            for (int i = 0; i < mwst.size(); i++) {
+                if (i > 4) {
+                    break;
+                }
+                alternativeTranslations.add(mwst.get(i).getTranslation().getText());
             }
-            alternativeTranslations.add(mwst.get(i).getTranslation().getText());
+            word.setAlternative(alternativeTranslations);
+        }catch (NullPointerException e){
+            word.setAlternative(null);
         }
-        word.setAlternative(alternativeTranslations);
 
         word.setExamples(meaning.getExamples());
-
         return word;
     }
 }
