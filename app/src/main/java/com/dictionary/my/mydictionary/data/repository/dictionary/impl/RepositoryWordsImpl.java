@@ -7,7 +7,8 @@ import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.cloud.dictionary.CloudWords;
 import com.dictionary.my.mydictionary.data.cloud.dictionary.impl.CloudWordsImpl;
-import com.dictionary.my.mydictionary.data.exception.SkyEngWordException;
+import com.dictionary.my.mydictionary.data.exception.MeaningIsNotFoundException;
+import com.dictionary.my.mydictionary.data.exception.TranslationIsNotFoundException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.WordFullInformation;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
@@ -105,7 +106,7 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     if(!e.isDisposed()){
                         e.onSuccess(translations);
                     }
-                }catch (SkyEngWordException exc){
+                }catch (TranslationIsNotFoundException exc){
                     Log.d(LOG_TAG, "Exception in getTranslation()");
                     if(!e.isDisposed()){
                         e.onError(exc);
@@ -127,9 +128,9 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
-                }catch (SkyEngWordException skyEngExc){
+                }catch (MeaningIsNotFoundException skyEngExc){
                     // if we are cant getting full information about word by Internet
-                    skyEngExc.printStackTrace();
+                    Log.d(LOG_TAG, "MeaningIsNotFound");
                     try {
                         dbWords.setNewWordWithoutInternet(translation);
                         if(!e.isDisposed()){

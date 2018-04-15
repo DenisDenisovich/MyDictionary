@@ -5,8 +5,10 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import java.io.IOException;
+import java.security.acl.LastOwnerException;
 
 import io.reactivex.Completable;
 import io.reactivex.functions.Action;
@@ -20,12 +22,13 @@ public class SoundPlayer implements MediaPlayer.OnPreparedListener,
                                     MediaPlayer.OnCompletionListener,
                                     MediaPlayer.OnErrorListener {
 
-
+    private final static String LOG_TAG = "Log_SoundPlayer";
     private MediaPlayer mediaPlayer;
     private PublishSubject<Boolean> stateObservable;
     public SoundPlayer(String url) throws IOException{
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        Log.d(LOG_TAG, url);
         mediaPlayer.setDataSource(url);
         mediaPlayer.setOnPreparedListener(this);
         mediaPlayer.setOnCompletionListener(this);

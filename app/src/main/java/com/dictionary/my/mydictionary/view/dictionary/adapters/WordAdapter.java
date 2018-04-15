@@ -124,6 +124,8 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
                             }
                         }catch (IOException e){
                             e.printStackTrace();
+                            soundIsWorking = false;
+                            notifyItemChanged(soundPosition);
                         }
                     }else {
                         Toast.makeText(context, "Internet connection is not available", Toast.LENGTH_SHORT).show();

@@ -157,6 +157,12 @@ public class DBWordsImpl implements DBWords {
         cv.put(Content.COLUMN_GROUP_ID, translation.getGroupId());
         cv.put(Content.COLUMN_DATE, translation.getDate());
 
+        if(translation.getSound() != null){
+            cv.put(Content.COLUMN_SOUND, translation.getSound());
+        }
+        if(translation.getPreview_image() != null){
+            cv.put(Content.COLUMN_PREVIEW_IMAGE, translation.getPreview_image());
+        }
         /*Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_ENG));
         Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_RUS));
         Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_DATE));

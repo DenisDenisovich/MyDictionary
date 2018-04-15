@@ -1,5 +1,7 @@
 package com.dictionary.my.mydictionary.data.cloud.dictionary;
 
+import com.dictionary.my.mydictionary.data.exception.MeaningIsNotFoundException;
+import com.dictionary.my.mydictionary.data.exception.TranslationIsNotFoundException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.WordFullInformation;
 
@@ -12,6 +14,6 @@ import java.util.ArrayList;
 
 public interface CloudWords {
     Double MIN_FREQUENCY_PERCENT = 10.0;
-    ArrayList<Translation> getTranslation(String word) throws Exception;
-    WordFullInformation getMeaning(Translation translation) throws Exception;
+    ArrayList<Translation> getTranslation(String word) throws IOException, TranslationIsNotFoundException;
+    WordFullInformation getMeaning(Translation translation) throws IOException, MeaningIsNotFoundException;
 }

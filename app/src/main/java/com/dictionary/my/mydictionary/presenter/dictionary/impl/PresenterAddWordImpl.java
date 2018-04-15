@@ -129,7 +129,7 @@ public class PresenterAddWordImpl<V extends ViewAddWord> implements PresenterAdd
 
                     @Override
                     public void onError(Throwable e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                         view.showERROR("Oops! Something was wrong");
                         defaultTranslationModeERROR = true;
                         searchForTranslation = false;
