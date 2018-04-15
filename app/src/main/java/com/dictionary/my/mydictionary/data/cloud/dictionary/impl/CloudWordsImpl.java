@@ -55,10 +55,27 @@ public class CloudWordsImpl implements CloudWords {
             Meaning meaning = meanings.get(i);
             Translation item = new Translation();
             item.setRus(meaning.getTranslation().getText());
-            item.setSound(meaning.getSoundUrl());
-            String urlImage = "http:";
-            urlImage = urlImage.concat(meaning.getPreviewUrl());
-            item.setPreview_image(urlImage);
+
+            if(meaning.getSoundUrl() != null) {
+                String urlSound = "http:";
+                urlSound = urlSound.concat(meaning.getSoundUrl());
+                item.setSound(urlSound);
+            }else {
+                item.setSound("");
+            }
+
+            if(meaning.getPreviewUrl() != null) {
+                String urlPreviewImage = "http:";
+                urlPreviewImage = urlPreviewImage.concat(meaning.getPreviewUrl());
+                item.setPreview_image(urlPreviewImage);
+            }else {
+                item.setPreview_image("");
+            }
+
+            //item.setSound(meaning.getSoundUrl());
+            //String urlImage = "http:";
+            //urlImage = urlImage.concat(meaning.getPreviewUrl());
+            //item.setPreview_image(urlImage);
             item.setMeaningId(String.valueOf(meaning.getId()));
             translations.add(item);
         }
@@ -79,8 +96,8 @@ public class CloudWordsImpl implements CloudWords {
         Log.d(LOG_TAG,String.valueOf(translation.getGroupId()));
 
         WordFullInformation word = new WordFullInformation();
-        //Response<ArrayList<MeaningSkyEng>> response = App.getSkyEngApi().getMeaning(translation.getMeaningId()).execute();
-        Response<ArrayList<MeaningSkyEng>> response = App.getSkyEngApi().getMeaning("11").execute();
+        Response<ArrayList<MeaningSkyEng>> response = App.getSkyEngApi().getMeaning(translation.getMeaningId()).execute();
+        //Response<ArrayList<MeaningSkyEng>> response = App.getSkyEngApi().getMeaning("11").execute();
         ArrayList<MeaningSkyEng> meaningList = response.body();
         // if response have empty body
         if(meaningList.size() == 0){
@@ -92,26 +109,26 @@ public class CloudWordsImpl implements CloudWords {
         word.setEng(translation.getEng());
         word.setRus(translation.getRus());
 
-        if(translation.getPreview_image() != null) {
+        /*if(translation.getPreview_image() != null) {
             String urlPreviewImage = "http:";
             urlPreviewImage = urlPreviewImage.concat(translation.getPreview_image());
             word.setPreviewImage(urlPreviewImage);
         }else {
             word.setPreviewImage("");
-        }
-
+        }*/
+        word.setPreviewImage(translation.getPreview_image());
         word.setDate(translation.getDate());
         word.setGroupId(translation.getGroupId());
         word.setNote((String) meaning.getTranslation().getNote());
 
-        if(translation.getSound() != null) {
+        /*if(translation.getSound() != null) {
             String urlSound = "http:";
             urlSound = urlSound.concat(translation.getSound());
             word.setSound(urlSound);
         }else {
             word.setSound("");
-        }
-
+        }*/
+        word.setSound(translation.getSound());
         word.setTranscription(meaning.getTranscription());
         word.setPartOfSpeech(meaning.getPartOfSpeechCode());
 
