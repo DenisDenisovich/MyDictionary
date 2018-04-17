@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * Created by luxso on 18.02.2018.
+ * This class working with training_words table
  */
 
 public class DBTrainingImpl implements DBTraining {
@@ -27,94 +27,173 @@ public class DBTrainingImpl implements DBTraining {
     }
 
     @Override
-    public void setEngRusTrainingWords(ArrayList<Long> longs) throws Exception {
+    public void setEngRusTrainingWords(ArrayList<Long> longs){
         setWordsToTraining(longs, 1);
     }
 
     @Override
-    public ArrayList<Word> getEngRusTrainingWords() throws Exception {
+    public ArrayList<Word> getEngRusTrainingWords(){
+        String[] id = {String.valueOf(1)};
+        Cursor cursor = db.query(Content.TABLE_TRAININGS, new String[] {Content.COLUMN_TRAINING_WORDS_ID}, Content.COLUMN_ROWID + " = ?", id,null,null,null);
+        String wordsLine = null;
+        try{
+            if(cursor.moveToFirst()){
+                wordsLine = cursor.getString(cursor.getColumnIndex(Content.COLUMN_TRAINING_WORDS_ID));
+            }
+        }finally {
+            cursor.close();
+        }
+        ArrayList<String> idList = new ArrayList<String>(Arrays.asList(wordsLine.split(Content.ARRAY_SEPARATOR)));
         return null;
     }
 
     @Override
-    public Integer getCountOfEngRusTrainingWords() throws Exception {
-        return null;
+    public Integer getCountOfEngRusTrainingWords(){
+        String[] id = {String.valueOf(1)};
+        Cursor cursor = db.query(Content.TABLE_TRAININGS,new String[] {Content.COLUMN_TRAINING_COUNT_OF_WORDS},Content.COLUMN_ROWID + " = ? ",id,null,null,null);
+        Integer count = null;
+        try {
+            if(cursor.moveToFirst()){
+                count = cursor.getInt(cursor.getColumnIndex(Content.COLUMN_TRAINING_COUNT_OF_WORDS));
+            }
+        }finally {
+            cursor.close();
+        }
+        return count;
     }
 
     @Override
-    public void setRusEngTrainingWords(ArrayList<Long> longs) throws Exception {
+    public void setRusEngTrainingWords(ArrayList<Long> longs){
         setWordsToTraining(longs, 2);
     }
 
     @Override
-    public ArrayList<Word> getRusEngTrainingWords() throws Exception {
+    public ArrayList<Word> getRusEngTrainingWords(){
         return null;
     }
 
     @Override
-    public Integer getCountOfRusEngTrainingWords() throws Exception {
-        return null;
+    public Integer getCountOfRusEngTrainingWords(){
+        String[] id = {String.valueOf(2)};
+        Cursor cursor = db.query(Content.TABLE_TRAININGS,new String[] {Content.COLUMN_TRAINING_COUNT_OF_WORDS},Content.COLUMN_ROWID + " = ? ",id,null,null,null);
+        Integer count = null;
+        try {
+            if(cursor.moveToFirst()){
+                count = cursor.getInt(cursor.getColumnIndex(Content.COLUMN_TRAINING_COUNT_OF_WORDS));
+            }
+        }finally {
+            cursor.close();
+        }
+        return count;
     }
 
     @Override
-    public void setConstructorTrainingWords(ArrayList<Long> longs) throws Exception {
+    public void setConstructorTrainingWords(ArrayList<Long> longs){
         setWordsToTraining(longs, 3);
     }
 
     @Override
-    public ArrayList<Word> getConstructorTrainingWords() throws Exception {
+    public ArrayList<Word> getConstructorTrainingWords(){
         return null;
     }
 
     @Override
-    public Integer getCountOfConstructorTrainingWords() throws Exception {
-        return null;
+    public Integer getCountOfConstructorTrainingWords(){
+        String[] id = {String.valueOf(3)};
+        Cursor cursor = db.query(Content.TABLE_TRAININGS,new String[] {Content.COLUMN_TRAINING_COUNT_OF_WORDS},Content.COLUMN_ROWID + " = ? ",id,null,null,null);
+        Integer count = null;
+        try {
+            if(cursor.moveToFirst()){
+                count = cursor.getInt(cursor.getColumnIndex(Content.COLUMN_TRAINING_COUNT_OF_WORDS));
+            }
+        }finally {
+            cursor.close();
+        }
+        return count;
     }
 
     @Override
-    public void setSprintTrainingWords(ArrayList<Long> longs) throws Exception {
+    public void setSprintTrainingWords(ArrayList<Long> longs){
         setWordsToTraining(longs, 4);
     }
 
     @Override
-    public ArrayList<Word> getSprintTrainingWords() throws Exception {
+    public ArrayList<Word> getSprintTrainingWords(){
         return null;
     }
 
     @Override
-    public Integer getCountOfSprintTrainingWords() throws Exception {
-        return null;
+    public Integer getCountOfSprintTrainingWords(){
+        String[] id = {String.valueOf(4)};
+        Cursor cursor = db.query(Content.TABLE_TRAININGS,new String[] {Content.COLUMN_TRAINING_COUNT_OF_WORDS},Content.COLUMN_ROWID + " = ? ",id,null,null,null);
+        Integer count = null;
+        try {
+            if(cursor.moveToFirst()){
+                count = cursor.getInt(cursor.getColumnIndex(Content.COLUMN_TRAINING_COUNT_OF_WORDS));
+            }
+        }finally {
+            cursor.close();
+        }
+        return count;
     }
 
     @Override
-    public void setAllTrainingWords(ArrayList<Long> longs) throws Exception {
-        setWordsToTraining(longs, 1);
-        setWordsToTraining(longs, 2);
-        setWordsToTraining(longs, 3);
-        setWordsToTraining(longs, 4);
+    public void setAllTrainingWords(ArrayList<Long> longs){
         setWordsToTraining(longs, 5);
+        Cursor cursor = db.query(Content.TABLE_TRAININGS, new String[] {Content.COLUMN_TRAINING_WORDS_ID, Content.COLUMN_TRAINING_COUNT_OF_WORDS}, Content.COLUMN_ROWID + " = 5",null,null,null,null);
+        String wordsString = null;
+        Integer countOfWords = null;
+        try {
+            if (cursor.moveToFirst()) {
+                wordsString = cursor.getString(cursor.getColumnIndex(Content.COLUMN_TRAINING_WORDS_ID));
+                countOfWords = cursor.getInt(cursor.getColumnIndex(Content.COLUMN_TRAINING_COUNT_OF_WORDS));
+            }
+        }finally {
+            cursor.close();
+        }
+        ContentValues cv = new ContentValues();
+        cv.put(Content.COLUMN_TRAINING_WORDS_ID, wordsString);
+        cv.put(Content.COLUMN_TRAINING_COUNT_OF_WORDS, countOfWords);
+        db.update(Content.TABLE_TRAININGS, cv, Content.COLUMN_ROWID + " = 1", null);
+        db.update(Content.TABLE_TRAININGS, cv, Content.COLUMN_ROWID + " = 2", null);
+        db.update(Content.TABLE_TRAININGS, cv, Content.COLUMN_ROWID + " = 3", null);
+        db.update(Content.TABLE_TRAININGS, cv, Content.COLUMN_ROWID + " = 4", null);
     }
 
     @Override
-    public ArrayList<Word> getAllTrainingWords() throws Exception {
+    public ArrayList<Word> getAllTrainingWords(){
         return null;
     }
 
     @Override
-    public Integer getCountOfAllTrainingWords() throws Exception {
-        return null;
+    public Integer getCountOfAllTrainingWords(){
+        String[] id = {String.valueOf(5)};
+        Cursor cursor = db.query(Content.TABLE_TRAININGS,new String[] {Content.COLUMN_TRAINING_COUNT_OF_WORDS},Content.COLUMN_ROWID + " = ? ",id,null,null,null);
+        Integer count = null;
+        try {
+            if(cursor.moveToFirst()){
+                count = cursor.getInt(cursor.getColumnIndex(Content.COLUMN_TRAINING_COUNT_OF_WORDS));
+            }
+        }finally {
+            cursor.close();
+        }
+        return count;
     }
 
-    private void setWordsToTraining(ArrayList<Long> longs, int rowid) throws Exception{
-            Cursor cursor = db.query(Content.TABLE_TRAININGS, null, Content.COLUMN_ROWID + " == " + String.valueOf(rowid), null, null, null, null);
-            String line = null;
+    private void setWordsToTraining(ArrayList<Long> longs, int rowid){
+            Cursor cursor = db.query(Content.TABLE_TRAININGS, null, Content.COLUMN_ROWID + " = ? ", new String[] {String.valueOf(rowid)}, null, null, null);
+            String line;
             ArrayList<String> oldWords = null;
             int countOfNewWords = longs.size();
-            if (cursor.moveToFirst()) {
-                line = cursor.getString(cursor.getColumnIndex(Content.COLUMN_TRAININGS));
-                if (line != null) {
-                    oldWords = new ArrayList<String>(Arrays.asList(line.split(Content.ARRAY_SEPARATOR)));
+            try {
+                if (cursor.moveToFirst()) {
+                    line = cursor.getString(cursor.getColumnIndex(Content.COLUMN_TRAININGS));
+                    if (line != null) {
+                        oldWords = new ArrayList<String>(Arrays.asList(line.split(Content.ARRAY_SEPARATOR)));
+                    }
                 }
+            }finally {
+                cursor.close();
             }
             ContentValues cv = new ContentValues();
             StringBuilder sb = new StringBuilder();
@@ -125,10 +204,10 @@ public class DBTrainingImpl implements DBTraining {
                     sb.append(longs.get(i));
                     sb.append(Content.ARRAY_SEPARATOR);
                 }
-                sb.append(longs.get(maxCountOfWords));
+                sb.append(longs.get(maxCountOfWords - 1));
                 cv.put(Content.COLUMN_TRAINING_WORDS_ID, sb.toString());
                 cv.put(Content.COLUMN_TRAINING_COUNT_OF_WORDS, maxCountOfWords);
-                db.update(Content.TABLE_TRAININGS, cv, Content.COLUMN_ROWID + " == " + String.valueOf(rowid), null);
+                db.update(Content.TABLE_TRAININGS, cv, Content.COLUMN_ROWID + " = ?", new String[] {String.valueOf(rowid)});
             } else {
                 // if size of words not equals maxCount
                 int count = 0;
@@ -138,7 +217,7 @@ public class DBTrainingImpl implements DBTraining {
                     sb.append(Content.ARRAY_SEPARATOR);
                     count++;
                 }
-                // add oldWords which not exist in newWords
+                // add oldWords that aren't in newWords
                 if (oldWords != null) {
                     if (!oldWords.isEmpty()) {
                         for (int i = 0; i < oldWords.size(); i++) {
@@ -156,9 +235,8 @@ public class DBTrainingImpl implements DBTraining {
                 }
                 cv.put(Content.COLUMN_TRAINING_WORDS_ID, sb.toString());
                 cv.put(Content.COLUMN_TRAINING_COUNT_OF_WORDS, count);
-                db.update(Content.TABLE_TRAININGS, cv, Content.COLUMN_ROWID + " == " + String.valueOf(rowid), null);
+                db.update(Content.TABLE_TRAININGS, cv, Content.COLUMN_ROWID + " = ? ", new String[] {String.valueOf(rowid)});
             }
-            cursor.close();
             cv.clear();
     }
 
