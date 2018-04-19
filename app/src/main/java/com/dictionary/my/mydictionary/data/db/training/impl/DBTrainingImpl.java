@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.data.DBHelper;
@@ -18,6 +19,7 @@ import java.util.Arrays;
  */
 
 public class DBTrainingImpl implements DBTraining {
+    private final static String LOG_TAG = "Log_DBTraining";
     private DBHelper dbHelper;
     private SQLiteDatabase db;
     private final static int maxCountOfWords = 20;
@@ -32,7 +34,7 @@ public class DBTrainingImpl implements DBTraining {
     }
 
     @Override
-    public ArrayList<Word> getEngRusTrainingWords(){
+    public ArrayList<Long> getEngRusTrainingWords(){
         String[] id = {String.valueOf(1)};
         Cursor cursor = db.query(Content.TABLE_TRAININGS, new String[] {Content.COLUMN_TRAINING_WORDS_ID}, Content.COLUMN_ROWID + " = ?", id,null,null,null);
         String wordsLine = null;
@@ -43,8 +45,12 @@ public class DBTrainingImpl implements DBTraining {
         }finally {
             cursor.close();
         }
-        ArrayList<String> idList = new ArrayList<String>(Arrays.asList(wordsLine.split(Content.ARRAY_SEPARATOR)));
-        return null;
+        ArrayList<String> strIds = new ArrayList<String>(Arrays.asList(wordsLine.split(Content.ARRAY_SEPARATOR)));
+        ArrayList<Long> idsList = new ArrayList<>();
+        for(String str: strIds){
+            idsList.add(Long.valueOf(str));
+        }
+        return idsList;
     }
 
     @Override
@@ -68,7 +74,7 @@ public class DBTrainingImpl implements DBTraining {
     }
 
     @Override
-    public ArrayList<Word> getRusEngTrainingWords(){
+    public ArrayList<Long> getRusEngTrainingWords(){
         return null;
     }
 
@@ -93,7 +99,7 @@ public class DBTrainingImpl implements DBTraining {
     }
 
     @Override
-    public ArrayList<Word> getConstructorTrainingWords(){
+    public ArrayList<Long> getConstructorTrainingWords(){
         return null;
     }
 
@@ -118,7 +124,7 @@ public class DBTrainingImpl implements DBTraining {
     }
 
     @Override
-    public ArrayList<Word> getSprintTrainingWords(){
+    public ArrayList<Long> getSprintTrainingWords(){
         return null;
     }
 
@@ -161,7 +167,7 @@ public class DBTrainingImpl implements DBTraining {
     }
 
     @Override
-    public ArrayList<Word> getAllTrainingWords(){
+    public ArrayList<Long> getAllTrainingWords(){
         return null;
     }
 
@@ -187,7 +193,7 @@ public class DBTrainingImpl implements DBTraining {
             int countOfNewWords = longs.size();
             try {
                 if (cursor.moveToFirst()) {
-                    line = cursor.getString(cursor.getColumnIndex(Content.COLUMN_TRAININGS));
+                    line = cursor.getString(cursor.getColumnIndex(Content.COLUMN_TRAINING_WORDS_ID));
                     if (line != null) {
                         oldWords = new ArrayList<String>(Arrays.asList(line.split(Content.ARRAY_SEPARATOR)));
                     }
@@ -223,7 +229,7 @@ public class DBTrainingImpl implements DBTraining {
                         for (int i = 0; i < oldWords.size(); i++) {
                             if (count < maxCountOfWords) {
                                 if (!longs.contains(Long.valueOf(oldWords.get(i)))) {
-                                    sb.append(longs.get(i));
+                                    sb.append(oldWords.get(i));
                                     if (count < maxCountOfWords - 1) {
                                         sb.append(Content.ARRAY_SEPARATOR);
                                     }
