@@ -7,6 +7,8 @@ import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.cloud.dictionary.CloudWords;
 import com.dictionary.my.mydictionary.data.cloud.dictionary.impl.CloudWordsImpl;
+import com.dictionary.my.mydictionary.data.db.training.DBTraining;
+import com.dictionary.my.mydictionary.data.db.training.impl.DBTrainingImpl;
 import com.dictionary.my.mydictionary.data.exception.MeaningIsNotFoundException;
 import com.dictionary.my.mydictionary.data.exception.TranslationIsNotFoundException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
@@ -37,17 +39,20 @@ public class RepositoryWordsImpl implements RepositoryWords {
     private final static String LOG_TAG = "Log_RepositoryAllWords";
     private DBWords dbWords;
     private DBGroups dbGroups;
+    private DBTraining dbTraining;
     private CloudWords cloudWords;
 
     public RepositoryWordsImpl(Context context){
         dbWords = new DBWordsImpl(context);
         dbGroups = new DBGroupsImpl(context);
         cloudWords = new CloudWordsImpl();
+        dbTraining = new DBTrainingImpl(context);
     }
     public RepositoryWordsImpl(Context context, Long groupId){
         dbWords = new DBWordsImpl(context, groupId);
         dbGroups = new DBGroupsImpl(context);
         cloudWords = new CloudWordsImpl();
+        dbTraining = new DBTrainingImpl(context);
     }
     @Override
     public Single<ArrayList<Word>> getListOfWords() {
@@ -211,6 +216,66 @@ public class RepositoryWordsImpl implements RepositoryWords {
                 }
             }
         });
+    }
+
+    @Override
+    public Single<ArrayList<Long>> getListOfTrainings() {
+        return null;
+    }
+
+    @Override
+    public Completable setWordsToTraining(ArrayList<Long> longs, int rowid) {
+        Log.d(LOG_TAG, "setWordsToTraining(" + rowid + ")");
+        return Completable.create(new CompletableOnSubscribe() {
+            @Override
+            public void subscribe(CompletableEmitter e) throws Exception {
+                try {
+                    if (longs.size() == MAX_COUNT_OF_WORDS_IN_TRAINIGS) {
+                        dbTraining.setWordsToTraining(longs, rowid);
+                        if (rowid == FOR_ALL_TRAININGS_ROWID) {
+                            dbTraining.setWordsToTraining(longs, ENG_RUS_TRAINING_ROWID);
+                            dbTraining.setWordsToTraining(longs, RUS_ENG_TRAINING_ROWID);
+                            dbTraining.setWordsToTraining(longs, CONSTRUCTOR_TRAINING_ROWID);
+                            dbTraining.setWordsToTraining(longs, SPRINT_TRAINING_ROWID);
+                        }
+                    } else {
+                        // if size of input words not equals maxCount
+                        ArrayList<Long> oldWords = dbTraining.getWordsFromTraining(rowid);
+                        ArrayList<Long> newWords = new ArrayList<>(longs);
+                        int count = newWords.size();
+                        // add oldWords that aren't in newWords
+                        if (oldWords != null) {
+                            if (!oldWords.isEmpty()) {
+                                for (int i = 0; i < oldWords.size(); i++) {
+                                    if (count <= MAX_COUNT_OF_WORDS_IN_TRAINIGS) {
+                                        if (!longs.contains(oldWords.get(i))) {
+                                            newWords.add(oldWords.get(i));
+                                            count++;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        dbTraining.setWordsToTraining(newWords, rowid);
+                        if (rowid == FOR_ALL_TRAININGS_ROWID) {
+                            dbTraining.setWordsToTraining(newWords, ENG_RUS_TRAINING_ROWID);
+                            dbTraining.setWordsToTraining(newWords, RUS_ENG_TRAINING_ROWID);
+                            dbTraining.setWordsToTraining(newWords, CONSTRUCTOR_TRAINING_ROWID);
+                            dbTraining.setWordsToTraining(newWords, SPRINT_TRAINING_ROWID);
+                        }
+                    }
+                    if (!e.isDisposed()) {
+                        e.onComplete();
+                    }
+                }catch (SQLiteException | NullPointerException | IndexOutOfBoundsException exc){
+                    if(!e.isDisposed()) {
+                        e.onError(exc);
+                    }
+                }
+            }
+        });
+
+
     }
 
     @Override

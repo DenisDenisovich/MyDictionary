@@ -4,12 +4,10 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.data.DBHelper;
 import com.dictionary.my.mydictionary.data.db.training.DBTraining;
-import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +20,6 @@ public class DBTrainingImpl implements DBTraining {
     private final static String LOG_TAG = "Log_DBTraining";
     private DBHelper dbHelper;
     private SQLiteDatabase db;
-    private final static int maxCountOfWords = 20;
     public DBTrainingImpl(Context context){
         dbHelper = new DBHelper(context);
         db = dbHelper.getWritableDatabase();
@@ -57,17 +54,18 @@ public class DBTrainingImpl implements DBTraining {
             cursor.close();
         }
         for(int  i = 0; i < longs.size(); i++){
-            if(oldWords.contains(String.valueOf(longs.get(i)))){
-                oldWords.remove(String.valueOf(longs.get(i)));
-            }
+            oldWords.remove(String.valueOf(longs.get(i)));
+
         }
         ContentValues cv = new ContentValues();
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < oldWords.size() - 1; i++) {
-            sb.append(oldWords.get(i));
-            sb.append(Content.ARRAY_SEPARATOR);
+        if(!oldWords.isEmpty()) {
+            for (int i = 0; i < oldWords.size() - 1; i++) {
+                sb.append(oldWords.get(i));
+                sb.append(Content.ARRAY_SEPARATOR);
+            }
+            sb.append(oldWords.get(oldWords.size() - 1));
         }
-        sb.append(oldWords.get(oldWords.size() - 1));
         cv.put(Content.COLUMN_TRAINING_WORDS_ID, sb.toString());
         cv.put(Content.COLUMN_TRAINING_COUNT_OF_WORDS, oldWords.size());
         db.update(Content.TABLE_TRAININGS, cv, Content.COLUMN_ROWID + " = ?", new String[] {String.valueOf(rowid)});
@@ -76,20 +74,23 @@ public class DBTrainingImpl implements DBTraining {
     @Override
     public ArrayList<Long> getWordsFromTraining(int rowid) {
         String[] id = {String.valueOf(rowid)};
-        Cursor cursor = db.query(Content.TABLE_TRAININGS, new String[] {Content.COLUMN_TRAINING_WORDS_ID}, Content.COLUMN_ROWID + " = ?", id,null,null,null);
+        Cursor cursor = db.query(Content.TABLE_TRAININGS, new String[]{Content.COLUMN_TRAINING_WORDS_ID}, Content.COLUMN_ROWID + " = ?", id, null, null, null);
         String wordsLine = null;
-        try{
-            if(cursor.moveToFirst()){
+        try {
+            if (cursor.moveToFirst()) {
                 wordsLine = cursor.getString(cursor.getColumnIndex(Content.COLUMN_TRAINING_WORDS_ID));
             }
-        }finally {
+        } finally {
             cursor.close();
         }
-        ArrayList<String> strIds = new ArrayList<String>(Arrays.asList(wordsLine.split(Content.ARRAY_SEPARATOR)));
         ArrayList<Long> idsList = new ArrayList<>();
-        for(String str: strIds){
-            idsList.add(Long.valueOf(str));
+        ArrayList<String> strIds = new ArrayList<String>(Arrays.asList(wordsLine.split(Content.ARRAY_SEPARATOR)));
+        if (!wordsLine.isEmpty()){
+            for (String str : strIds) {
+                idsList.add(Long.valueOf(str));
+            }
         }
+
         return idsList;
     }
 
