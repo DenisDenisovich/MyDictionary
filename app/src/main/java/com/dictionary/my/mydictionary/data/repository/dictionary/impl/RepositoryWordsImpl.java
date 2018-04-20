@@ -220,7 +220,15 @@ public class RepositoryWordsImpl implements RepositoryWords {
 
     @Override
     public Single<ArrayList<Long>> getListOfTrainings() {
-        return null;
+        return Single.create(new SingleOnSubscribe<ArrayList<Long>>() {
+            @Override
+            public void subscribe(SingleEmitter<ArrayList<Long>> e) throws Exception {
+                ArrayList<Long> list = dbTraining.getListOfTrainings();
+                if(!e.isDisposed()){
+                    e.onSuccess(list);
+                }
+            }
+        });
     }
 
     @Override
@@ -241,7 +249,12 @@ public class RepositoryWordsImpl implements RepositoryWords {
                     } else {
                         // if size of input words not equals maxCount
                         ArrayList<Long> oldWords = dbTraining.getWordsFromTraining(rowid);
-                        ArrayList<Long> newWords = new ArrayList<>(longs);
+                        ArrayList<Long> newWords = new ArrayList<>();
+                        if(longs.size() > MAX_COUNT_OF_WORDS_IN_TRAINIGS) {
+                            newWords.addAll(longs.subList(0, MAX_COUNT_OF_WORDS_IN_TRAINIGS));
+                        }else{
+                            newWords.addAll(longs);
+                        }
                         int count = newWords.size();
                         // add oldWords that aren't in newWords
                         if (oldWords != null) {

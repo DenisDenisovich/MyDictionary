@@ -124,7 +124,6 @@ public class DBTrainingImpl implements DBTraining {
         }finally {
             cursor.close();
         }
-
         return trainings;
     }
 
