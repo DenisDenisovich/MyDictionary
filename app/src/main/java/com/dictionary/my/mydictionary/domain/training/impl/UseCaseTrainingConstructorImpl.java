@@ -33,7 +33,7 @@ public class UseCaseTrainingConstructorImpl implements UseCaseTrainingConstructo
         return Observable.create(new ObservableOnSubscribe<WordConstructor>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<WordConstructor> e) throws Exception {
-                try{
+                /*try{
                     ArrayList<String> allIds = repository.getAllId();
                     int count = allIds.size();
 
@@ -98,7 +98,7 @@ public class UseCaseTrainingConstructorImpl implements UseCaseTrainingConstructo
                     if(!e.isDisposed()){
                         e.onError(t);
                     }
-                }
+                }*/
             }
         });
     }

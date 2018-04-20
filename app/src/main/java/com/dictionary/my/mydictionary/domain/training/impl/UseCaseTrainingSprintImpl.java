@@ -39,7 +39,7 @@ public class UseCaseTrainingSprintImpl implements UseCaseTrainingSprint {
         return Observable.create(new ObservableOnSubscribe<WordSprint>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<WordSprint> e) throws Exception {
-                try{
+                /*try{
                     ArrayList<String> allIds = repository.getAllId();
                     int count = allIds.size();
                     WordSprint item;
@@ -91,7 +91,7 @@ public class UseCaseTrainingSprintImpl implements UseCaseTrainingSprint {
                     if(!e.isDisposed()){
                         e.onError(t);
                     }
-                }
+                }*/
             }
         });
     }

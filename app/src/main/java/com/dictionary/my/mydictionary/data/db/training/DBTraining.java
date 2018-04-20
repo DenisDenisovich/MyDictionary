@@ -9,23 +9,10 @@ import java.util.ArrayList;
  */
 
 public interface DBTraining {
-    void setEngRusTrainingWords(ArrayList<Long> longs);
-    ArrayList<Long> getEngRusTrainingWords();
-    Integer getCountOfEngRusTrainingWords();
-    void setRusEngTrainingWords(ArrayList<Long> longs);
-    ArrayList<Long> getRusEngTrainingWords();
-    Integer getCountOfRusEngTrainingWords();
-    void setConstructorTrainingWords(ArrayList<Long> longs);
-    ArrayList<Long> getConstructorTrainingWords();
-    Integer getCountOfConstructorTrainingWords();
-    void setSprintTrainingWords(ArrayList<Long> longs);
-    ArrayList<Long> getSprintTrainingWords();
-    Integer getCountOfSprintTrainingWords();
-    void setAllTrainingWords(ArrayList<Long> longs);
-    ArrayList<Long> getAllTrainingWords();
-    Integer getCountOfAllTrainingWords();
-    ArrayList<String> getAllId();
-    String getTranslateById(long id);
-    String getWordById(long id);
+    void setWordsToTraining(ArrayList<Long> longs, int rowid);
+    void deleteWordsFromTraining(ArrayList<Long> longs, int rowid);
+    ArrayList<Long> getWordsFromTraining(int rowid);
+    Integer getCountOfWordsFromTraining(int rowid);
+
     void destroy();
 }

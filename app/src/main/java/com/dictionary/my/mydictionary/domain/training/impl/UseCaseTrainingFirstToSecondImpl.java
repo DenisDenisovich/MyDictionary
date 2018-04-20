@@ -43,7 +43,7 @@ public class UseCaseTrainingFirstToSecondImpl implements UseCaseTrainingFirstToS
         Observable<WordSecondToFirst> observable = Observable.create(new ObservableOnSubscribe<WordSecondToFirst>() {
             @Override
             public void subscribe(@NonNull ObservableEmitter<WordSecondToFirst> e) throws Exception {
-                try {
+                /*try {
                     ArrayList<String> allIds = repository.getAllId();
                     int count = allIds.size();
 
@@ -122,7 +122,7 @@ public class UseCaseTrainingFirstToSecondImpl implements UseCaseTrainingFirstToS
                     if(!e.isDisposed()) {
                         e.onError(t);
                     }
-                }
+                }*/
             }
         });
 
