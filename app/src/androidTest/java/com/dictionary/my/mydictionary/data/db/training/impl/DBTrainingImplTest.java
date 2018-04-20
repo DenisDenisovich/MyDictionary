@@ -125,6 +125,17 @@ public class DBTrainingImplTest {
         Integer count  = db.getWordsFromTraining(1).size();
         Integer expCount = exp.size();
         assertEquals(expCount,count);
+    }
 
+    @Test
+    public void getListOfTrainings(){
+        ArrayList<Long> expectedList = new ArrayList<>();
+        expectedList.add(1L);
+        expectedList.add(2L);
+        expectedList.add(3L);
+        expectedList.add(4L);
+        expectedList.add(5L);
+        ArrayList<Long> outputList = db.getListOfTrainings();
+        assertEquals(expectedList,outputList);
     }
 }

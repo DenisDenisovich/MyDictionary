@@ -110,6 +110,24 @@ public class DBTrainingImpl implements DBTraining {
         }
         return count;
     }
+
+    @Override
+    public ArrayList<Long> getListOfTrainings() {
+        Cursor cursor = db.query(Content.TABLE_TRAININGS,new String[] {Content.COLUMN_ROWID},null,null,null,null,null);
+        ArrayList<Long> trainings = new ArrayList<>();
+        try {
+            if(cursor.moveToFirst()){
+                do {
+                    trainings.add(cursor.getLong(cursor.getColumnIndex(Content.COLUMN_ROWID)));
+                }while (cursor.moveToNext());
+            }
+        }finally {
+            cursor.close();
+        }
+
+        return trainings;
+    }
+
     @Override
     public void destroy() {
         db.close();

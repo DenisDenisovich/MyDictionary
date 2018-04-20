@@ -13,6 +13,7 @@ public interface DBTraining {
     void deleteWordsFromTraining(ArrayList<Long> longs, int rowid);
     ArrayList<Long> getWordsFromTraining(int rowid);
     Integer getCountOfWordsFromTraining(int rowid);
+    ArrayList<Long> getListOfTrainings();
 
     void destroy();
 }
