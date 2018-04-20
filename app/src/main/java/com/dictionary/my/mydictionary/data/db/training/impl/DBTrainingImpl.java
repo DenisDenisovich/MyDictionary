@@ -85,12 +85,14 @@ public class DBTrainingImpl implements DBTraining {
         }
         ArrayList<Long> idsList = new ArrayList<>();
         ArrayList<String> strIds = new ArrayList<String>(Arrays.asList(wordsLine.split(Content.ARRAY_SEPARATOR)));
-        if (!wordsLine.isEmpty()){
+        try {
             for (String str : strIds) {
                 idsList.add(Long.valueOf(str));
             }
+        }catch (NumberFormatException e){
+            // if reading string is empty
+            return idsList;
         }
-
         return idsList;
     }
 
