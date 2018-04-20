@@ -137,6 +137,22 @@ public class RepositoryWordsImplTest {
         assertEquals(l,output);
     }
 
+    @Test
+    public void setWordsToAllTrainings() throws Exception{
+        repository.setWordsToTraining(set,5)
+                .test()
+                .assertComplete();
+        ArrayList<Long> output = db.getWordsFromTraining(1);
+        ArrayList<Long> output2 = db.getWordsFromTraining(2);
+        ArrayList<Long> output3 = db.getWordsFromTraining(3);
+        ArrayList<Long> output4 = db.getWordsFromTraining(4);
+        ArrayList<Long> output5 = db.getWordsFromTraining(5);
+        assertEquals(exp,output);
+        assertEquals(exp,output2);
+        assertEquals(exp,output3);
+        assertEquals(exp,output4);
+        assertEquals(exp,output5);
+    }
 
 
 }
