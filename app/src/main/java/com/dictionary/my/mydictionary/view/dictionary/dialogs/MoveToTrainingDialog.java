@@ -12,6 +12,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.content.res.ResourcesCompat;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -72,11 +73,14 @@ public class MoveToTrainingDialog extends DialogFragment {
         ((TextView)view.findViewById(R.id.tvDialogMoveToTrainingHead)).setTypeface(typeface);
 
         ListView lv = view.findViewById(R.id.lvDialogMoveToTraining);
+        lv.setDivider(null);
         DialogListAdapter adapter = new DialogListAdapter(getContext(),android.R.layout.simple_list_item_single_choice,trainingTitle,trainingId);
+        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(getContext(),R.layout.item_single_choice_dialog,R.id.tvSingleChoiceDialog, trainingTitle);
         lv.setAdapter(adapter);
 
         lv.setOnItemClickListener((adapterView, view1, i, l) -> {
             setItemId(i+1,adapter.getItemTitle(i));
+            //lv.setItemChecked(i,true);
             ((AlertDialog)getDialog()).getButton(Dialog.BUTTON_POSITIVE).setEnabled(true);
         });
         builder.setView(view)

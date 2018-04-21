@@ -42,6 +42,9 @@ public class DialogListAdapter extends ArrayAdapter {
         Typeface typeface = ResourcesCompat.getFont(context, R.font.roboto_light);
         ((TextView) convertView).setText(titles[position]);
         ((TextView)convertView).setTypeface(typeface);
+        int paddingTop = (int)context.getResources().getDimension(R.dimen.dropdown_top_padding);
+        int paddingBottom = (int)context.getResources().getDimension(R.dimen.dropdown_bottom_padding);
+        convertView.setPadding(0,paddingTop,0,paddingBottom);
         return super.getView(position, convertView, parent);
     }
 

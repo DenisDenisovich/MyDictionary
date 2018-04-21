@@ -327,6 +327,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
 
     @Override
     public void allowMoveToTraining() {
+        showERROR("Words is moved to " + moveGroupTitle);
         wordAdapter.selectModeOff();
         toolbarSelectedMode = false;
         invalidateOptionsMenu();

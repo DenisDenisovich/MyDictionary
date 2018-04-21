@@ -362,6 +362,9 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
     @Override
     public void allowMoveToTraining() {
         showERROR("Words is moved to " + moveGroupTitle);
+        wordAdapter.selectModeOff();
+        toolbarSelectedMode = false;
+        getActivity().invalidateOptionsMenu();
     }
 
     @Override
