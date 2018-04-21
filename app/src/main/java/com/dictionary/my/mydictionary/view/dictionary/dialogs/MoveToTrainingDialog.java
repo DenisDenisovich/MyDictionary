@@ -44,7 +44,7 @@ public class MoveToTrainingDialog extends DialogFragment {
     }
 
     public interface MoveToTrainingListener{
-        void onMoveToGroupPositiveClick(Integer groupId, String groupTitle);
+        void onMoveToTrainingPositiveClick(Integer trainingId, String trainingTitle);
     }
     MoveToTrainingListener mListener;
     private boolean isActivity = false;
@@ -82,7 +82,7 @@ public class MoveToTrainingDialog extends DialogFragment {
         builder.setView(view)
                 .setPositiveButton(getResources().getString(R.string.move_to_training_positive_button), (dialogInterface, i) -> {
                     if (isActivity){
-                        mListener.onMoveToGroupPositiveClick(selectedItemId,selectedItemTitle);
+                        mListener.onMoveToTrainingPositiveClick(selectedItemId,selectedItemTitle);
                     }else {
                         Intent data = new Intent();
                         data.putExtra(Content.COLUMN_ROWID, selectedItemId);

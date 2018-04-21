@@ -54,6 +54,8 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
     private String moveGroupTitle;
     private final static int REQUEST_CODE_NEW_WORD = 1;
     private final static String KEY_CURRENT_GROUP = "currentGroup";
+    private ArrayList<Long> movedWordsToTraining;
+    private Integer selectedTrainingId;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -151,6 +153,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
                     presenter.moveToGroupSelected();
                     return true;
                 case R.id.word_menu_move_to_training:
+                    presenter.moveToTrainingSelected();
                     return true;
             }
         }else{
@@ -295,22 +298,38 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
 
     @Override
     public void createMoveToTrainingDialog(ArrayList<Long> ids) {
+        Log.d(LOG_TAG, "createMoveToGroupDialog()");
+        if(wordAdapter.getSelectedItemsSize() <= 20){
+            DialogFragment dialog = MoveToTrainingDialog.newInstance(ids);
+            dialog.show(getSupportFragmentManager(),null);
+        }else{
+            showERROR("You can't move to training more than 20 words");
+        }
+    }
 
+    @Override
+    public void onMoveToTrainingPositiveClick(Integer trainingId, String trainingTitle) {
+        movedWordsToTraining = (ArrayList<Long>) wordAdapter.getSelectedItemIds().clone();
+        selectedTrainingId = trainingId;
+        moveGroupTitle = trainingTitle;
+        presenter.movedWordsToTrainingIsReady();
     }
 
     @Override
     public ArrayList<Long> getMovedToTrainingWords() {
-        return null;
+        return movedWordsToTraining;
     }
 
     @Override
     public Integer getSelectedTraining() {
-        return null;
+        return selectedTrainingId;
     }
 
     @Override
     public void allowMoveToTraining() {
-
+        wordAdapter.selectModeOff();
+        toolbarSelectedMode = false;
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -346,8 +365,4 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
         presenter.detach();
     }
 
-    @Override
-    public void onMoveToGroupPositiveClick(Integer groupId, String groupTitle) {
-
-    }
 }
