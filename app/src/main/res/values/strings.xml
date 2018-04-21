@@ -11,6 +11,16 @@
         <item>Groups</item>
     </string-array>
 
+    <string-array name="training_array">
+        <item>Eng to Rus</item>
+        <item>Rus to Eng</item>
+        <item>Constructor</item>
+        <item>Sprint</item>
+        <item>All trainings</item>
+    </string-array>
+
+
+
     <string name="word_menu_edit">Edit</string>
     <string name="word_menu_delete">Delete</string>
     <string name="word_menu_move_to_group">Move to group</string>
@@ -37,9 +47,15 @@
     <string name="move_to_group_positive_button">Move</string>
     <string name="move_to_group_negative_button">Cancel</string>
 
+    <string name="move_to_training_dialog_header">Move to training</string>
+    <string name="move_to_training_positive_button">Move</string>
+    <string name="move_to_training_negative_button">Cancel</string>
+
     <string name="new_group_dialog_header">Add new group</string>
     <string name="new_group_dialog_hint">Inter title there</string>
     <string name="new_group_dialog_positive_button">Add</string>
     <string name="new_group_dialog_negative_button">Cancel</string>
+
+
 
 </resources>

@@ -25,17 +25,19 @@ import com.dictionary.my.mydictionary.view.dictionary.ViewAllWords;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.WordAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.DeleteWordDialog;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.MoveToGroupDialog;
+import com.dictionary.my.mydictionary.view.dictionary.dialogs.MoveToTrainingDialog;
 
 import java.util.ArrayList;
 
 import io.reactivex.observers.DisposableObserver;
 
 /**
- * Created by luxso on 28.03.2018.
+ * This class is used for display words of selected group
  */
 
 public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWords, DeleteWordDialog.DeleteWordListener,
-                                                                                     MoveToGroupDialog.MoveToGroupListener {
+                                                                                     MoveToGroupDialog.MoveToGroupListener,
+                                                                                     MoveToTrainingDialog.MoveToTrainingListener{
     private final static String LOG_TAG = "Log_GroupOfWords";
     private PresenterWords presenter;
     private WordAdapter wordAdapter;
@@ -280,7 +282,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
         movedWords = (ArrayList<Long>) wordAdapter.getSelectedItemIds().clone();
         moveGroupTitle = groupTitle;
         movedWords.add(0, groupId);
-        presenter.moveToGroupWordsIsReady();
+        presenter.movedWordsToGroupIsReady();
     }
 
     @Override
@@ -292,7 +294,22 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
     }
 
     @Override
-    public void createMoveToTrainingDialog() {
+    public void createMoveToTrainingDialog(ArrayList<Long> ids) {
+
+    }
+
+    @Override
+    public ArrayList<Long> getMovedToTrainingWords() {
+        return null;
+    }
+
+    @Override
+    public Integer getSelectedTraining() {
+        return null;
+    }
+
+    @Override
+    public void allowMoveToTraining() {
 
     }
 
@@ -327,5 +344,10 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
         }
         presenter.saveListState();
         presenter.detach();
+    }
+
+    @Override
+    public void onMoveToGroupPositiveClick(Integer groupId, String groupTitle) {
+
     }
 }

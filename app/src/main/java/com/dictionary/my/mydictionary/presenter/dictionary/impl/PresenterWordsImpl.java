@@ -146,12 +146,7 @@ public class PresenterWordsImpl<V extends ViewAllWords> implements PresenterWord
     }
 
     @Override
-    public void moveToTrainingSelected() {
-
-    }
-
-    @Override
-    public void moveToGroupWordsIsReady() {
+    public void movedWordsToGroupIsReady() {
         ArrayList<Long> moveWords = view.getMovedToGroupWords();
         moveDisposable = repository.moveWords(moveWords)
                 .subscribeOn(Schedulers.io())
@@ -160,6 +155,46 @@ public class PresenterWordsImpl<V extends ViewAllWords> implements PresenterWord
                     @Override
                     public void onComplete() {
                         view.moveWordsFromList();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        view.showERROR("Move ERROR");
+                    }
+                });
+    }
+
+    @Override
+    public void moveToTrainingSelected() {
+        repository.getListOfTrainings()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<ArrayList<Long>>() {
+                    @Override
+                    public void onSuccess(ArrayList<Long> ids) {
+                        view.createMoveToTrainingDialog(ids);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        view.showERROR("Training ERROR");
+                    }
+                });
+    }
+
+    @Override
+    public void movedWordsToTrainingIsReady() {
+        ArrayList<Long> moveWords = view.getMovedToTrainingWords();
+        Integer trainingId = view.getSelectedTraining();
+        moveDisposable = repository.setWordsToTraining(moveWords, trainingId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        view.allowMoveToTraining();
                     }
 
                     @Override

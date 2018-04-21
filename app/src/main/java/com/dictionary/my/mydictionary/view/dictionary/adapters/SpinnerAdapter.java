@@ -16,7 +16,7 @@ import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import java.util.ArrayList;
 
 /**
- * Created by luxso on 24.03.2018.
+ * This class is used for spinner in AllGroupsFragment/AllWordsFragment and in AddWordActivity
  */
 
 public class SpinnerAdapter extends ArrayAdapter{
@@ -27,6 +27,7 @@ public class SpinnerAdapter extends ArrayAdapter{
     private int resource;
     private boolean isGroupList;
 
+    // constructor for AddWordActivity. He gets titles of group(objects) and ArrayList of Groups(data)
     public SpinnerAdapter(@NonNull Context context, int resource, @NonNull String[] objects, ArrayList<Group> data) {
         super(context, resource, objects);
         this.context = context;
@@ -34,7 +35,7 @@ public class SpinnerAdapter extends ArrayAdapter{
         this.data = data;
         isGroupList = true;
     }
-
+    // constructor for AllGroupsFragment/AllWordsFragment. He gets titles of AllGroups and AllWords Fragments
     public SpinnerAdapter(@NonNull Context context, int resource, @NonNull String[] objects) {
         super(context, resource, objects);
         this.context = context;

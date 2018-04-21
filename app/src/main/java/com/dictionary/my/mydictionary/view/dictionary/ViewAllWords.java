@@ -24,5 +24,8 @@ public interface ViewAllWords {
     void createMoveToGroupDialog(ArrayList<Group> groups);
     ArrayList<Long> getMovedToGroupWords();
     void moveWordsFromList();
-    void createMoveToTrainingDialog();
+    void createMoveToTrainingDialog(ArrayList<Long> ids);
+    ArrayList<Long> getMovedToTrainingWords();
+    Integer getSelectedTraining();
+    void allowMoveToTraining();
 }

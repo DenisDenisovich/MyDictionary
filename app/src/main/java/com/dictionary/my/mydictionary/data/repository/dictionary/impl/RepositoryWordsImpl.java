@@ -57,19 +57,16 @@ public class RepositoryWordsImpl implements RepositoryWords {
     @Override
     public Single<ArrayList<Word>> getListOfWords() {
         Log.d(LOG_TAG, "getListOfWords()");
-        return Single.create(new SingleOnSubscribe<ArrayList<Word>>() {
-            @Override
-            public void subscribe(SingleEmitter<ArrayList<Word>> e) throws Exception {
-                try {
-                    ArrayList<Word> words = dbWords.getListOfWord();
-                    if(!e.isDisposed()){
-                        e.onSuccess(words);
-                    }
-                }catch (SQLiteException | IllegalStateException exc){
-                    Log.d(LOG_TAG, "Exception in getListOfWords()");
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
+        return Single.create(e -> {
+            try {
+                ArrayList<Word> words = dbWords.getListOfWord();
+                if(!e.isDisposed()){
+                    e.onSuccess(words);
+                }
+            }catch (SQLiteException | IllegalStateException exc){
+                Log.d(LOG_TAG, "Exception in getListOfWords()");
+                if(!e.isDisposed()) {
+                    e.onError(exc);
                 }
             }
         });
@@ -78,19 +75,16 @@ public class RepositoryWordsImpl implements RepositoryWords {
     @Override
     public Single<ArrayList<Group>> getListOfGroups() {
         Log.d(LOG_TAG, "getListOfGroups()");
-        return Single.create(new SingleOnSubscribe<ArrayList<Group>>() {
-            @Override
-            public void subscribe(SingleEmitter<ArrayList<Group>> e) throws Exception {
-                try {
-                    ArrayList<Group> groups = dbGroups.getListOfGroups();
-                    if(!e.isDisposed()){
-                        e.onSuccess(groups);
-                    }
-                }catch (SQLiteException exc){
-                    Log.d(LOG_TAG, "Exception in getListOfGroups()");
-                    if(!e.isDisposed()){
-                        e.onError(exc);
-                    }
+        return Single.create(e -> {
+            try {
+                ArrayList<Group> groups = dbGroups.getListOfGroups();
+                if(!e.isDisposed()){
+                    e.onSuccess(groups);
+                }
+            }catch (SQLiteException exc){
+                Log.d(LOG_TAG, "Exception in getListOfGroups()");
+                if(!e.isDisposed()){
+                    e.onError(exc);
                 }
             }
         });
@@ -99,19 +93,16 @@ public class RepositoryWordsImpl implements RepositoryWords {
     @Override
     public Single<ArrayList<Translation>> getTranslation(final String word) {
         Log.d(LOG_TAG, "getTranslation()");
-        return Single.create(new SingleOnSubscribe<ArrayList<Translation>>() {
-            @Override
-            public void subscribe(SingleEmitter<ArrayList<Translation>> e) throws Exception {
-                try {
-                    ArrayList<Translation> translations = cloudWords.getTranslation(word);
-                    if(!e.isDisposed()){
-                        e.onSuccess(translations);
-                    }
-                }catch (TranslationIsNotFoundException | IOException exc){
-                    Log.d(LOG_TAG, "Exception in getTranslation()");
-                    if(!e.isDisposed()){
-                        e.onError(exc);
-                    }
+        return Single.create(e -> {
+            try {
+                ArrayList<Translation> translations = cloudWords.getTranslation(word);
+                if(!e.isDisposed()){
+                    e.onSuccess(translations);
+                }
+            }catch (TranslationIsNotFoundException | IOException exc){
+                Log.d(LOG_TAG, "Exception in getTranslation()");
+                if(!e.isDisposed()){
+                    e.onError(exc);
                 }
             }
         });
@@ -120,56 +111,50 @@ public class RepositoryWordsImpl implements RepositoryWords {
     @Override
     public Completable setNewWord(final Translation translation) {
         Log.d(LOG_TAG, "setNewWord()");
-        return Completable.create(new CompletableOnSubscribe() {
-            @Override
-            public void subscribe(CompletableEmitter e) throws Exception {
+        return Completable.create(e -> {
+            try {
+                WordFullInformation wordFullInformation = cloudWords.getMeaning(translation);
+                dbWords.setNewWord(wordFullInformation);
+                if(!e.isDisposed()){
+                    e.onComplete();
+                }
+            }catch (MeaningIsNotFoundException | IOException skyEngExc){
+                // if we are cant getting full information about word by Internet
+                Log.d(LOG_TAG, "MeaningIsNotFound");
                 try {
-                    WordFullInformation wordFullInformation = cloudWords.getMeaning(translation);
-                    dbWords.setNewWord(wordFullInformation);
+                    dbWords.setNewWordWithoutInternet(translation);
                     if(!e.isDisposed()){
                         e.onComplete();
                     }
-                }catch (MeaningIsNotFoundException | IOException skyEngExc){
-                    // if we are cant getting full information about word by Internet
-                    Log.d(LOG_TAG, "MeaningIsNotFound");
-                    try {
-                        dbWords.setNewWordWithoutInternet(translation);
-                        if(!e.isDisposed()){
-                            e.onComplete();
-                        }
-                    }catch (SQLException sqlExc){
-                        Log.d(LOG_TAG, "Exception of db.setNewWordWithoutInternet()");
-                        if(!e.isDisposed()) {
-                            e.onError(sqlExc);
-                        }
-                    }
                 }catch (SQLException sqlExc){
-                    Log.d(LOG_TAG, "Exception of db.setNewWord()");
+                    Log.d(LOG_TAG, "Exception of db.setNewWordWithoutInternet()");
                     if(!e.isDisposed()) {
                         e.onError(sqlExc);
                     }
                 }
-
+            }catch (SQLException sqlExc){
+                Log.d(LOG_TAG, "Exception of db.setNewWord()");
+                if(!e.isDisposed()) {
+                    e.onError(sqlExc);
+                }
             }
+
         });
     }
 
     @Override
     public Completable setNewWordWithoutInternet(final Translation translation) {
         Log.d(LOG_TAG, "setNewWordWithoutInternet()");
-        return Completable.create(new CompletableOnSubscribe() {
-            @Override
-            public void subscribe(CompletableEmitter e) throws Exception {
-                try{
-                    dbWords.setNewWordWithoutInternet(translation);
-                    if(!e.isDisposed()){
-                        e.onComplete();
-                    }
-                }catch (SQLException exc){
-                    Log.d(LOG_TAG, "Exception of db.setNewWordWithoutInternet()");
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
+        return Completable.create(e -> {
+            try{
+                dbWords.setNewWordWithoutInternet(translation);
+                if(!e.isDisposed()){
+                    e.onComplete();
+                }
+            }catch (SQLException exc){
+                Log.d(LOG_TAG, "Exception of db.setNewWordWithoutInternet()");
+                if(!e.isDisposed()) {
+                    e.onError(exc);
                 }
             }
         });
@@ -178,41 +163,35 @@ public class RepositoryWordsImpl implements RepositoryWords {
     @Override
     public Completable deleteWords(final ArrayList<Long> delList) {
         Log.d(LOG_TAG, "deleteWords()");
-        return Completable.create(new CompletableOnSubscribe() {
-            @Override
-            public void subscribe(CompletableEmitter e) throws Exception {
-                try{
-                    dbWords.deleteWords(delList);
-                    if(!e.isDisposed()){
-                        e.onComplete();
-                    }
-                }catch (SQLiteException | NullPointerException | IndexOutOfBoundsException exc){
-                    Log.d(LOG_TAG, "Exception of db.deleteWords()");
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
+        return Completable.create(e -> {
+            try{
+                dbWords.deleteWords(delList);
+                if(!e.isDisposed()){
+                    e.onComplete();
                 }
-
+            }catch (SQLiteException | NullPointerException | IndexOutOfBoundsException exc){
+                Log.d(LOG_TAG, "Exception of db.deleteWords()");
+                if(!e.isDisposed()) {
+                    e.onError(exc);
+                }
             }
+
         });
     }
 
     @Override
     public Completable moveWords(final ArrayList<Long> moveList) {
         Log.d(LOG_TAG, "moveWords()");
-        return Completable.create(new CompletableOnSubscribe() {
-            @Override
-            public void subscribe(CompletableEmitter e) throws Exception {
-                try {
-                    dbWords.moveWords(moveList);
-                    if(!e.isDisposed()){
-                        e.onComplete();
-                    }
-                }catch (SQLiteException | NullPointerException | NegativeArraySizeException | IndexOutOfBoundsException exc){
-                    Log.d(LOG_TAG, "Exception of db.moveWords()");
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
+        return Completable.create(e -> {
+            try {
+                dbWords.moveWords(moveList);
+                if(!e.isDisposed()){
+                    e.onComplete();
+                }
+            }catch (SQLiteException | NullPointerException | NegativeArraySizeException | IndexOutOfBoundsException exc){
+                Log.d(LOG_TAG, "Exception of db.moveWords()");
+                if(!e.isDisposed()) {
+                    e.onError(exc);
                 }
             }
         });
@@ -220,13 +199,10 @@ public class RepositoryWordsImpl implements RepositoryWords {
 
     @Override
     public Single<ArrayList<Long>> getListOfTrainings() {
-        return Single.create(new SingleOnSubscribe<ArrayList<Long>>() {
-            @Override
-            public void subscribe(SingleEmitter<ArrayList<Long>> e) throws Exception {
-                ArrayList<Long> list = dbTraining.getListOfTrainings();
-                if(!e.isDisposed()){
-                    e.onSuccess(list);
-                }
+        return Single.create(e -> {
+            ArrayList<Long> list = dbTraining.getListOfTrainings();
+            if(!e.isDisposed()){
+                e.onSuccess(list);
             }
         });
     }
@@ -234,56 +210,53 @@ public class RepositoryWordsImpl implements RepositoryWords {
     @Override
     public Completable setWordsToTraining(ArrayList<Long> longs, int rowid) {
         Log.d(LOG_TAG, "setWordsToTraining(" + rowid + ")");
-        return Completable.create(new CompletableOnSubscribe() {
-            @Override
-            public void subscribe(CompletableEmitter e) throws Exception {
-                try {
-                    if (longs.size() == MAX_COUNT_OF_WORDS_IN_TRAINIGS) {
-                        dbTraining.setWordsToTraining(longs, rowid);
-                        if (rowid == FOR_ALL_TRAININGS_ROWID) {
-                            dbTraining.setWordsToTraining(longs, ENG_RUS_TRAINING_ROWID);
-                            dbTraining.setWordsToTraining(longs, RUS_ENG_TRAINING_ROWID);
-                            dbTraining.setWordsToTraining(longs, CONSTRUCTOR_TRAINING_ROWID);
-                            dbTraining.setWordsToTraining(longs, SPRINT_TRAINING_ROWID);
-                        }
-                    } else {
-                        // if size of input words not equals maxCount
-                        ArrayList<Long> oldWords = dbTraining.getWordsFromTraining(rowid);
-                        ArrayList<Long> newWords = new ArrayList<>();
-                        if(longs.size() > MAX_COUNT_OF_WORDS_IN_TRAINIGS) {
-                            newWords.addAll(longs.subList(0, MAX_COUNT_OF_WORDS_IN_TRAINIGS));
-                        }else{
-                            newWords.addAll(longs);
-                        }
-                        int count = newWords.size();
-                        // add oldWords that aren't in newWords
-                        if (oldWords != null) {
-                            if (!oldWords.isEmpty()) {
-                                for (int i = 0; i < oldWords.size(); i++) {
-                                    if (count <= MAX_COUNT_OF_WORDS_IN_TRAINIGS) {
-                                        if (!longs.contains(oldWords.get(i))) {
-                                            newWords.add(oldWords.get(i));
-                                            count++;
-                                        }
+        return Completable.create(e -> {
+            try {
+                if (longs.size() == MAX_COUNT_OF_WORDS_IN_TRAINIGS) {
+                    dbTraining.setWordsToTraining(longs, rowid);
+                    if (rowid == FOR_ALL_TRAININGS_ROWID) {
+                        dbTraining.setWordsToTraining(longs, ENG_RUS_TRAINING_ROWID);
+                        dbTraining.setWordsToTraining(longs, RUS_ENG_TRAINING_ROWID);
+                        dbTraining.setWordsToTraining(longs, CONSTRUCTOR_TRAINING_ROWID);
+                        dbTraining.setWordsToTraining(longs, SPRINT_TRAINING_ROWID);
+                    }
+                } else {
+                    // if size of input words not equals maxCount
+                    ArrayList<Long> oldWords = dbTraining.getWordsFromTraining(rowid);
+                    ArrayList<Long> newWords = new ArrayList<>();
+                    if(longs.size() > MAX_COUNT_OF_WORDS_IN_TRAINIGS) {
+                        newWords.addAll(longs.subList(0, MAX_COUNT_OF_WORDS_IN_TRAINIGS));
+                    }else{
+                        newWords.addAll(longs);
+                    }
+                    int count = newWords.size();
+                    // add oldWords that aren't in newWords
+                    if (oldWords != null) {
+                        if (!oldWords.isEmpty()) {
+                            for (int i = 0; i < oldWords.size(); i++) {
+                                if (count < MAX_COUNT_OF_WORDS_IN_TRAINIGS) {
+                                    if (!longs.contains(oldWords.get(i))) {
+                                        newWords.add(oldWords.get(i));
+                                        count++;
                                     }
                                 }
                             }
                         }
-                        dbTraining.setWordsToTraining(newWords, rowid);
-                        if (rowid == FOR_ALL_TRAININGS_ROWID) {
-                            dbTraining.setWordsToTraining(newWords, ENG_RUS_TRAINING_ROWID);
-                            dbTraining.setWordsToTraining(newWords, RUS_ENG_TRAINING_ROWID);
-                            dbTraining.setWordsToTraining(newWords, CONSTRUCTOR_TRAINING_ROWID);
-                            dbTraining.setWordsToTraining(newWords, SPRINT_TRAINING_ROWID);
-                        }
                     }
-                    if (!e.isDisposed()) {
-                        e.onComplete();
+                    dbTraining.setWordsToTraining(newWords, rowid);
+                    if (rowid == FOR_ALL_TRAININGS_ROWID) {
+                        dbTraining.setWordsToTraining(newWords, ENG_RUS_TRAINING_ROWID);
+                        dbTraining.setWordsToTraining(newWords, RUS_ENG_TRAINING_ROWID);
+                        dbTraining.setWordsToTraining(newWords, CONSTRUCTOR_TRAINING_ROWID);
+                        dbTraining.setWordsToTraining(newWords, SPRINT_TRAINING_ROWID);
                     }
-                }catch (SQLiteException | NullPointerException | IndexOutOfBoundsException exc){
-                    if(!e.isDisposed()) {
-                        e.onError(exc);
-                    }
+                }
+                if (!e.isDisposed()) {
+                    e.onComplete();
+                }
+            }catch (SQLiteException | NullPointerException | IndexOutOfBoundsException exc){
+                if(!e.isDisposed()) {
+                    e.onError(exc);
                 }
             }
         });

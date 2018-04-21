@@ -11,6 +11,7 @@ public interface PresenterWords<V> {
     void deleteSelected();
     void deleteWordsIsReady();
     void moveToGroupSelected();
-    void moveToGroupWordsIsReady();
+    void movedWordsToGroupIsReady();
     void moveToTrainingSelected();
+    void movedWordsToTrainingIsReady();
 }

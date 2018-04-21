@@ -35,6 +35,7 @@ import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.WordAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.DeleteWordDialog;
 import com.dictionary.my.mydictionary.view.dictionary.dialogs.MoveToGroupDialog;
+import com.dictionary.my.mydictionary.view.dictionary.dialogs.MoveToTrainingDialog;
 
 import java.util.ArrayList;
 
@@ -60,9 +61,11 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
     private PresenterWords presenter;
 
     private final static int REQUEST_CODE_MOVE_TO_GROUP = 1;
-    private ArrayList<Long> movedWords;
+    private ArrayList<Long> movedWordsToGroup;
     private String moveGroupTitle;
     private final static int REQUEST_CODE_MOVE_TO_TRAINING = 2;
+    private ArrayList<Long> movedWordsToTraining;
+    private Integer selectedTrainingId;
     private final static int REQUEST_CODE_DELETE = 3;
     private boolean onNewWordClicked = false;
     private final static String KEY_ON_NEW_WORD_CLICKED = "onNewWordClicked";
@@ -194,7 +197,6 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
                 .subscribeWith(new DisposableObserver<Integer>() {
                     @Override
                     public void onNext(Integer integer) {
-                        Log.d(LOG_TAG, "onNext integer: " + integer);
                         countOfSelectedItems = integer;
                         toolbarSelectedMode = true;
                         getActivity().invalidateOptionsMenu();
@@ -277,6 +279,7 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
                     presenter.moveToGroupSelected();
                     return true;
                 case R.id.word_menu_move_to_training:
+                    presenter.moveToTrainingSelected();
                     return true;
             }
         }else{
@@ -323,7 +326,7 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
 
     @Override
     public ArrayList<Long> getMovedToGroupWords() {
-        return movedWords;
+        return movedWordsToGroup;
     }
 
     @Override
@@ -335,8 +338,30 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
     }
 
     @Override
-    public void createMoveToTrainingDialog(){
+    public void createMoveToTrainingDialog(ArrayList<Long> ids){
+        Log.d(LOG_TAG, "createMoveToGroupDialog()");
+        if(wordAdapter.getSelectedItemsSize() <= 20){
+            DialogFragment dialog = MoveToTrainingDialog.newInstance(ids);
+            dialog.setTargetFragment(this, REQUEST_CODE_MOVE_TO_TRAINING);
+            dialog.show(getFragmentManager(),null);
+        }else{
+            showERROR("You can't move to training more than 20 words");
+        }
+    }
 
+    @Override
+    public ArrayList<Long> getMovedToTrainingWords() {
+        return movedWordsToTraining;
+    }
+
+    @Override
+    public Integer getSelectedTraining() {
+        return selectedTrainingId;
+    }
+
+    @Override
+    public void allowMoveToTraining() {
+        showERROR("Words is moved to " + moveGroupTitle);
     }
 
     @Override
@@ -349,13 +374,17 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
                     presenter.deleteWordsIsReady();
                     break;
                 case REQUEST_CODE_MOVE_TO_GROUP:
-                    movedWords = (ArrayList<Long>) wordAdapter.getSelectedItemIds().clone();
+                    movedWordsToGroup = (ArrayList<Long>) wordAdapter.getSelectedItemIds().clone();
                     Long groupId = data.getLongExtra(Content.COLUMN_ROWID,0);
                     moveGroupTitle = data.getStringExtra(Content.COLUMN_TITLE);
-                    movedWords.add(0, groupId);
-                    presenter.moveToGroupWordsIsReady();
+                    movedWordsToGroup.add(0, groupId);
+                    presenter.movedWordsToGroupIsReady();
                     break;
                 case REQUEST_CODE_MOVE_TO_TRAINING:
+                    movedWordsToTraining = (ArrayList<Long>) wordAdapter.getSelectedItemIds().clone();
+                    selectedTrainingId = data.getIntExtra(Content.COLUMN_ROWID,1);
+                    moveGroupTitle = data.getStringExtra(Content.COLUMN_TRAININGS);
+                    presenter.movedWordsToTrainingIsReady();
                     break;
             }
         }else if(resultCode == Activity.RESULT_CANCELED){

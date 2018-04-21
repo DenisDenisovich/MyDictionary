@@ -26,8 +26,8 @@ public class MoveToGroupDialog extends DialogFragment{
     private long selectedItemId;
     private String selectedItemTitle;
     public static MoveToGroupDialog newInstance(ArrayList<Group> list){
-        final String KEY_ALL_DICTIONARIES_TITLE_LIST = "groupsTitle";
-        final String KEY_ALL_DICTIONARIES_ID_LIST = "groupsId";
+        final String KEY_GROUPS_TITLE_LIST = "groupsTitle";
+        final String KEY_GROUPS_ID_LIST = "groupsId";
         String[] groupTitle = new String[list.size()];
         long[] groupId = new long[list.size()];
         for(int i = 0; i < list.size(); i++){
@@ -37,14 +37,14 @@ public class MoveToGroupDialog extends DialogFragment{
 
         MoveToGroupDialog d = new MoveToGroupDialog();
         Bundle b = new Bundle();
-        b.putStringArray(KEY_ALL_DICTIONARIES_TITLE_LIST,groupTitle);
-        b.putLongArray(KEY_ALL_DICTIONARIES_ID_LIST,groupId);
+        b.putStringArray(KEY_GROUPS_TITLE_LIST,groupTitle);
+        b.putLongArray(KEY_GROUPS_ID_LIST,groupId);
         d.setArguments(b);
         return d;
     }
 
     public interface MoveToGroupListener{
-        public void onMoveToGroupPositiveClick(Long groupId, String groupTitle);
+        void onMoveToGroupPositiveClick(Long groupId, String groupTitle);
     }
     MoveToGroupListener mListener;
     private boolean isActivity = false;
