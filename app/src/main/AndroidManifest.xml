@@ -26,6 +26,10 @@
 
         </activity>
         <activity android:name=".view.dictionary.impl.GroupOfWordsActivity"/>
+        <activity android:name=".view.trainings.impl.EngRusTrainingActivity"/>
+        <activity android:name=".view.trainings.impl.RusEngTrainingActivity"/>
+        <activity android:name=".view.trainings.impl.ConstructorTrainingActivity"/>
+        <activity android:name=".view.trainings.impl.SprintTrainingActivity"/>
     </application>
 
 </manifest>

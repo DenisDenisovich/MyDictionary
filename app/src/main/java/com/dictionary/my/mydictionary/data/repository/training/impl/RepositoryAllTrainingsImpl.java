@@ -8,6 +8,10 @@ import com.dictionary.my.mydictionary.data.repository.training.RepositoryAllTrai
 
 import java.util.ArrayList;
 
+import io.reactivex.Single;
+import io.reactivex.SingleEmitter;
+import io.reactivex.SingleOnSubscribe;
+
 /**
  * Created by luxso on 31.03.2018.
  */
@@ -17,124 +21,50 @@ public class RepositoryAllTrainingsImpl implements RepositoryAllTrainings {
     public RepositoryAllTrainingsImpl(Context context){
         db = new DBTrainingImpl(context);
     }
+
+
     @Override
-    public void setEngRusWords(ArrayList<Long> longs) {
-        if(longs.size() == MAX_COUNT_OF_WORDS){
-            db.setWordsToTraining(longs,ENG_RUS_ROWID);
-        }else {
-            // if size of input words not equals maxCount
-            ArrayList<Long> oldWords = db.getWordsFromTraining(ENG_RUS_ROWID);
-            ArrayList<Long> newWords = new ArrayList<>(longs);
-            int count = newWords.size();
-            // add oldWords that aren't in newWords
-            if (oldWords != null) {
-                if (!oldWords.isEmpty()) {
-                    for (int i = 0; i < oldWords.size(); i++) {
-                        if (count <= MAX_COUNT_OF_WORDS) {
-                            if (!longs.contains(oldWords.get(i))) {
-                                newWords.add(oldWords.get(i));
-                                count++;
-                            }
-                        }
-                    }
-                }
+    public Single<Integer> getCountOfEngRusWords() {
+        return Single.create(e -> {
+            Integer count = db.getCountOfWordsFromTraining(ENG_RUS_ROWID);
+            if(!e.isDisposed()){
+                e.onSuccess(count);
             }
-            db.setWordsToTraining(newWords,ENG_RUS_ROWID);
-        }
+        });
     }
 
     @Override
-    public void deleteEngRusWords(ArrayList<Long> longs) {
-
+    public Single<Integer> getCountOfRusEngWords() {
+        return Single.create(e -> {
+            Integer count = db.getCountOfWordsFromTraining(RUS_ENG_ROWID);
+            if(!e.isDisposed()){
+                e.onSuccess(count);
+            }
+        });
     }
 
     @Override
-    public ArrayList<Long> getEngRusWords() {
-        return db.getWordsFromTraining(ENG_RUS_ROWID);
+    public Single<Integer> getCountOfConstructorWords() {
+        return Single.create(e -> {
+            Integer count = db.getCountOfWordsFromTraining(CONSTRUCTOR_ROWID);
+            if(!e.isDisposed()){
+                e.onSuccess(count);
+            }
+        });
     }
 
     @Override
-    public Integer getCountOfEngRusWords() {
-        return null;
+    public Single<Integer> getCountOfSprintWords() {
+        return Single.create(e -> {
+            Integer count = db.getCountOfWordsFromTraining(SPRINT_ROWID);
+            if(!e.isDisposed()){
+                e.onSuccess(count);
+            }
+        });
     }
 
     @Override
-    public void setRusEngWords(ArrayList<Long> longs) {
-
-    }
-
-    @Override
-    public void deleteRusEngWords(ArrayList<Long> longs) {
-
-    }
-
-    @Override
-    public ArrayList<Long> getRusEngWords() {
-        return null;
-    }
-
-    @Override
-    public Integer getCountOfRusEngWords() {
-        return null;
-    }
-
-    @Override
-    public void setConstructorWords(ArrayList<Long> longs) {
-
-    }
-
-    @Override
-    public void deleteConstructorWords(ArrayList<Long> longs) {
-
-    }
-
-    @Override
-    public ArrayList<Long> getConstructorWords() {
-        return null;
-    }
-
-    @Override
-    public Integer getCountOfConstructorWords() {
-        return null;
-    }
-
-    @Override
-    public void setSprintWords(ArrayList<Long> longs) {
-
-    }
-
-    @Override
-    public void deleteSprintWords(ArrayList<Long> longs) {
-
-    }
-
-    @Override
-    public ArrayList<Long> getSprintWords() {
-        return null;
-    }
-
-    @Override
-    public Integer getCountOfSprintWords() {
-        return null;
-    }
-
-    @Override
-    public void setAllTrainingWords(ArrayList<Long> longs) {
-
-    }
-
-    @Override
-    public void deleteAllTrainingWords(ArrayList<Long> longs) {
-
-    }
-
-    @Override
-    public ArrayList<Long> getAllTrainingWords() {
-        return null;
-    }
-
-    @Override
-    public Integer getCountOfAllTrainingWords() {
-        return null;
+    public void destroy() {
+        db.destroy();
     }
 }

@@ -10,7 +10,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <Spinner
-        android:id="@+id/spinnerTrainings"
+        android:id="@+id/spinnerChoiceWords"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -22,12 +22,12 @@
 
     <android.support.v7.widget.CardView
     android:id="@+id/cvEngRus"
-    android:layout_width="170dp"
+    android:layout_width="160dp"
     android:layout_height="180dp"
     android:layout_marginTop="16dp"
     android:layout_marginStart="16dp"
     app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@id/spinnerTrainings">
+    app:layout_constraintTop_toBottomOf="@id/spinnerChoiceWords">
 
         <TextView
             android:id="@+id/tvEngRusCountOfWords"
@@ -43,7 +43,6 @@
             android:background="@color/colorAccent"
             android:layout_gravity="bottom"/>
         <TextView
-            android:id="@+id/tvTrainingEngRus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
@@ -55,12 +54,12 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/cvRusEng"
-        android:layout_width="170dp"
+        android:layout_width="160dp"
         android:layout_height="180dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/spinnerTrainings">
+        app:layout_constraintTop_toBottomOf="@id/spinnerChoiceWords">
 
         <TextView
             android:id="@+id/tvRusEngCountOfWords"
@@ -77,7 +76,6 @@
             android:background="@color/colorAccent"
             android:layout_gravity="bottom"/>
         <TextView
-            android:id="@+id/tvTrainingRusEng"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
@@ -89,7 +87,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/cvConstructor"
-        android:layout_width="170dp"
+        android:layout_width="160dp"
         android:layout_height="180dp"
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
@@ -110,7 +108,6 @@
             android:background="@color/colorAccent"
             android:layout_gravity="bottom"/>
         <TextView
-            android:id="@+id/tvTrainingConstructor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
@@ -122,7 +119,7 @@
 
     <android.support.v7.widget.CardView
         android:id="@+id/cvSprint"
-        android:layout_width="170dp"
+        android:layout_width="160dp"
         android:layout_height="180dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
@@ -144,7 +141,6 @@
             android:background="@color/colorAccent"
             android:layout_gravity="bottom"/>
         <TextView
-            android:id="@+id/tvTrainingSprint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"

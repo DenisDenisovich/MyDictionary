@@ -17,11 +17,18 @@ import com.dictionary.my.mydictionary.view.dictionary.impl.AddWordActivity;
 import com.dictionary.my.mydictionary.view.dictionary.impl.AllGroupsFragment;
 import com.dictionary.my.mydictionary.view.dictionary.impl.AllWordsFragment;
 import com.dictionary.my.mydictionary.view.dictionary.impl.GroupOfWordsActivity;
+import com.dictionary.my.mydictionary.view.trainings.impl.AllTrainingsFragment;
+import com.dictionary.my.mydictionary.view.trainings.impl.ConstructorTrainingActivity;
+import com.dictionary.my.mydictionary.view.trainings.impl.EngRusTrainingActivity;
+import com.dictionary.my.mydictionary.view.trainings.impl.RusEngTrainingActivity;
+import com.dictionary.my.mydictionary.view.trainings.impl.SprintTrainingActivity;
 
-public class MainActivity extends AppCompatActivity implements AllWordsFragment.onAllWordsSelectedListener, AllGroupsFragment.onAllGroupsSelectedListener {
+public class MainActivity extends AppCompatActivity implements AllWordsFragment.onAllWordsSelectedListener,
+                                                               AllGroupsFragment.onAllGroupsSelectedListener,
+                                                               AllTrainingsFragment.onTrainingSelectedListener{
     private final int REQUEST_CODE_NEW_WORD = 1;
     private Boolean addWordResult = false;
-
+    // comment in migrate_to_CouchBase_Lite
     private final static String LOG_TAG = "Log_ActivityMain";
     private final static String KEY_ALL_WORDS = "allWordsFragment";
     private final static String KEY_ALL_GROUPS = "allGroupsFragment";
@@ -49,6 +56,11 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
 
                     return true;
                 case R.id.navigation_trainings:
+                    if(getSupportFragmentManager().findFragmentByTag(KEY_TRAININGS) == null){
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        ft.replace(R.id.mainActivityContainer,new AllTrainingsFragment(),KEY_TRAININGS);
+                        ft.commit();
+                    }
                     return true;
                 case R.id.navigation_notepad:
                     return true;
@@ -110,6 +122,34 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
     }
 
     @Override
+    public void showEngRusTraining() {
+        Log.d(LOG_TAG, "showEngRusTraining()");
+        Intent intent = new Intent(this, EngRusTrainingActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showRusEngTraining() {
+        Log.d(LOG_TAG, "showRusEngTraining()");
+        Intent intent = new Intent(this, RusEngTrainingActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showConstructorTraining() {
+        Log.d(LOG_TAG, "showConstructorTraining()");
+        Intent intent = new Intent(this, ConstructorTrainingActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showSprintTraining() {
+        Log.d(LOG_TAG, "showSprintTraining()");
+        Intent intent = new Intent(this, SprintTrainingActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == Activity.RESULT_OK){
             switch (requestCode){
@@ -125,4 +165,5 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
             }
         }
     }
+
 }

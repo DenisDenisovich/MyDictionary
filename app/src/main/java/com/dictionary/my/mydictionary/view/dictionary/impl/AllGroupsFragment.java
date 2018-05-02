@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import io.reactivex.observers.DisposableObserver;
 
 /**
- * Created by luxso on 07.03.2018.
+ * This class is used for show screen of all groups
  */
 
 public class AllGroupsFragment extends Fragment implements ViewAllGroups, OnBottomNavigationClick {
