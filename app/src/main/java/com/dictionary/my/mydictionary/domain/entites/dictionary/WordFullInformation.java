@@ -11,7 +11,7 @@ import java.util.List;
  */
 
 public class WordFullInformation {
-    private Long id;
+    private String id;
     private String eng;
     private String rus;
     private String note;
@@ -24,13 +24,13 @@ public class WordFullInformation {
     private List<Example> examples = null;
     private ArrayList<String> alternative;
     private String date;
-    private Long groupId;
+    private String groupId;
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
     public String getEng() {
@@ -129,11 +129,11 @@ public class WordFullInformation {
         this.date = date;
     }
 
-    public Long getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Long groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 

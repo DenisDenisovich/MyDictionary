@@ -82,10 +82,10 @@ public class SpinnerAdapter extends ArrayAdapter{
 
     @Override
     public long getItemId(int position) {
-        if(isGroupList) {
-            return data.get(position).getId();
-        }else {
-            return position;
-        }
+        return position;
+    }
+
+    public String getGroupString(int position){
+        return data.get(position).getId();
     }
 }

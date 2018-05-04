@@ -7,17 +7,17 @@ package com.dictionary.my.mydictionary.domain.entites.dictionary;
 
 public class Word {
 
-    private long id;
+    private String id;
     private String word;
     private String translate;
     private String sound;
 
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -44,4 +44,5 @@ public class Word {
     public void setSound(String sound) {
         this.sound = sound;
     }
+
 }

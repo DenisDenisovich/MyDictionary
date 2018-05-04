@@ -25,7 +25,7 @@ public class PresenterGroupsImpl<V extends ViewAllGroups> implements PresenterGr
     private V view;
     private RepositoryGroups repository;
     private ArrayList<Group> groups;
-    private ArrayList<Long> selectedItemIds;
+    private ArrayList<String> selectedItemIds;
     private Boolean selectMode;
     private DisposableCompletableObserver newDisposable;
     private DisposableCompletableObserver delDisposable;
@@ -131,7 +131,7 @@ public class PresenterGroupsImpl<V extends ViewAllGroups> implements PresenterGr
     @Override
     public void deleteGroupsIsReady() {
         Log.d(LOG_TAG, "deleteGroupsIsReady()");
-        ArrayList<Long> delList = view.getDeletedGroups();
+        ArrayList<String> delList = view.getDeletedGroups();
         delDisposable = repository.deleteGroups(delList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

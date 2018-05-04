@@ -61,7 +61,7 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
     private PresenterWords presenter;
 
     private final static int REQUEST_CODE_MOVE_TO_GROUP = 1;
-    private ArrayList<Long> movedWordsToGroup;
+    private ArrayList<String> movedWordsToGroup;
     private String moveGroupTitle;
     private final static int REQUEST_CODE_MOVE_TO_TRAINING = 2;
     private ArrayList<Long> movedWordsToTraining;
@@ -173,7 +173,7 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
     }
 
     @Override
-    public ArrayList<Long> getSelectedItemIds() {
+    public ArrayList<String> getSelectedItemIds() {
         return wordAdapter.getSelectedItemIds();
     }
 
@@ -183,7 +183,7 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
     }
 
     @Override
-    public void setSelectedItemIds(ArrayList<Long> selectedItemIds) {
+    public void setSelectedItemIds(ArrayList<String> selectedItemIds) {
         wordAdapter.setSelectedItemIds(selectedItemIds);
     }
 
@@ -305,7 +305,7 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
     }
 
     @Override
-    public ArrayList<Long> getDeletedWords() {
+    public ArrayList<String> getDeletedWords() {
         return wordAdapter.getSelectedItemIds();
     }
 
@@ -325,7 +325,7 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
     }
 
     @Override
-    public ArrayList<Long> getMovedToGroupWords() {
+    public ArrayList<String> getMovedToGroupWords() {
         return movedWordsToGroup;
     }
 
@@ -377,8 +377,8 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
                     presenter.deleteWordsIsReady();
                     break;
                 case REQUEST_CODE_MOVE_TO_GROUP:
-                    movedWordsToGroup = (ArrayList<Long>) wordAdapter.getSelectedItemIds().clone();
-                    Long groupId = data.getLongExtra(Content.COLUMN_ROWID,0);
+                    movedWordsToGroup = (ArrayList<String>) wordAdapter.getSelectedItemIds().clone();
+                    String groupId = data.getStringExtra(Content.COLUMN_ROWID);
                     moveGroupTitle = data.getStringExtra(Content.COLUMN_TITLE);
                     movedWordsToGroup.add(0, groupId);
                     presenter.movedWordsToGroupIsReady();

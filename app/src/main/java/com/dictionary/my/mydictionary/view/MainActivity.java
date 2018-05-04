@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
                                                                AllTrainingsFragment.onTrainingSelectedListener{
     private final int REQUEST_CODE_NEW_WORD = 1;
     private Boolean addWordResult = false;
-    // comment in migrate_to_CouchBase_Lite
+
     private final static String LOG_TAG = "Log_ActivityMain";
     private final static String KEY_ALL_WORDS = "allWordsFragment";
     private final static String KEY_ALL_GROUPS = "allGroupsFragment";
@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
     }
 
     @Override
-    public void groupOfWordsSelected(long groupId, String title) {
+    public void groupOfWordsSelected(String groupId, String title) {
         Intent intent = new Intent(this,GroupOfWordsActivity.class);
         intent.putExtra(Content.COLUMN_ROWID, groupId);
         intent.putExtra(Content.COLUMN_TITLE, title);

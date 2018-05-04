@@ -87,7 +87,6 @@ public class CloudWordsImpl implements CloudWords {
         Log.d(LOG_TAG,translation.getSound());
         Log.d(LOG_TAG,translation.getPreview_image());
         Log.d(LOG_TAG,translation.getMeaningId());
-        Log.d(LOG_TAG,translation.getDate());
         Log.d(LOG_TAG,String.valueOf(translation.getGroupId()));
 
         WordFullInformation word = new WordFullInformation();
@@ -103,7 +102,6 @@ public class CloudWordsImpl implements CloudWords {
         word.setEng(translation.getEng());
         word.setRus(translation.getRus());
         word.setPreviewImage(translation.getPreview_image());
-        word.setDate(translation.getDate());
         word.setGroupId(translation.getGroupId());
         word.setNote((String) meaning.getTranslation().getNote());
         word.setSound(translation.getSound());

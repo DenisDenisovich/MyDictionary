@@ -5,14 +5,14 @@ package com.dictionary.my.mydictionary.domain.entites.dictionary;
  */
 
 public class Group {
-    private long id;
+    private String id;
     private String title;
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

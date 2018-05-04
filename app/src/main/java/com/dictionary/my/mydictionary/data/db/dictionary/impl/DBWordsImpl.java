@@ -1,42 +1,51 @@
 package com.dictionary.my.mydictionary.data.db.dictionary.impl;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import com.dictionary.my.mydictionary.data.Content;
-import com.dictionary.my.mydictionary.data.DBHelper;
+import com.couchbase.lite.Array;
+import com.couchbase.lite.CouchbaseLiteException;
+import com.couchbase.lite.DataSource;
+import com.couchbase.lite.Database;
+import com.couchbase.lite.Document;
+import com.couchbase.lite.Expression;
+import com.couchbase.lite.MutableArray;
+import com.couchbase.lite.MutableDocument;
+import com.couchbase.lite.Ordering;
+import com.couchbase.lite.Query;
+import com.couchbase.lite.QueryBuilder;
+import com.couchbase.lite.Result;
+import com.couchbase.lite.ResultSet;
+import com.couchbase.lite.SelectResult;
+import com.dictionary.my.mydictionary.data.CBKeys;
+import com.dictionary.my.mydictionary.data.DataBaseManager;
+import com.dictionary.my.mydictionary.data.cloud.pojo.meaning.Example;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Translation;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Word;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.WordFullInformation;
-import com.dictionary.my.mydictionary.data.cloud.pojo.meaning.Example;
 import com.dictionary.my.mydictionary.data.db.dictionary.DBWords;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
 /**
- * This class working only with All_Words table of dataBase
+ * This class working only with dbWords CouchBase Lite database
  */
 
 public class DBWordsImpl implements DBWords {
     private final static String LOG_TAG = "Log_DBAllWords";
-    private DBHelper dbHelper;
-    private SQLiteDatabase db;
-    private Long groupId = null;
+    private Database db;
+    private String groupId = null;
 
     public DBWordsImpl(Context context){
-        dbHelper = new DBHelper(context);
-        db = dbHelper.getWritableDatabase();
+        db = DataBaseManager.getSharedInstance(context).databaseWords;
     }
 
-    public DBWordsImpl(Context context, Long groupId){
+    public DBWordsImpl(Context context, String groupId){
         this.groupId = groupId;
-        dbHelper = new DBHelper(context);
-        db = dbHelper.getWritableDatabase();
+        db = DataBaseManager.getSharedInstance(context).databaseWords;
     }
 
 
@@ -44,168 +53,136 @@ public class DBWordsImpl implements DBWords {
     public ArrayList<Word> getListOfWord(){
         Log.d(LOG_TAG, "getListOfWords()");
         ArrayList<Word> list = new ArrayList<>();
-        String[] columns = {Content.COLUMN_ROWID, Content.COLUMN_ENG, Content.COLUMN_RUS, Content.COLUMN_SOUND};
-        Cursor cursor;
-        if(groupId != null){
-            String whereClause = Content.COLUMN_GROUP_ID + " = ?";
-            String[] whereArg = {String.valueOf(groupId)};
-            cursor = db.query(Content.TABLE_ALL_WORD,columns,whereClause,whereArg,null,null,null);
+        Query query;
+        if(groupId == null) {
+            query = QueryBuilder
+                    .select(SelectResult.property(CBKeys.KEY_ID),
+                            SelectResult.property(CBKeys.KEY_ENG),
+                            SelectResult.property(CBKeys.KEY_RUS),
+                            SelectResult.property(CBKeys.KEY_SOUND))
+                    .from(DataSource.database(db))
+                    .orderBy(Ordering.property(CBKeys.KEY_DATE).descending());
         }else {
-            cursor = db.query(Content.TABLE_ALL_WORD,columns,null,null,null,null,null);
+            query = QueryBuilder
+                    .select(SelectResult.property(CBKeys.KEY_ID),
+                            SelectResult.property(CBKeys.KEY_ENG),
+                            SelectResult.property(CBKeys.KEY_RUS),
+                            SelectResult.property(CBKeys.KEY_SOUND))
+                    .from(DataSource.database(db))
+                    .where(Expression.property(CBKeys.KEY_GROUP_ID).equalTo(Expression.string(groupId)))
+                    .orderBy(Ordering.property(CBKeys.KEY_DATE).descending());
         }
         try {
-            if (cursor.moveToLast()) {
-                do {
-                    Word item = new Word();
-                    item.setId(cursor.getInt(cursor.getColumnIndex(Content.COLUMN_ROWID)));
-                    item.setWord(cursor.getString(cursor.getColumnIndex(Content.COLUMN_ENG)));
-                    item.setTranslate(cursor.getString(cursor.getColumnIndex(Content.COLUMN_RUS)));
-                    item.setSound(cursor.getString(cursor.getColumnIndex(Content.COLUMN_SOUND)));
-                    list.add(item);
-                } while (cursor.moveToPrevious());
+            ResultSet rs = query.execute();
+            Log.d(LOG_TAG, "get words ");
+            for (Result result : rs) {
+                Word word = new Word();
+                word.setId(result.getString(CBKeys.KEY_ID));
+                word.setWord(result.getString(CBKeys.KEY_ENG));
+                word.setTranslate(result.getString(CBKeys.KEY_RUS));
+                Log.d(LOG_TAG, "id: " + word.getId());
+                Log.d(LOG_TAG, "eng: " + word.getWord());
+                Log.d(LOG_TAG, "rus: " + word.getTranslate());
+                if (result.contains(CBKeys.KEY_SOUND)){
+                    word.setSound(result.getString(CBKeys.KEY_SOUND));
+                }
+                list.add(word);
             }
-        }finally {
-            cursor.close();
-
+        } catch (CouchbaseLiteException e) {
+            e.printStackTrace();
         }
+
         return list;
     }
 
     @Override
-    public void setNewWord(final WordFullInformation word){
+    public void setNewWord(final WordFullInformation word) throws CouchbaseLiteException {
         Log.d(LOG_TAG, "setNewWord()");
-        ContentValues cv = new ContentValues();
-        cv.put(Content.COLUMN_ENG, word.getEng());
-        cv.put(Content.COLUMN_RUS, word.getRus());
-        cv.put(Content.COLUMN_NOTE, word.getNote());
-        cv.put(Content.COLUMN_TRANSCRIPTION, word.getTranscription());
-        cv.put(Content.COLUMN_SOUND, word.getSound());
-        cv.put(Content.COLUMN_PART_OF_SPEECH, word.getPartOfSpeech());
-        cv.put(Content.COLUMN_PREVIEW_IMAGE, word.getPreviewImage());
-        cv.put(Content.COLUMN_IMAGE, word.getImage());
-        cv.put(Content.COLUMN_DEFINITION, word.getDefinition());
-        cv.put(Content.COLUMN_DATE, word.getDate());
-        cv.put(Content.COLUMN_GROUP_ID, word.getGroupId());
-
-        String strExample = "";
-        try {
+        MutableDocument newWord = new MutableDocument();
+        newWord.setString(CBKeys.KEY_TYPE, CBKeys.WORD_TYPE);
+        newWord.setString(CBKeys.KEY_ENG, word.getEng());
+        newWord.setString(CBKeys.KEY_RUS, word.getRus());
+        newWord.setString(CBKeys.KEY_NOTE, word.getNote());
+        newWord.setString(CBKeys.KEY_TRANSCRIPTION, word.getTranscription());
+        newWord.setString(CBKeys.KEY_SOUND, word.getSound());
+        newWord.setString(CBKeys.KEY_PART_OF_SPEECH, word.getPartOfSpeech());
+        newWord.setString(CBKeys.KEY_PREVIEW_IMAGE, word.getPreviewImage());
+        newWord.setString(CBKeys.KEY_IMAGE, word.getImage());
+        newWord.setString(CBKeys.KEY_DEFINITION, word.getDefinition());
+        newWord.setDate(CBKeys.KEY_DATE, new Date());
+        newWord.setString(CBKeys.KEY_GROUP_ID, word.getGroupId());
+        if(word.getExamples() != null){
+            MutableArray exampleArray = new MutableArray();
             List<Example> examples = word.getExamples();
-            for (int i = 0; i < examples.size(); i++) {
-                strExample = strExample.concat(examples.get(i).getText());
-                if (i < (examples.size() - 1)) {
-                    strExample = strExample.concat(Content.ARRAY_SEPARATOR);
-                }
+            for (Example e : examples) {
+                exampleArray.addString(e.getText());
             }
-            cv.put(Content.COLUMN_EXAMPLES, strExample);
-        }catch (IndexOutOfBoundsException indexExc){
-            Log.d(LOG_TAG, "Exception of word.getExamples()");
-            indexExc.printStackTrace();
-            strExample = "";
-            cv.put(Content.COLUMN_EXAMPLES, strExample);
-        }catch (NullPointerException nullExc){
-            Log.d(LOG_TAG, "Exception of word.getExamples()");
-            nullExc.printStackTrace();
-            strExample = "";
-            cv.put(Content.COLUMN_EXAMPLES, strExample);
+            newWord.setArray(CBKeys.KEY_EXAMPLES, exampleArray);
         }
 
-        String strAlternative = "";
-        try {
-            ArrayList<String> alternative = word.getAlternative();
-            for (int i = 0; i < alternative.size(); i++) {
-                strAlternative = strAlternative.concat(alternative.get(i));
-                if (i < (alternative.size() - 1)) {
-                    strAlternative = strAlternative.concat(Content.ARRAY_SEPARATOR);
-                }
+        if(word.getAlternative() != null){
+            MutableArray alternativeArray = new MutableArray();
+            List<String> alternative = word.getAlternative();
+            for (String a : alternative) {
+                alternativeArray.addString(a);
             }
-            cv.put(Content.COLUMN_ALTERNATIVE, strAlternative);
-        }catch (IndexOutOfBoundsException indexExc){
-            Log.d(LOG_TAG, "Exception of word.getAlternative()");
-            indexExc.printStackTrace();
-            strAlternative = "";
-            cv.put(Content.COLUMN_ALTERNATIVE, strAlternative);
-        }catch (NullPointerException nullExc){
-            Log.d(LOG_TAG, "Exception of word.getAlternative()");
-            nullExc.printStackTrace();
-            strAlternative = "";
-            cv.put(Content.COLUMN_ALTERNATIVE, strAlternative);
+            newWord.setArray(CBKeys.KEY_ALTERNATIVE, alternativeArray);
         }
 
-        /*Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_ENG));
-        Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_RUS));
-        Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_NOTE));
-        Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_TRANSCRIPTION));
-        Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_SOUND));
-        Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_PART_OF_SPEECH));
-        Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_PREVIEW_IMAGE));
-        Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_IMAGE));
-        Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_DEFINITION));
-        Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_DATE));
-        Log.d(LOG_TAG,String.valueOf(cv.get(Content.COLUMN_GROUP_ID)));
-        Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_EXAMPLES));
-        Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_ALTERNATIVE));*/
-
-        db.insertOrThrow(Content.TABLE_ALL_WORD,null,cv);
+        db.save(newWord);
     }
 
     @Override
-    public void setNewWordWithoutInternet(final Translation translation){
+    public void setNewWordWithoutInternet(final Translation translation) throws CouchbaseLiteException {
         Log.d(LOG_TAG, "setNewWordWithoutInternet()");
-        ContentValues cv = new ContentValues();
-        cv.put(Content.COLUMN_ENG, translation.getEng());
-        cv.put(Content.COLUMN_RUS, translation.getRus());
-        cv.put(Content.COLUMN_GROUP_ID, translation.getGroupId());
-        cv.put(Content.COLUMN_DATE, translation.getDate());
-
+        MutableDocument newWord = new MutableDocument();
+        newWord.setString(CBKeys.KEY_TYPE, CBKeys.WORD_TYPE);
+        newWord.setString(CBKeys.KEY_ENG, translation.getEng());
+        newWord.setString(CBKeys.KEY_RUS, translation.getRus());
+        newWord.setString(CBKeys.KEY_GROUP_ID, translation.getGroupId());
+        newWord.setDate(CBKeys.KEY_DATE, new Date());
         if(translation.getSound() != null){
-            cv.put(Content.COLUMN_SOUND, translation.getSound());
+            newWord.setString(CBKeys.KEY_SOUND,translation.getSound());
         }
         if(translation.getPreview_image() != null){
-            cv.put(Content.COLUMN_PREVIEW_IMAGE, translation.getPreview_image());
+            newWord.setString(CBKeys.KEY_PREVIEW_IMAGE,translation.getPreview_image());
         }
-        /*Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_ENG));
-        Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_RUS));
-        Log.d(LOG_TAG,(String)cv.get(Content.COLUMN_DATE));
-        Log.d(LOG_TAG,String.valueOf(cv.get(Content.COLUMN_GROUP_ID)));*/
 
-        db.insertOrThrow(Content.TABLE_ALL_WORD,null,cv);
+        db.save(newWord);
     }
 
     @Override
-    public void deleteWords(final ArrayList<Long> delList){
+    public void deleteWords(final ArrayList<String> delList){
         Log.d(LOG_TAG, "deleteWords()");
-        String strPlaceholder = "(";
-        String[] whereArg = new String[delList.size()];
-        for(int i = 0; i < delList.size()-1;i++){
-            strPlaceholder = strPlaceholder.concat("?,");
-            whereArg[i] = delList.get(i).toString();
+        for(String id:delList) {
+            Document word = db.getDocument(id);
+            try {
+                db.delete(word);
+            } catch (CouchbaseLiteException e) {
+                e.printStackTrace();
+            }
+
         }
-        strPlaceholder = strPlaceholder.concat("?)");
-        whereArg[whereArg.length-1] = delList.get(delList.size()-1).toString();
-        db.delete(Content.TABLE_ALL_WORD,Content.COLUMN_ROWID + " in " + strPlaceholder, whereArg);
     }
 
     @Override
-    public void moveWords(final ArrayList<Long> moveList){
+    public void moveWords(final ArrayList<String> moveList){
         Log.d(LOG_TAG, "moveWords()");
-        Long moveToDictionaryId;
-        String strPlaceholder = "(";
-        String[] strArg = new String[moveList.size()-1];
-        ContentValues cv = new ContentValues();
-        moveToDictionaryId = moveList.get(0);
-        for(int i = 1; i < moveList.size()-1; i++){
-            strPlaceholder = strPlaceholder.concat("?,");
-            strArg[i-1] = moveList.get(i).toString();
+        String moveToDictionaryId = moveList.get(0);
+        for(int i = 1; i < moveList.size();i++) {
+            MutableDocument word = db.getDocument(moveList.get(i)).toMutable();
+            try {
+                word.setString(CBKeys.KEY_GROUP_ID,moveToDictionaryId);
+                db.save(word);
+            } catch (CouchbaseLiteException e) {
+                e.printStackTrace();
+            }
 
         }
-        strPlaceholder = strPlaceholder.concat("?)");
-        strArg[moveList.size()-2] = moveList.get(moveList.size()-1).toString();
-        cv.put(Content.COLUMN_GROUP_ID, moveToDictionaryId);
-        db.update(Content.TABLE_ALL_WORD, cv, Content.COLUMN_ROWID + " in " + strPlaceholder, strArg);
     }
 
     @Override
     public void destroy() {
-        db.close();
+        //db.close();
     }
 }

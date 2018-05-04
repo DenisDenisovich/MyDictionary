@@ -23,13 +23,13 @@ import java.util.ArrayList;
 public class MoveToGroupDialog extends DialogFragment{
     private final String KEY_GROUPS_TITLE_LIST = "groupsTitle";
     private final String KEY_GROUPS_ID_LIST = "groupsId";
-    private long selectedItemId;
+    private String selectedItemId;
     private String selectedItemTitle;
     public static MoveToGroupDialog newInstance(ArrayList<Group> list){
         final String KEY_GROUPS_TITLE_LIST = "groupsTitle";
         final String KEY_GROUPS_ID_LIST = "groupsId";
         String[] groupTitle = new String[list.size()];
-        long[] groupId = new long[list.size()];
+        String[] groupId = new String[list.size()];
         for(int i = 0; i < list.size(); i++){
             groupTitle[i] = list.get(i).getTitle();
             groupId[i] = list.get(i).getId();
@@ -38,13 +38,13 @@ public class MoveToGroupDialog extends DialogFragment{
         MoveToGroupDialog d = new MoveToGroupDialog();
         Bundle b = new Bundle();
         b.putStringArray(KEY_GROUPS_TITLE_LIST,groupTitle);
-        b.putLongArray(KEY_GROUPS_ID_LIST,groupId);
+        b.putStringArray(KEY_GROUPS_ID_LIST,groupId);
         d.setArguments(b);
         return d;
     }
 
     public interface MoveToGroupListener{
-        void onMoveToGroupPositiveClick(Long groupId, String groupTitle);
+        void onMoveToGroupPositiveClick(String groupId, String groupTitle);
     }
     MoveToGroupListener mListener;
     private boolean isActivity = false;
@@ -62,7 +62,7 @@ public class MoveToGroupDialog extends DialogFragment{
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        final long[] groupsId = getArguments().getLongArray(KEY_GROUPS_ID_LIST);
+        final String[] groupsId = getArguments().getStringArray(KEY_GROUPS_ID_LIST);
         final String[] groupsTitle = getArguments().getStringArray(KEY_GROUPS_TITLE_LIST);
         builder.setTitle(getResources().getString(R.string.move_to_group_dialog_header))
                 .setSingleChoiceItems(getArguments().getStringArray(KEY_GROUPS_TITLE_LIST), -1, new DialogInterface.OnClickListener() {
@@ -96,7 +96,7 @@ public class MoveToGroupDialog extends DialogFragment{
         return builder.create();
     }
 
-    private void setItemId(long l, String title){
+    private void setItemId(String l, String title){
         selectedItemId = l;
         selectedItemTitle = title;
     }

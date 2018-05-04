@@ -36,7 +36,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder>{
     }
 
     private ArrayList<Group> mdata;
-    private ArrayList<Long> selectedItemIds;
+    private ArrayList<String> selectedItemIds;
     private PublishSubject<Integer> countOfSelectObservable;
     private PublishSubject<Group> choiceGroupObservable;
     private boolean selectMode = false;
@@ -114,7 +114,7 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder>{
         return mdata.size();
     }
 
-    private void selectItem(Long id){
+    private void selectItem(String id){
         if(selectedItemIds.contains(id)){
             selectedItemIds.remove(id);
         } else{
@@ -134,14 +134,14 @@ public class GroupAdapter extends RecyclerView.Adapter<GroupAdapter.ViewHolder>{
         return choiceGroupObservable;
     }
 
-    public ArrayList<Long> getSelectedItemIds(){
+    public ArrayList<String> getSelectedItemIds(){
         return selectedItemIds;
     }
 
     public Boolean getSelectMode(){
         return selectMode;
     }
-    public void setSelectedItemIds(ArrayList<Long> selectedItemIds){
+    public void setSelectedItemIds(ArrayList<String> selectedItemIds){
         this.selectedItemIds = selectedItemIds;
     }
     public void setSelectMode(Boolean selectMode){

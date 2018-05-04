@@ -70,7 +70,7 @@ public class RepositoryGroupsImpl implements RepositoryGroups {
     }
 
     @Override
-    public Completable deleteGroups(final ArrayList<Long> delList) {
+    public Completable deleteGroups(final ArrayList<String> delList) {
         return Completable.create(new CompletableOnSubscribe() {
             @Override
             public void subscribe(CompletableEmitter e) throws Exception {

@@ -42,7 +42,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
     private PresenterWords presenter;
     private WordAdapter wordAdapter;
 
-    private Long groupId;
+    private String groupId;
     private String groupTitle;
     private Integer countOfSelectedItems;
     private Boolean toolbarSelectedMode = false;
@@ -50,7 +50,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
     private final static String KEY_TOOLBAR_SELECTED_MODE = "toolbarSelectedMode";
     private DisposableObserver<Integer> selectedItemsObserver;
 
-    private ArrayList<Long> movedWords;
+    private ArrayList<String> movedWords;
     private String moveGroupTitle;
     private final static int REQUEST_CODE_NEW_WORD = 1;
     private final static String KEY_CURRENT_GROUP = "currentGroup";
@@ -64,7 +64,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
         setContentView(R.layout.fragment_all_words);
         if(savedInstanceState == null){
             Intent intent = getIntent();
-            groupId = intent.getLongExtra(Content.COLUMN_ROWID, 0);
+            groupId = intent.getStringExtra(Content.COLUMN_ROWID);
             groupTitle = intent.getStringExtra(Content.COLUMN_TITLE);
             presenter = new PresenterWordsImpl(getApplicationContext(),groupId);
             presenter.attach(this);
@@ -73,7 +73,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
             presenter = (PresenterWords) getLastCustomNonConfigurationInstance();
             presenter.attach(this);
             presenter.update();
-            groupId = savedInstanceState.getLong(Content.COLUMN_ROWID);
+            groupId = savedInstanceState.getString(Content.COLUMN_ROWID);
             groupTitle = savedInstanceState.getString(Content.COLUMN_TITLE);
             toolbarSelectedMode = savedInstanceState.getBoolean(KEY_TOOLBAR_SELECTED_MODE);
         }
@@ -97,7 +97,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putLong(Content.COLUMN_ROWID, groupId);
+        outState.putString(Content.COLUMN_ROWID, groupId);
         outState.putString(Content.COLUMN_TITLE, groupTitle);
         outState.putBoolean(KEY_TOOLBAR_SELECTED_MODE, toolbarSelectedMode);
     }
@@ -202,7 +202,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
     }
 
     @Override
-    public ArrayList<Long> getSelectedItemIds() {
+    public ArrayList<String> getSelectedItemIds() {
         return wordAdapter.getSelectedItemIds();
     }
 
@@ -212,7 +212,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
     }
 
     @Override
-    public void setSelectedItemIds(ArrayList<Long> selectedItemIds) {
+    public void setSelectedItemIds(ArrayList<String> selectedItemIds) {
         wordAdapter.setSelectedItemIds(selectedItemIds);
     }
 
@@ -257,7 +257,7 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
     }
 
     @Override
-    public ArrayList<Long> getDeletedWords() {
+    public ArrayList<String> getDeletedWords() {
         return wordAdapter.getSelectedItemIds();
     }
 
@@ -276,13 +276,13 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
     }
 
     @Override
-    public ArrayList<Long> getMovedToGroupWords() {
+    public ArrayList<String> getMovedToGroupWords() {
         return movedWords;
     }
 
     @Override
-    public void onMoveToGroupPositiveClick(Long groupId, String groupTitle) {
-        movedWords = (ArrayList<Long>) wordAdapter.getSelectedItemIds().clone();
+    public void onMoveToGroupPositiveClick(String groupId, String groupTitle) {
+        movedWords = (ArrayList<String>) wordAdapter.getSelectedItemIds().clone();
         moveGroupTitle = groupTitle;
         movedWords.add(0, groupId);
         presenter.movedWordsToGroupIsReady();

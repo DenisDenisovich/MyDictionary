@@ -22,8 +22,8 @@ public interface RepositoryWords {
     Single<ArrayList<Translation>> getTranslation(String word);
     Completable setNewWord(Translation translation);
     Completable setNewWordWithoutInternet(Translation translation);
-    Completable deleteWords(ArrayList<Long> delList);
-    Completable moveWords(ArrayList<Long> moveList);
+    Completable deleteWords(ArrayList<String> delList);
+    Completable moveWords(ArrayList<String> moveList);
 
     Single<ArrayList<Long>> getListOfTrainings();
     Completable setWordsToTraining(ArrayList<Long> longs, int rowid);

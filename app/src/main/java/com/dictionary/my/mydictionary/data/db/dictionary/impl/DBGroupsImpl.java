@@ -5,82 +5,95 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.util.Log;
 
+import com.couchbase.lite.CouchbaseLiteException;
+import com.couchbase.lite.DataSource;
+import com.couchbase.lite.Database;
+import com.couchbase.lite.Document;
+import com.couchbase.lite.MutableDocument;
+import com.couchbase.lite.Ordering;
+import com.couchbase.lite.Query;
+import com.couchbase.lite.QueryBuilder;
+import com.couchbase.lite.Result;
+import com.couchbase.lite.ResultSet;
+import com.couchbase.lite.SelectResult;
+import com.dictionary.my.mydictionary.data.CBKeys;
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.data.DBHelper;
+import com.dictionary.my.mydictionary.data.DataBaseManager;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.data.db.dictionary.DBGroups;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 
 /**
- * This class working only with Groups table of dataBase
+ * This class working only with dbGroups CouchBase Lite database
  */
 
 public class DBGroupsImpl implements DBGroups {
-    private DBHelper dbHelper;
-    private SQLiteDatabase db;
+    private static final String LOG_TAG = "Log_DBGroups";
+    private Database db;
 
     public DBGroupsImpl(Context context){
-
-        dbHelper = new DBHelper(context);
-        db = dbHelper.getWritableDatabase();
+        db = DataBaseManager.getSharedInstance(context).databaseGroups;
     }
     @Override
     public ArrayList<Group> getListOfGroups(){
         ArrayList<Group> list = new ArrayList<>();
-        String[] columns = {Content.COLUMN_ROWID, Content.COLUMN_TITLE};
-        Cursor cursor = db.query(Content.TABLE_GROUPS,columns,null,null,null,null,null);
+        Query query = QueryBuilder
+                .select(SelectResult.property(CBKeys.KEY_ID),
+                        SelectResult.property(CBKeys.KEY_TITLE))
+                .from(DataSource.database(db))
+                .orderBy(Ordering.property(CBKeys.KEY_DATE));
         try {
-            if(cursor.moveToLast()){
-                do{
-                    Group item = new Group();
-                    item.setId(cursor.getInt(cursor.getColumnIndex(Content.COLUMN_ROWID)));
-                    item.setTitle(cursor.getString(cursor.getColumnIndex(Content.COLUMN_TITLE)));
-                    list.add(item);
-                }while (cursor.moveToPrevious());
-            }
-        }finally {
-            cursor.close();
-        }
 
+            ResultSet rs = query.execute();
+            for (Result result : rs) {
+                Group item = new Group();
+                item.setId(result.getString(CBKeys.KEY_ID));
+                item.setTitle(result.getString(CBKeys.KEY_TITLE));
+                list.add(item);
+            }
+        } catch (CouchbaseLiteException e) {
+            e.printStackTrace();
+        }
         return list;
     }
 
     @Override
-    public void setNewGroup(Group group){
-        ContentValues cv = new ContentValues();
-        cv.put(Content.COLUMN_TITLE, group.getTitle());
-        db.insertOrThrow(Content.TABLE_GROUPS, null, cv);
+    public void setNewGroup(Group group) throws CouchbaseLiteException {
+        MutableDocument newGroup = new MutableDocument();
+        newGroup.setString(CBKeys.KEY_TYPE, CBKeys.GROUP_TYPE);
+        newGroup.setString(CBKeys.KEY_TITLE, group.getTitle());
+        newGroup.setDate(CBKeys.KEY_DATE, new Date());
+        db.save(newGroup);
     }
 
     @Override
-    public void deleteGroups(ArrayList<Long> delList){
-        String strPlaceholder = "(";
-        String[] whereArg = new String[delList.size()];
-        for (int i = 0; i < delList.size() - 1; i++) {
-            strPlaceholder = strPlaceholder.concat("?,");
-            whereArg[i] = delList.get(i).toString();
+    public void deleteGroups(ArrayList<String> delList){
+        for(String id:delList) {
+            Document group = db.getDocument(id);
+            try {
+                db.delete(group);
+            } catch (CouchbaseLiteException e) {
+                e.printStackTrace();
+            }
         }
-        strPlaceholder = strPlaceholder.concat("?)");
-        whereArg[whereArg.length - 1] = delList.get(delList.size() - 1).toString();
-        db.delete(Content.TABLE_GROUPS, Content.COLUMN_ROWID + " in " + strPlaceholder, whereArg);
     }
 
     @Override
-    public void editGroup(Group group){
-        ContentValues cv = new ContentValues();
-        String idOfModifiedGroup;
-        cv.put(Content.COLUMN_TITLE, group.getTitle());
-        idOfModifiedGroup = String.valueOf(group.getId());
-        db.update(Content.TABLE_GROUPS, cv, Content.COLUMN_ROWID + " = ?", new String[]{idOfModifiedGroup});
-
+    public void editGroup(Group group) throws CouchbaseLiteException {
+        MutableDocument word = db.getDocument(group.getId()).toMutable();
+        word.setString(CBKeys.KEY_TITLE,group.getTitle());
+        db.save(word);
     }
 
     @Override
     public void destroy() {
-        db.close();
+        //db.close();
     }
 
 }

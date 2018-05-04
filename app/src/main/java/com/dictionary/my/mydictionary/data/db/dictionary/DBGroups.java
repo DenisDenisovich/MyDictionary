@@ -2,6 +2,7 @@ package com.dictionary.my.mydictionary.data.db.dictionary;
 
 import android.database.sqlite.SQLiteException;
 
+import com.couchbase.lite.CouchbaseLiteException;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 
 import java.util.ArrayList;
@@ -14,8 +15,8 @@ import io.reactivex.Single;
 
 public interface DBGroups {
     ArrayList<Group> getListOfGroups();
-    void setNewGroup(Group group);
-    void deleteGroups(ArrayList<Long> delList);
-    void editGroup(Group editGroup);
+    void setNewGroup(Group group) throws CouchbaseLiteException;
+    void deleteGroups(ArrayList<String> delList);
+    void editGroup(Group editGroup) throws CouchbaseLiteException;
     void destroy();
 }

@@ -48,7 +48,7 @@ public class RepositoryWordsImpl implements RepositoryWords {
         cloudWords = new CloudWordsImpl();
         dbTraining = new DBTrainingImpl(context);
     }
-    public RepositoryWordsImpl(Context context, Long groupId){
+    public RepositoryWordsImpl(Context context, String groupId){
         dbWords = new DBWordsImpl(context, groupId);
         dbGroups = new DBGroupsImpl(context);
         cloudWords = new CloudWordsImpl();
@@ -63,7 +63,7 @@ public class RepositoryWordsImpl implements RepositoryWords {
                 if(!e.isDisposed()){
                     e.onSuccess(words);
                 }
-            }catch (SQLiteException | IllegalStateException exc){
+            }catch (IllegalStateException | NullPointerException exc){
                 Log.d(LOG_TAG, "Exception in getListOfWords()");
                 if(!e.isDisposed()) {
                     e.onError(exc);
@@ -161,7 +161,7 @@ public class RepositoryWordsImpl implements RepositoryWords {
     }
 
     @Override
-    public Completable deleteWords(final ArrayList<Long> delList) {
+    public Completable deleteWords(final ArrayList<String> delList) {
         Log.d(LOG_TAG, "deleteWords()");
         return Completable.create(e -> {
             try{
@@ -180,7 +180,7 @@ public class RepositoryWordsImpl implements RepositoryWords {
     }
 
     @Override
-    public Completable moveWords(final ArrayList<Long> moveList) {
+    public Completable moveWords(final ArrayList<String> moveList) {
         Log.d(LOG_TAG, "moveWords()");
         return Completable.create(e -> {
             try {

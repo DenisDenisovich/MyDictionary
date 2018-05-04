@@ -26,7 +26,7 @@ public class PresenterWordsImpl<V extends ViewAllWords> implements PresenterWord
     private V view;
     private RepositoryWords repository;
     private ArrayList<Word> words;
-    private ArrayList<Long> selectedItemIds;
+    private ArrayList<String> selectedItemIds;
     private Boolean selectMode;
     private DisposableCompletableObserver delDisposable;
     private DisposableCompletableObserver moveDisposable;
@@ -35,7 +35,7 @@ public class PresenterWordsImpl<V extends ViewAllWords> implements PresenterWord
         repository = new RepositoryWordsImpl(context);
     }
 
-    public PresenterWordsImpl(Context context, Long groupId){
+    public PresenterWordsImpl(Context context, String groupId){
         repository = new RepositoryWordsImpl(context, groupId);
     }
 
@@ -107,7 +107,7 @@ public class PresenterWordsImpl<V extends ViewAllWords> implements PresenterWord
 
     @Override
     public void deleteWordsIsReady() {
-        ArrayList<Long> deleteWords = view.getDeletedWords();
+        ArrayList<String> deleteWords = view.getDeletedWords();
         delDisposable = repository.deleteWords(deleteWords)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -147,7 +147,7 @@ public class PresenterWordsImpl<V extends ViewAllWords> implements PresenterWord
 
     @Override
     public void movedWordsToGroupIsReady() {
-        ArrayList<Long> moveWords = view.getMovedToGroupWords();
+        ArrayList<String> moveWords = view.getMovedToGroupWords();
         moveDisposable = repository.moveWords(moveWords)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -167,7 +167,7 @@ public class PresenterWordsImpl<V extends ViewAllWords> implements PresenterWord
 
     @Override
     public void moveToTrainingSelected() {
-        repository.getListOfTrainings()
+       /* repository.getListOfTrainings()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(new DisposableSingleObserver<ArrayList<Long>>() {
@@ -181,12 +181,12 @@ public class PresenterWordsImpl<V extends ViewAllWords> implements PresenterWord
                         e.printStackTrace();
                         view.showERROR("Training ERROR");
                     }
-                });
+                });*/
     }
 
     @Override
     public void movedWordsToTrainingIsReady() {
-        ArrayList<Long> moveWords = view.getMovedToTrainingWords();
+        /*ArrayList<Long> moveWords = view.getMovedToTrainingWords();
         Integer trainingId = view.getSelectedTraining();
         moveDisposable = repository.setWordsToTraining(moveWords, trainingId)
                 .subscribeOn(Schedulers.io())
@@ -202,7 +202,7 @@ public class PresenterWordsImpl<V extends ViewAllWords> implements PresenterWord
                         e.printStackTrace();
                         view.showERROR("Move ERROR");
                     }
-                });
+                });*/
     }
 
 

@@ -13,14 +13,14 @@ public interface ViewAllGroups {
     void hideProgress();
     void showERROR(String message);
     void createList(ArrayList<Group> words);
-    ArrayList<Long> getSelectedItemIds();
+    ArrayList<String> getSelectedItemIds();
     Boolean getSelectMode();
-    void setSelectedItemIds(ArrayList<Long> selectedItemIds);
+    void setSelectedItemIds(ArrayList<String> selectedItemIds);
     void setSelectMode(Boolean selectMode);
     void createNewGroupDialog();
     Group getNewGroup();
     void createDeleteDialog();
-    ArrayList<Long> getDeletedGroups();
+    ArrayList<String> getDeletedGroups();
     void deleteGroupFromList();
     void createEditDialog();
     Group getEditedGroup();

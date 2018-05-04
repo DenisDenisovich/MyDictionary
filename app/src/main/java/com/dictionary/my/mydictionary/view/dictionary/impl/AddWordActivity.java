@@ -50,6 +50,7 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
     private PresenterAddWord presenter;
     private EditText wordEditText;
     private EditText alternativeTranslation;
+    SpinnerAdapter groupAdapter;
     private Spinner spinner;
     private Translation selectedTranslation;
     private boolean alternativeTranslationMode = false;
@@ -222,7 +223,7 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
                 }
             }
         }
-        SpinnerAdapter groupAdapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, stringGroups, groups);
+        groupAdapter = new SpinnerAdapter(this, android.R.layout.simple_spinner_item, stringGroups, groups);
         spinner.setAdapter(groupAdapter);
         spinner.setSelection(currentTitlePosition);
     }
@@ -286,14 +287,7 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
     @Override
     public Translation getNewTranslation() {
         Translation translation = selectedTranslation;
-        translation.setGroupId(spinner.getSelectedItemId());
-
-        Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd'_'HH:mm");
-        String formattedDate = df.format(c);
-
-        translation.setDate(formattedDate);
-        Log.d(LOG_TAG, formattedDate);
+        translation.setGroupId(groupAdapter.getGroupString(spinner.getSelectedItemPosition()));
         return translation;
     }
 
@@ -302,14 +296,7 @@ public class AddWordActivity extends AppCompatActivity implements ViewAddWord {
         Translation translation = new Translation();
         translation.setEng(getPrintedWord());
         translation.setRus(alternativeTranslation.getText().toString().trim().replaceAll("\\s{2,}", " ").toLowerCase());
-
-        Date c = Calendar.getInstance().getTime();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy.MM.dd'_'HH:mm");
-        String formattedDate = df.format(c);
-
-        translation.setDate(formattedDate);
-        Log.d(LOG_TAG, formattedDate);
-        translation.setGroupId(spinner.getSelectedItemId());
+        translation.setGroupId(groupAdapter.getGroupString(spinner.getSelectedItemPosition()));
         return translation;
     }
 

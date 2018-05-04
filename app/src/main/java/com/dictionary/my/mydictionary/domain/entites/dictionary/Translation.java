@@ -8,7 +8,7 @@ public class Translation {
     // this objects sets in AddWordDialogs
     private String eng;
     private String date;
-    private Long groupId;
+    private String groupId;
 
     // this objects sets in CloudAllWords
     private String rus;
@@ -67,11 +67,11 @@ public class Translation {
         this.date = date;
     }
 
-    public Long getGroupId() {
+    public String getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(Long groupId) {
+    public void setGroupId(String groupId) {
         this.groupId = groupId;
     }
 }

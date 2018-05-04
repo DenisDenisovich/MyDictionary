@@ -67,7 +67,7 @@ public class AllGroupsFragment extends Fragment implements ViewAllGroups, OnBott
 
     public interface onAllGroupsSelectedListener{
         void allWordsScreenSelected();
-        void groupOfWordsSelected(long groupId, String title);
+        void groupOfWordsSelected(String groupId, String title);
     }
     private onAllGroupsSelectedListener mListener;
     @Override
@@ -153,7 +153,7 @@ public class AllGroupsFragment extends Fragment implements ViewAllGroups, OnBott
     }
 
     @Override
-    public ArrayList<Long> getSelectedItemIds() {
+    public ArrayList<String> getSelectedItemIds() {
         return groupAdapter.getSelectedItemIds();
     }
 
@@ -163,7 +163,7 @@ public class AllGroupsFragment extends Fragment implements ViewAllGroups, OnBott
     }
 
     @Override
-    public void setSelectedItemIds(ArrayList<Long> selectedItemIds) {
+    public void setSelectedItemIds(ArrayList<String> selectedItemIds) {
         groupAdapter.setSelectedItemIds(selectedItemIds);
     }
 
@@ -326,7 +326,7 @@ public class AllGroupsFragment extends Fragment implements ViewAllGroups, OnBott
     }
 
     @Override
-    public ArrayList<Long> getDeletedGroups() {
+    public ArrayList<String> getDeletedGroups() {
         return groupAdapter.getSelectedItemIds();
     }
 
