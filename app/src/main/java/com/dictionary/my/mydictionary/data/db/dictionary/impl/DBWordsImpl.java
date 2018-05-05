@@ -74,15 +74,11 @@ public class DBWordsImpl implements DBWords {
         }
         try {
             ResultSet rs = query.execute();
-            Log.d(LOG_TAG, "get words ");
             for (Result result : rs) {
                 Word word = new Word();
                 word.setId(result.getString(CBKeys.KEY_ID));
                 word.setWord(result.getString(CBKeys.KEY_ENG));
                 word.setTranslate(result.getString(CBKeys.KEY_RUS));
-                Log.d(LOG_TAG, "id: " + word.getId());
-                Log.d(LOG_TAG, "eng: " + word.getWord());
-                Log.d(LOG_TAG, "rus: " + word.getTranslate());
                 if (result.contains(CBKeys.KEY_SOUND)){
                     word.setSound(result.getString(CBKeys.KEY_SOUND));
                 }
