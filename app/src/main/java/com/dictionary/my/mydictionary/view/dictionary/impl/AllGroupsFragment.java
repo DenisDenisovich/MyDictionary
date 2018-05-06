@@ -28,7 +28,7 @@ import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.domain.entites.dictionary.Group;
 import com.dictionary.my.mydictionary.presenter.dictionary.PresenterGroups;
 import com.dictionary.my.mydictionary.presenter.dictionary.impl.PresenterGroupsImpl;
-import com.dictionary.my.mydictionary.view.OnBottomNavigationClick;
+import com.dictionary.my.mydictionary.view.OnNavigationDrawableClick;
 import com.dictionary.my.mydictionary.view.dictionary.ViewAllGroups;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.GroupAdapter;
 import com.dictionary.my.mydictionary.view.dictionary.adapters.SpinnerAdapter;
@@ -44,7 +44,7 @@ import io.reactivex.observers.DisposableObserver;
  * This class is used for show screen of all groups
  */
 
-public class AllGroupsFragment extends Fragment implements ViewAllGroups, OnBottomNavigationClick {
+public class AllGroupsFragment extends Fragment implements ViewAllGroups, OnNavigationDrawableClick {
     private final static String LOG_TAG = "Log_ViewAllGroups";
     private AppCompatActivity activity;
     private View myView;
