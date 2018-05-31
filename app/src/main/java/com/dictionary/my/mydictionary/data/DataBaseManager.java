@@ -3,6 +3,7 @@ package com.dictionary.my.mydictionary.data;
 import android.content.Context;
 import android.util.Log;
 
+import com.couchbase.lite.BasicAuthenticator;
 import com.couchbase.lite.CouchbaseLiteException;
 import com.couchbase.lite.Database;
 import com.couchbase.lite.DatabaseConfiguration;
@@ -40,10 +41,11 @@ public class DataBaseManager {
                 databaseGroups.save(defaultGroup);
             }
 
-            Endpoint targetEndpoint = new URLEndpoint(new URI("ws://localhost:4984/dbwords"));
+            /*Endpoint targetEndpoint = new URLEndpoint(new URI("ws://35.230.160.78:4984/dbwords"));
             ReplicatorConfiguration replConfig = new ReplicatorConfiguration(databaseWords, targetEndpoint);
             replConfig.setReplicatorType(ReplicatorConfiguration.ReplicatorType.PUSH_AND_PULL);
             replConfig.setContinuous(true);
+            replConfig.setAuthenticator(new BasicAuthenticator("couchbase", "ETrsB3*T"));
             Replicator replication = new Replicator(replConfig);
             replication.start();
             replication.addChangeListener(new ReplicatorChangeListener() {
@@ -54,10 +56,12 @@ public class DataBaseManager {
             });
 
 
-            Endpoint targetEndpoint2 = new URLEndpoint(new URI("ws://localhost:4984/dbgroups"));
+
+            Endpoint targetEndpoint2 = new URLEndpoint(new URI("ws://35.230.160.78:4984/dbgroups"));
             ReplicatorConfiguration replConfig2 = new ReplicatorConfiguration(databaseGroups, targetEndpoint2);
             replConfig2.setReplicatorType(ReplicatorConfiguration.ReplicatorType.PUSH_AND_PULL);
             replConfig2.setContinuous(true);
+            replConfig2.setAuthenticator(new BasicAuthenticator("couchbase", "ETrsB3*T"));
             Replicator replication2 = new Replicator(replConfig2);
             replication2.start();
             replication2.addChangeListener(new ReplicatorChangeListener() {
@@ -65,14 +69,14 @@ public class DataBaseManager {
                 public void changed(ReplicatorChange change) {
                     Log.d(LOG_TAG,change.toString());
                 }
-            });
+            });*/
 
 
         }catch (CouchbaseLiteException e){
             e.printStackTrace();
-        } catch (URISyntaxException e) {
+        } /*catch (URISyntaxException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 
     public static DataBaseManager getSharedInstance(Context context){

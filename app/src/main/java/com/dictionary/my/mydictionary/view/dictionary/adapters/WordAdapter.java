@@ -3,7 +3,6 @@ package com.dictionary.my.mydictionary.view.dictionary.adapters;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,6 +43,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
     }
 
     private ArrayList<Word> mdata;
+    private String fullInfoId;
     private ArrayList<String> selectedItemIds;
     private PublishSubject<Integer> selectObservable;
     private SoundPlayer soundPlayer;
@@ -151,6 +151,9 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
             public void onClick(View view) {
                 if(selectMode) {
                     selectItem(mdata.get(position).getId());
+                }else{
+                    fullInfoId = mdata.get(position).getId();
+                    selectObservable.onNext(-1);
                 }
             }
         });
@@ -178,7 +181,7 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
     public PublishSubject<Integer> getSelectedItemsObservable(){
         return selectObservable;
     }
-    
+
     public ArrayList<String> getSelectedItemIds(){
         return selectedItemIds;
     }
@@ -233,6 +236,10 @@ public class WordAdapter extends RecyclerView.Adapter<WordAdapter.ViewHolder> {
                 notifyItemChanged(soundPosition);
             }
         });
+    }
+
+    public String getFullInfoId(){
+        return fullInfoId;
     }
 
     public void destroy(){

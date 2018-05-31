@@ -5,12 +5,12 @@
     <group
         android:id="@+id/word_menu_group_base"
         android:visible="false">
-        <item
+        <!--<item
             android:id="@+id/word_menu_search"
             android:title="search"
             android:icon="@drawable/ic_word_search"
             app:showAsAction="always"
-            />
+            />-->
         <item
             android:id="@+id/word_menu_add"
             android:title="add"
@@ -33,10 +33,10 @@
             android:title="@string/word_menu_move_to_group"
             app:showAsAction="never"/>
 
-        <item
+        <!--<item
             android:id="@+id/word_menu_move_to_training"
             android:title="@string/word_menu_move_to_training"
-            app:showAsAction="never"/>
+            app:showAsAction="never"/>-->
     </group>
 
 </menu>

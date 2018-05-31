@@ -75,6 +75,7 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
         void allGroupsScreenSelected();
         void showAddWordDialog();
         boolean wordIsAdded();
+        void showFullInfo(String id);
     }
     private onAllWordsSelectedListener mListener;
 
@@ -198,8 +199,14 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
                     @Override
                     public void onNext(Integer integer) {
                         countOfSelectedItems = integer;
-                        toolbarSelectedMode = true;
-                        getActivity().invalidateOptionsMenu();
+                        if(countOfSelectedItems != -1) {
+                            toolbarSelectedMode = true;
+                            getActivity().invalidateOptionsMenu();
+                        }else{
+                            String id = wordAdapter.getFullInfoId();
+                            Log.d(LOG_TAG, "in Frag " + id);
+                            mListener.showFullInfo(id);
+                        }
                     }
 
                     @Override
@@ -242,11 +249,11 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
             }
             if(countOfSelectedItems == 0){
                 menu.findItem(R.id.word_menu_move_to_group).setEnabled(false);
-                menu.findItem(R.id.word_menu_move_to_training).setEnabled(false);
+                //menu.findItem(R.id.word_menu_move_to_training).setEnabled(false);
                 menu.findItem(R.id.word_menu_delete).setEnabled(false);
             }else{
                 menu.findItem(R.id.word_menu_move_to_group).setEnabled(true);
-                menu.findItem(R.id.word_menu_move_to_training).setEnabled(true);
+                //menu.findItem(R.id.word_menu_move_to_training).setEnabled(true);
                 menu.findItem(R.id.word_menu_delete).setEnabled(true);
             }
         }else{
@@ -278,15 +285,15 @@ public class AllWordsFragment extends Fragment implements ViewAllWords, OnBottom
                 case R.id.word_menu_move_to_group:
                     presenter.moveToGroupSelected();
                     return true;
-                case R.id.word_menu_move_to_training:
+                /*case R.id.word_menu_move_to_training:
                     presenter.moveToTrainingSelected();
-                    return true;
+                    return true;*/
             }
         }else{
             int id = item.getItemId();
             switch (id){
-                case R.id.word_menu_search:
-                    return true;
+                /*case R.id.word_menu_search:
+                    return true;*/
                 case R.id.word_menu_add:
                     onNewWordClicked = true;
                     mListener.showAddWordDialog();

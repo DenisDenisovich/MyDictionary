@@ -118,11 +118,11 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
             toolbarTitle.setText(String.valueOf(countOfSelectedItems));
             if(countOfSelectedItems == 0){
                 menu.findItem(R.id.word_menu_move_to_group).setEnabled(false);
-                menu.findItem(R.id.word_menu_move_to_training).setEnabled(false);
+                //menu.findItem(R.id.word_menu_move_to_training).setEnabled(false);
                 menu.findItem(R.id.word_menu_delete).setEnabled(false);
             }else{
                 menu.findItem(R.id.word_menu_move_to_group).setEnabled(true);
-                menu.findItem(R.id.word_menu_move_to_training).setEnabled(true);
+                //menu.findItem(R.id.word_menu_move_to_training).setEnabled(true);
                 menu.findItem(R.id.word_menu_delete).setEnabled(true);
             }
         }else{
@@ -152,9 +152,9 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
                 case R.id.word_menu_move_to_group:
                     presenter.moveToGroupSelected();
                     return true;
-                case R.id.word_menu_move_to_training:
+                /*case R.id.word_menu_move_to_training:
                     presenter.moveToTrainingSelected();
-                    return true;
+                    return true;*/
             }
         }else{
             int id = item.getItemId();
@@ -162,8 +162,8 @@ public class GroupOfWordsActivity extends AppCompatActivity implements ViewAllWo
                 case android.R.id.home:
                     onBackPressed();
                     return true;
-                case R.id.word_menu_search:
-                    return true;
+                /*case R.id.word_menu_search:
+                    return true;*/
                 case R.id.word_menu_add:
                     Intent intent = new Intent(this,AddWordActivity.class);
                     intent.putExtra(KEY_CURRENT_GROUP, groupTitle);

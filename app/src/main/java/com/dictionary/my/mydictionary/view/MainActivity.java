@@ -12,11 +12,14 @@ import android.util.Log;
 import android.view.MenuItem;
 
 import com.dictionary.my.mydictionary.R;
+import com.dictionary.my.mydictionary.data.CBKeys;
 import com.dictionary.my.mydictionary.data.Content;
 import com.dictionary.my.mydictionary.view.dictionary.impl.AddWordActivity;
 import com.dictionary.my.mydictionary.view.dictionary.impl.AllGroupsFragment;
 import com.dictionary.my.mydictionary.view.dictionary.impl.AllWordsFragment;
+import com.dictionary.my.mydictionary.view.dictionary.impl.FullInfoWordActivity;
 import com.dictionary.my.mydictionary.view.dictionary.impl.GroupOfWordsActivity;
+import com.dictionary.my.mydictionary.view.statistic.StatisticFragment;
 import com.dictionary.my.mydictionary.view.trainings.impl.AllTrainingsFragment;
 import com.dictionary.my.mydictionary.view.trainings.impl.ConstructorTrainingActivity;
 import com.dictionary.my.mydictionary.view.trainings.impl.EngRusTrainingActivity;
@@ -33,9 +36,11 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
     private final static String KEY_ALL_WORDS = "allWordsFragment";
     private final static String KEY_ALL_GROUPS = "allGroupsFragment";
     private final static String KEY_TRAININGS = "trainingsFragment";
+    private final static String KEY_STATISTIC = "trainingsFragment";
     private final static String KEY_NOTEPAD = "notepadFragment";
     private AllWordsFragment allWordsFragment;
     private AllGroupsFragment allGroupsFragment;
+    private StatisticFragment statisticFragment;
     private OnBottomNavigationClick updateFragment;
 
 
@@ -55,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
                     }
 
                     return true;
-                case R.id.navigation_trainings:
+                /*case R.id.navigation_trainings:
                     if(getSupportFragmentManager().findFragmentByTag(KEY_TRAININGS) == null){
                         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                         ft.replace(R.id.mainActivityContainer,new AllTrainingsFragment(),KEY_TRAININGS);
@@ -63,6 +68,13 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
                     }
                     return true;
                 case R.id.navigation_notepad:
+                    return true;*/
+                case R.id.navigation_statistic:
+                    if(getSupportFragmentManager().findFragmentByTag(KEY_STATISTIC) == null){
+                        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                        ft.replace(R.id.mainActivityContainer,new StatisticFragment(),KEY_STATISTIC);
+                        ft.commit();
+                    }
                     return true;
             }
             return false;
@@ -119,6 +131,13 @@ public class MainActivity extends AppCompatActivity implements AllWordsFragment.
     @Override
     public boolean wordIsAdded() {
         return addWordResult;
+    }
+
+    @Override
+    public void showFullInfo(String id) {
+        Intent intent = new Intent(this,FullInfoWordActivity.class);
+        intent.putExtra(CBKeys.KEY_ID, id);
+        startActivity(intent);
     }
 
     @Override

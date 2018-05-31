@@ -7,6 +7,10 @@
         android:title="@string/title_dictionary" />
 
     <item
+        android:id="@+id/navigation_statistic"
+        android:icon="@drawable/ic_document"
+        android:title="Statistic" />
+    <!--<item
         android:id="@+id/navigation_trainings"
         android:icon="@drawable/ic_navigation_trainings"
         android:title="@string/title_trainings" />
@@ -14,6 +18,7 @@
     <item
         android:id="@+id/navigation_notepad"
         android:icon="@drawable/ic_navigation_notepad"
-        android:title="@string/title_notepad" />
+        android:title="@string/title_notepad" />-->
+
 
 </menu>
